@@ -1,0 +1,6 @@
+mode: baseline_repertoire_generation
+olga_model: humanTRB
+output_path: "D:\\Mano\\Darbai\\UiO\\Masters thesis\\simAIRR_evaluation\\data"
+n_repertoires: 20
+n_sequences: 10
+n_threads: 8
