@@ -3,9 +3,9 @@ definitions:
     olga_dataset:
       format: OLGA
       params:
-        path: ".\\data\\olga_repertoires"
+        path: "./data/olga_repertoires"
         is_repertoire: True # whether to import a RepertoireDataset (True) or a SequenceDataset (False)
-        metadata_file: ".\\data\\metadata.csv" # metadata file for RepertoireDataset
+        metadata_file: "./data/metadata.csv" # metadata file for RepertoireDataset
         import_illegal_characters: False # remove sequences with illegal characters for the sequence_type being used
         import_empty_nt_sequences: True # keep sequences even though the nucleotide sequence might be empty
         import_empty_aa_sequences: False # filter out sequences if they don't have sequence_aa set
@@ -22,14 +22,26 @@ definitions:
         k: 3
         scale_to_unit_variance: True
         scale_to_zero_mean: True
+  reports:
+    dme_report:
+      DesignMatrixExporter:
+        file_format: csv
 instructions:
   export_instruction:
     type: DatasetExport
     datasets: 
-        - olga_dataset
-    number_of_processes: 4
-      export_formats:
-        - AIRR
-        - ImmuneML
+      - olga_dataset
+    number_of_processes: 1
+    export_formats:
+      - AIRR
+      - ImmuneML
+  expl_analysis_instruction:
+    type: ExploratoryAnalysis
+    analyses:
+      analysis_1:
+        dataset: olga_dataset
+        encoding: continuous_kmer
+        report: dme_report
+    number_of_processes: 1
 output:
   format: HTML
