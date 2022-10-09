@@ -1,6 +1,6 @@
 mode: baseline_repertoire_generation
 olga_model: humanTRB
-output_path: "D:\\Mano\\Darbai\\UiO\\Masters thesis\\simAIRR_evaluation\\data"
+output_path: "/home/mint/Desktop/masters/simAIRR_evaluation/data/sim_dataset"
 n_repertoires: 20
 n_sequences: 10
-n_threads: 8
+n_threads: 1

@@ -1,11 +1,23 @@
 definitions:
   datasets:
-    olga_dataset:
+    real_dataset:
       format: OLGA
       params:
-        path: "./data/olga_repertoires"
+        path: "./data/real_dataset"
         is_repertoire: True # whether to import a RepertoireDataset (True) or a SequenceDataset (False)
-        metadata_file: "./data/metadata.csv" # metadata file for RepertoireDataset
+        metadata_file: "./data/metadata_real.csv" # metadata file for RepertoireDataset
+        import_illegal_characters: False # remove sequences with illegal characters for the sequence_type being used
+        import_empty_nt_sequences: True # keep sequences even though the nucleotide sequence might be empty
+        import_empty_aa_sequences: False # filter out sequences if they don't have sequence_aa set
+        # Optional fields with OLGA-specific defaults, only change when different behavior is required:
+        # separator: "\t" # column separator
+        # region_type: IMGT_CDR3 # what part of the sequence to import
+    sim_dataset:
+      format: OLGA
+      params:
+        path: "./data/sim_dataset"
+        is_repertoire: True # whether to import a RepertoireDataset (True) or a SequenceDataset (False)
+        metadata_file: "./data/metadata_sim.csv" # metadata file for RepertoireDataset
         import_illegal_characters: False # remove sequences with illegal characters for the sequence_type being used
         import_empty_nt_sequences: True # keep sequences even though the nucleotide sequence might be empty
         import_empty_aa_sequences: False # filter out sequences if they don't have sequence_aa set
@@ -30,7 +42,8 @@ instructions:
   export_instruction:
     type: DatasetExport
     datasets: 
-      - olga_dataset
+      - real_dataset
+      - sim_dataset
     number_of_processes: 1
     export_formats:
       - AIRR
@@ -39,7 +52,11 @@ instructions:
     type: ExploratoryAnalysis
     analyses:
       analysis_1:
-        dataset: olga_dataset
+        dataset: real_dataset
+        encoding: continuous_kmer
+        report: dme_report
+      analysis_2:
+        dataset: sim_dataset
         encoding: continuous_kmer
         report: dme_report
     number_of_processes: 1

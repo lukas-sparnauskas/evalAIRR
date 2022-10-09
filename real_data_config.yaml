@@ -1,0 +1,6 @@
+mode: baseline_repertoire_generation
+olga_model: humanTRB
+output_path: "/home/mint/Desktop/masters/simAIRR_evaluation/data/real_dataset"
+n_repertoires: 20
+n_sequences: 10
+n_threads: 1

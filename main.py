@@ -22,16 +22,19 @@ path_R = args.real_dataset
 print('Real dataset: ' + path_R)
 data_file_R = open(path_R, "r")
 
-features_R = data_file_R.readline().split('\t')
+features_R = data_file_R.readline().split(',')
 features_R.pop(0)
 N_R = len(features_R)
 print('Number of real features:', N_R)
 
 data_R = []
 for row in data_file_R:
-    row = row.replace('\n', '')
-    data_R.append(row.split('\t'))
-
+    row = row.replace('\n', '').split(',')
+    float_row = []
+    for x in row:
+        float_row.append(float(x))
+    data_R.append(float_row)
+    
 data_R = np.array(data_R)
 
 # READ SIMULATED ENCODED TSV
@@ -41,15 +44,18 @@ print('Simulated dataset: ' + path_S)
 
 data_file_S = open(path_S, "r")
 
-features_S = data_file_S.readline().split('\t')
+features_S = data_file_S.readline().split(',')
 features_S.pop(0)
 N_S = len(features_S)
 print('Number of simulated features:', N_S)
 
 data_S = []
 for row in data_file_S:
-    row = row.replace('\n', '')
-    data_S.append(row.split('\t'))
+    row = row.replace('\n', '').split(',')
+    float_row = []
+    for x in row:
+        float_row.append(float(x))
+    data_S.append(float_row)
 
 data_S = np.array(data_S)
 
