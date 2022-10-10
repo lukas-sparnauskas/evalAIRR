@@ -1,7 +1,15 @@
-from scipy.stats import pearsonr
+import seaborn
 import argparse
-import numpy as np
 import subprocess
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from scipy.stats import pearsonr
+
+#######################
+### PARSE ARGUMENTS ###
+#######################
 
 parser = argparse.ArgumentParser(prog='simAIRR_eval')
 parser.add_argument('-r', '--real_dataset',
@@ -10,20 +18,16 @@ parser.add_argument('-s', '--sim_dataset',
                     help='path to the simulated AIRR dataset', required=True)
 args = parser.parse_args()
 
-# subprocess.call(
-#     'olga-generate_sequences --humanTRB -o ".\\data\\olga_repertoires\\rep_real.tsv" -n 10 --seed 121 >/dev/null 2>&1')
-# subprocess.call(
-#     'olga-generate_sequences --humanTRB -o ".\\data\\olga_repertoires\\rep_sim.tsv" -n 10 --seed 122 >/dev/null 2>&1')
 
-
-# READ REAL ENCODED TSV
+#############################
+### READ REAL ENCODED CSV ###
+#############################
 
 path_R = args.real_dataset
 print('Real dataset: ' + path_R)
 data_file_R = open(path_R, "r")
 
 features_R = data_file_R.readline().split(',')
-features_R.pop(0)
 N_R = len(features_R)
 print('Number of real features:', N_R)
 
@@ -34,10 +38,13 @@ for row in data_file_R:
     for x in row:
         float_row.append(float(x))
     data_R.append(float_row)
-    
+
 data_R = np.array(data_R)
 
-# READ SIMULATED ENCODED TSV
+
+##################################
+### READ SIMULATED ENCODED CSV ###
+##################################
 
 path_S = args.sim_dataset
 print('Simulated dataset: ' + path_S)
@@ -45,7 +52,6 @@ print('Simulated dataset: ' + path_S)
 data_file_S = open(path_S, "r")
 
 features_S = data_file_S.readline().split(',')
-features_S.pop(0)
 N_S = len(features_S)
 print('Number of simulated features:', N_S)
 
@@ -59,10 +65,10 @@ for row in data_file_S:
 
 data_S = np.array(data_S)
 
+
 ################################
 ### CALCULATING CORRELATIONS ###
 ################################
-
 
 def find_correlations(N_features, dataset):
     correlations = []
@@ -79,14 +85,25 @@ def find_correlations(N_features, dataset):
             #     return correlations
     return correlations
 
+# corrs_R = find_correlations(N_R, data_R)
+# corrs_S = find_correlations(N_S, data_S)
+# print('Correlations (REAL):')
+# for corr in corrs_R:
+#     print(
+#         f'{features_R[corr[0]]} and {features_R[corr[1]]} correlate at a rate of', '%.3f' % corr[2])
+# print('Correlations (REAL):')
+# for corr in corrs_S:
+#     print(
+#         f'{features_S[corr[0]]} and {features_S[corr[1]]} correlate at a rate of', '%.3f' % corr[2])
 
-corrs_R = find_correlations(N_R, data_R)
-corrs_S = find_correlations(N_S, data_S)
-print('Correlations (REAL):')
-for corr in corrs_R:
-    print(
-        f'{features_R[corr[0]]} and {features_R[corr[1]]} correlate at a rate of', '%.3f' % corr[2])
-print('Correlations (REAL):')
-for corr in corrs_S:
-    print(
-        f'{features_S[corr[0]]} and {features_S[corr[1]]} correlate at a rate of', '%.3f' % corr[2])
+
+corr_R = pd.DataFrame(data_R, columns=features_R).corr()
+corr_S = pd.DataFrame(data_S, columns=features_S).corr()
+
+plt.figure(figsize=(20, 20))
+seaborn.heatmap(corr_R, cmap='YlGnBu')  # , mask=(np.abs(corr_R) >= 0.5))
+plt.show()
+
+plt.figure(figsize=(20, 20))
+seaborn.heatmap(corr_S, cmap='YlGnBu')  # , mask=(np.abs(corr_S) >= 0.5))
+plt.show()
