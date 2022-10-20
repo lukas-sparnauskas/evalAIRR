@@ -28,9 +28,8 @@ definitions:
     continuous_kmer:
       KmerFrequency:
         normalization_type: RELATIVE_FREQUENCY
-        reads: UNIQUE
+        reads: ALL
         sequence_encoding: CONTINUOUS_KMER
-        sequence_type: NUCLEOTIDE
         k: 3
         scale_to_unit_variance: True
         scale_to_zero_mean: True
@@ -41,7 +40,7 @@ definitions:
 instructions:
   export_instruction:
     type: DatasetExport
-    datasets: 
+    datasets:
       - real_dataset
       - sim_dataset
     number_of_processes: 1
