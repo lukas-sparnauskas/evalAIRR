@@ -1,6 +1,6 @@
-def read_encoded_csv(csv_path):
+import numpy as np
 
-    import numpy as np
+def read_encoded_csv(csv_path):
 
     print('[LOG] Reading file: ' + csv_path)
     data_file = open(csv_path, "r")
