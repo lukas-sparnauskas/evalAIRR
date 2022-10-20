@@ -27,7 +27,6 @@ definitions:
   encodings:
     continuous_kmer:
       KmerFrequency:
-        normalization_type: RELATIVE_FREQUENCY
         reads: ALL
         sequence_encoding: CONTINUOUS_KMER
         k: 3
