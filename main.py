@@ -1,7 +1,9 @@
 import yaml
 import argparse
+import numpy as np
 from util.input import read_encoded_csv
-from util.pca import pca
+from util.corr import export_corr_heatmap
+from util.pca import export_pca_comparison
 
 #######################
 ### PARSE ARGUMENTS ###
@@ -23,6 +25,7 @@ with open(YAML_FILE, "r") as stream:
     except yaml.YAMLError as exc:
         print(exc)
 
+REPORTS = np.array(CONFIG['reports'])
 
 #####################
 ### READ DATASETS ###
@@ -31,6 +34,18 @@ with open(YAML_FILE, "r") as stream:
 features_R, data_R = read_encoded_csv(CONFIG['datasets']['real']['path'])
 features_S, data_S = read_encoded_csv(CONFIG['datasets']['sim']['path'])
 
-eigvec, PCA_R = pca(data_R, 100)
+###################
+### CORR REPORT ###
+###################
 
-print('PCA_R.shape = ', PCA_R.shape)
+do_corr_report = 'multivariate' in REPORTS
+if (do_corr_report):
+    export_corr_heatmap(data_R, data_S, len(features_R), len(features_S), 0.33)
+
+##################
+### PCA REPORT ###
+##################
+
+do_pca_report = 'pca' in REPORTS
+if (do_pca_report):
+    export_pca_comparison(data_R, data_S)

@@ -1,11 +1,11 @@
 datasets:
   real:
-    path: "./data/encoded_real.csv"
+    path: ./data/encoded_real.csv
   sim:
-    path: "./data/encoded_sim.csv"
+    path: ./data/encoded_sim.csv
 reports:
-  - "univariate"
-  - "multivariate"
-  - "ml-model"
-  - "pca"
-  - "copulas"
+  - univariate
+  - multivariate
+  - ml-model
+  - pca
+  - copulas

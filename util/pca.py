@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 def center_data(A):
     # INPUT:
@@ -94,3 +95,38 @@ def encode_decode_pca(A,m):
     Ahat = np.dot(P[:,:m].T, eigvec.T)
     Ahat += me  
     return Ahat
+
+def export_pca_comparison(data_real, data_sim):
+    eigvec_R, pca_R = pca(data_real, 2)
+    eigvec_S, pca_S = pca(data_sim, 2)
+
+    eigvec_R_x = np.linspace(min(pca_R[:, 0]), max(pca_R[:, 0]), 1000)
+    eigvec_R_y = eigvec_R[0][1] / eigvec_R[0][0] * eigvec_R_x
+
+    eigvec_S_x = np.linspace(min(pca_S[:, 0]), max(pca_S[:, 0]), 1000)
+    eigvec_S_y = eigvec_S[0][1] / eigvec_S[0][0] * eigvec_S_x
+
+    f,(ax1, ax2) = plt.subplots(1, 2)
+    f.set_size_inches(10, 5)
+    f.suptitle('PCA comparison in two dimensions')
+
+    ax1.scatter(pca_R[:, 0], pca_R[:, 1])
+    ax1.plot(eigvec_R_x, eigvec_R_y, c='#1b24a8')
+    ax1.set_title('Real dataset')
+
+    ax2.scatter(pca_S[:, 0], pca_S[:, 1], c='red')
+    ax2.plot(eigvec_S_x, eigvec_S_y, c='#781010')
+    # ax2.set_ylabel('')
+    # ax2.set_yticklabels([])
+    # ax2.set_yticks([])
+    ax2.set_title('Simulated dataset')
+    
+    xbound = (min(ax1.get_xbound()[0], ax2.get_xbound()[0]), max(ax1.get_xbound()[1], ax2.get_xbound()[1]))
+    ybound = (min(ax1.get_ybound()[0], ax2.get_ybound()[0]), max(ax1.get_ybound()[1], ax2.get_ybound()[1]))
+
+    ax1.set_xbound(xbound)
+    ax1.set_ybound(ybound)
+    ax2.set_xbound(xbound)
+    ax2.set_ybound(ybound)
+
+    plt.show()
