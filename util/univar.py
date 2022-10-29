@@ -36,3 +36,15 @@ def export_ks_test(feature, data_R, data_S, features_R, features_S):
     ax2.plot(cdf_2_x, cdf_2_y, c='#781010')
     ax2.set_title(f'CDF of feature {feature} in the simulated dataset')
     plt.show()
+
+def export_distr_histogram(feature, data_R, data_S, features_R, features_S, n_bins):
+    data_R_f = get_feature_data(feature, data_R, features_R)
+    data_S_f = get_feature_data(feature, data_S, features_S)
+    bins = np.linspace(min(min(data_R_f), min(data_S_f)), max(max(data_R_f), max(data_S_f)), n_bins=30)
+
+    f, ax = plt.subplots(1, 1)
+    f.set_size_inches(9, 7)
+    f.suptitle(f'Distribution histograms of feature {feature}')
+    ax.hist([data_R_f, data_S_f], bins, label=['Real dataset', 'Simulated dataset'])
+    ax.legend(loc='upper right')
+    plt.show()

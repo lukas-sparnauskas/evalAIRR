@@ -4,7 +4,9 @@ datasets:
   sim:
     path: ./data/encoded_sim.csv
 reports:
-  ks:
+  # ks:
+  #   - TGT
+  distr_histogram:
     - TGT
   # - multivariate
   # - ml-model
