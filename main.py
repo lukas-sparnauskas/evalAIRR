@@ -4,6 +4,7 @@ import numpy as np
 from util.input import read_encoded_csv
 from util.corr import export_corr_heatmap
 from util.pca import export_pca_comparison
+from util.univar import export_ks_test
 
 #######################
 ### PARSE ARGUMENTS ###
@@ -25,7 +26,7 @@ with open(YAML_FILE, "r") as stream:
     except yaml.YAMLError as exc:
         print(exc)
 
-REPORTS = np.array(CONFIG['reports'])
+REPORTS = CONFIG['reports']
 
 #####################
 ### READ DATASETS ###
@@ -49,3 +50,13 @@ if (do_corr_report):
 do_pca_report = 'pca' in REPORTS
 if (do_pca_report):
     export_pca_comparison(data_R, data_S)
+
+######################
+### KS TEST REPORT ###
+######################
+
+do_ks_report = 'ks' in REPORTS
+if (do_ks_report):
+    ks_reports = REPORTS['ks']
+    for feature in ks_reports:
+        export_ks_test(feature, data_R, data_S, features_R, features_S)

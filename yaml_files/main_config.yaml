@@ -4,8 +4,9 @@ datasets:
   sim:
     path: ./data/encoded_sim.csv
 reports:
-  - univariate
-  - multivariate
-  - ml-model
-  - pca
-  - copulas
+  ks:
+    - TGT
+  # - multivariate
+  # - ml-model
+  # - pca
+  # - copulas
