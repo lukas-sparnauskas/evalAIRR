@@ -1,13 +1,17 @@
 datasets:
   real:
-    path: ./data/encoded_real.csv
+    path: ./data/encoded_real_1000_200.csv
   sim:
-    path: ./data/encoded_sim.csv
+    path: ./data/encoded_sim_1000_200.csv
 reports:
-  # ks:
-  #   - TGT
+  ks:
+    - TGT
+    - ASS
+    - ANV
   distr_histogram:
     - TGT
+    - ASS
+    - ANV
   # - multivariate
   # - ml-model
   # - pca
