@@ -6,6 +6,7 @@ from util.corr import export_corr_heatmap
 from util.pca import export_pca_comparison
 from util.univar import export_ks_test
 from util.univar import export_distr_histogram
+from util.univar import export_distr_boxplot
 
 #######################
 ### PARSE ARGUMENTS ###
@@ -71,3 +72,13 @@ if (do_distr_histogram_report):
     distr_histogram_reports = REPORTS['distr_histogram']
     for feature in distr_histogram_reports:
         export_distr_histogram(feature, data_R, data_S, features_R, features_S)
+
+###################################
+### DISTRIBUTION BOXPLOT REPORT ###
+###################################
+
+do_distr_boxplot_report = 'distr_boxplot' in REPORTS
+if (do_distr_boxplot_report):
+    distr_boxplot_reports = REPORTS['distr_boxplot']
+    for feature in distr_boxplot_reports:
+        export_distr_boxplot(feature, data_R, data_S, features_R, features_S)

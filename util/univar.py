@@ -48,3 +48,13 @@ def export_distr_histogram(feature, data_R, data_S, features_R, features_S, n_bi
     ax.hist([data_R_f, data_S_f], bins, label=['Real dataset', 'Simulated dataset'])
     ax.legend(loc='upper right')
     plt.show()
+
+def export_distr_boxplot(feature, data_R, data_S, features_R, features_S, n_bins=30):
+    data_R_f = get_feature_data(feature, data_R, features_R)
+    data_S_f = get_feature_data(feature, data_S, features_S)
+
+    f, ax = plt.subplots(1, 1)
+    f.set_size_inches(9, 7)
+    f.suptitle(f'Distribution boxplots of feature {feature}')
+    ax.boxplot([data_R_f, data_S_f], labels=['Real dataset', 'Simulated dataset'])
+    plt.show()
