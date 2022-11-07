@@ -3,7 +3,7 @@ import argparse
 import numpy as np
 from util.input import read_encoded_csv
 from util.corr import export_corr_heatmap
-from util.pca import export_pca_comparison
+from util.pca import export_pca_2d_comparison
 from util.univar import export_ks_test
 from util.univar import export_distr_histogram
 from util.univar import export_distr_boxplot
@@ -41,17 +41,18 @@ features_S, data_S = read_encoded_csv(CONFIG['datasets']['sim']['path'])
 ### CORR REPORT ###
 ###################
 
-do_corr_report = 'multivariate' in REPORTS
+do_corr_report = 'corr' in REPORTS
 if (do_corr_report):
-    export_corr_heatmap(data_R, data_S, len(features_R), len(features_S), 0.33)
+    percent_features = REPORTS['corr']['percent_features']
+    export_corr_heatmap(data_R, data_S, len(features_R), len(features_S), percent_features)
 
-##################
-### PCA REPORT ###
-##################
+#####################
+### PCA 2D REPORT ###
+#####################
 
-do_pca_report = 'pca' in REPORTS
-if (do_pca_report):
-    export_pca_comparison(data_R, data_S)
+do_pca_2d_report = 'pca_2d' in REPORTS
+if (do_pca_2d_report):
+    export_pca_2d_comparison(data_R, data_S)
 
 ######################
 ### KS TEST REPORT ###

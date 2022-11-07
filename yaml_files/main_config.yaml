@@ -4,19 +4,15 @@ datasets:
   sim:
     path: ./data/encoded_sim_1000_200.csv
 reports:
-  # ks:
-  #   - TGT
-  #   - ASS
-  #   - ANV
+  ks:
+    - TGT
+    - ANV
   distr_histogram:
     - TGT
-    - ASS
     - ANV
   distr_boxplot:
     - TGT
-    - ASS
     - ANV
-  # - multivariate
-  # - ml-model
-  # - pca
-  # - copulas
+  corr:
+    percent_features: 0.10
+  pca_2d:

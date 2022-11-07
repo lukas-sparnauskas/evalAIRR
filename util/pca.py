@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import cupy as cp
 
 def center_data(A):
     # INPUT:
@@ -29,7 +30,7 @@ def compute_eigenvalue_eigenvectors(A):
     # OUTPUT:
     # eigval    [D] numpy vector of eigenvalues
     # eigvec    [DxD] numpy array of eigenvectors
-    eigval, eigvec = np.linalg.eig(A)
+    eigval, eigvec = np.linalg.eigh(A)
     # Numerical roundoff can lead to (tiny) imaginary parts. We correct that here.
     eigval = eigval.real
     eigvec = eigvec.real
@@ -58,9 +59,13 @@ def pca(A,m):
     # pca_eigvec    [Mxm] numpy matrix containing the eigenvectors (M dimensions, m eigenvectors)
     # P             [Nxm] numpy PCA data matrix (N samples, m features)
     
+    print('[LOG] PCA: Centering data')
     A = center_data(A)
+    print('[LOG] PCA: Computing covariance matrix')
     C = compute_covariance_matrix(A)
+    print('[LOG] PCA: Computing PCA matrix and eigenvectors')
     eigval, eigvec = compute_eigenvalue_eigenvectors(C)
+    print('[LOG] PCA: Sorting PCA matrix and eigenvectors')
     eigval, eigvec = sort_eigenvalue_eigenvectors(eigval, eigvec)
     
     if m > 0:
@@ -96,7 +101,7 @@ def encode_decode_pca(A,m):
     Ahat += me  
     return Ahat
 
-def export_pca_comparison(data_real, data_sim):
+def export_pca_2d_comparison(data_real, data_sim):
     eigvec_R, pca_R = pca(data_real, 2)
     eigvec_S, pca_S = pca(data_sim, 2)
 
