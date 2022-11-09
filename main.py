@@ -7,6 +7,7 @@ from util.pca import export_pca_2d_comparison
 from util.univar import export_ks_test
 from util.univar import export_distr_histogram
 from util.univar import export_distr_boxplot
+from util.univar import export_distr_violinplot
 
 #######################
 ### PARSE ARGUMENTS ###
@@ -83,3 +84,13 @@ if (do_distr_boxplot_report):
     distr_boxplot_reports = REPORTS['distr_boxplot']
     for feature in distr_boxplot_reports:
         export_distr_boxplot(feature, data_R, data_S, features_R, features_S)
+
+######################################
+### DISTRIBUTION VIOLINPLOT REPORT ###
+######################################
+
+do_distr_violinplot_report = 'distr_violinplot' in REPORTS
+if (do_distr_violinplot_report):
+    distr_violinplot_reports = REPORTS['distr_violinplot']
+    for feature in distr_violinplot_reports:
+        export_distr_violinplot(feature, data_R, data_S, features_R, features_S)

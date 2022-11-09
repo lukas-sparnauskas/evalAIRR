@@ -30,7 +30,7 @@ def compute_eigenvalue_eigenvectors(A):
     # OUTPUT:
     # eigval    [D] numpy vector of eigenvalues
     # eigvec    [DxD] numpy array of eigenvectors
-    eigval, eigvec = np.linalg.eigh(A)
+    eigval, eigvec = np.linalg.eig(A)
     # Numerical roundoff can lead to (tiny) imaginary parts. We correct that here.
     eigval = eigval.real
     eigvec = eigvec.real
@@ -105,11 +105,13 @@ def export_pca_2d_comparison(data_real, data_sim):
     eigvec_R, pca_R = pca(data_real, 2)
     eigvec_S, pca_S = pca(data_sim, 2)
 
+    eigvec_R = eigvec_R[0]
+    eigvec_S = eigvec_S[0]
     eigvec_R_x = np.linspace(min(pca_R[:, 0]), max(pca_R[:, 0]), 1000)
-    eigvec_R_y = eigvec_R[0][1] / eigvec_R[0][0] * eigvec_R_x
+    eigvec_R_y = eigvec_R[1] / eigvec_R[0] * eigvec_R_x
 
     eigvec_S_x = np.linspace(min(pca_S[:, 0]), max(pca_S[:, 0]), 1000)
-    eigvec_S_y = eigvec_S[0][1] / eigvec_S[0][0] * eigvec_S_x
+    eigvec_S_y = eigvec_S[1] / eigvec_S[0] * eigvec_S_x
 
     f,(ax1, ax2) = plt.subplots(1, 2)
     f.set_size_inches(10, 5)

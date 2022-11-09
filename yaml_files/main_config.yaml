@@ -4,15 +4,18 @@ datasets:
   sim:
     path: ./data/encoded_sim_1000_200.csv
 reports:
-  ks:
+  # ks:
+  #   - TGT
+  #   - ANV
+  # distr_histogram:
+  #   - TGT
+  #   - ANV
+  # distr_boxplot:
+  #   - TGT
+  #   - ANV
+  distr_violinplot:
     - TGT
     - ANV
-  distr_histogram:
-    - TGT
-    - ANV
-  distr_boxplot:
-    - TGT
-    - ANV
-  corr:
-    percent_features: 0.10
-  pca_2d:
+  # corr:
+  #   percent_features: 0.10
+  # pca_2d:

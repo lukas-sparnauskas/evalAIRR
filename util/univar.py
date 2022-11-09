@@ -49,7 +49,7 @@ def export_distr_histogram(feature, data_R, data_S, features_R, features_S, n_bi
     ax.legend(loc='upper right')
     plt.show()
 
-def export_distr_boxplot(feature, data_R, data_S, features_R, features_S, n_bins=30):
+def export_distr_boxplot(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
     data_S_f = get_feature_data(feature, data_S, features_S)
 
@@ -57,4 +57,33 @@ def export_distr_boxplot(feature, data_R, data_S, features_R, features_S, n_bins
     f.set_size_inches(9, 7)
     f.suptitle(f'Distribution boxplots of feature {feature}')
     ax.boxplot([data_R_f, data_S_f], labels=['Real dataset', 'Simulated dataset'])
+    plt.show()
+
+def export_distr_violinplot(feature, data_R, data_S, features_R, features_S):
+    data_R_f = get_feature_data(feature, data_R, features_R)
+    data_S_f = get_feature_data(feature, data_S, features_S)
+    
+    f, [ax1, ax2] = plt.subplots(2, 1)
+    f.set_size_inches(9, 7)
+    f.suptitle(f'Distribution violin plots of feature {feature}')
+    ax1.violinplot(data_R_f, vert=False, widths=0.7,
+                     showmeans=True, showextrema=True, showmedians=True)
+    ax1.set_title('Real dataset')
+    ax1.set_yticklabels([])
+    ax1.set_yticks([])
+    ax1.set
+    ax2.violinplot(data_S_f, vert=False, widths=0.7,
+                     showmeans=True, showextrema=True, showmedians=True)
+    ax2.set_title('Simulated dataset')
+    ax2.set_yticklabels([])
+    ax2.set_yticks([])
+
+    xbound = (min(ax1.get_xbound()[0], ax2.get_xbound()[0]), max(ax1.get_xbound()[1], ax2.get_xbound()[1]))
+    ybound = (min(ax1.get_ybound()[0], ax2.get_ybound()[0]), max(ax1.get_ybound()[1], ax2.get_ybound()[1]))
+
+    ax1.set_xbound(xbound)
+    ax1.set_ybound(ybound)
+    ax2.set_xbound(xbound)
+    ax2.set_ybound(ybound)
+
     plt.show()
