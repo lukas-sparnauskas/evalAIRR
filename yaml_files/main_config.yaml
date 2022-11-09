@@ -13,7 +13,10 @@ reports:
   # distr_boxplot:
   #   - TGT
   #   - ANV
-  distr_violinplot:
+  # distr_violinplot:
+  #   - TGT
+  #   - ANV
+  distr_densityplot:
     - TGT
     - ANV
   # corr:

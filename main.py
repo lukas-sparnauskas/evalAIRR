@@ -8,6 +8,7 @@ from util.univar import export_ks_test
 from util.univar import export_distr_histogram
 from util.univar import export_distr_boxplot
 from util.univar import export_distr_violinplot
+from util.univar import export_distr_densityplot
 
 #######################
 ### PARSE ARGUMENTS ###
@@ -94,3 +95,13 @@ if (do_distr_violinplot_report):
     distr_violinplot_reports = REPORTS['distr_violinplot']
     for feature in distr_violinplot_reports:
         export_distr_violinplot(feature, data_R, data_S, features_R, features_S)
+
+########################################
+### DISTRIBUTION DENSITY PLOT REPORT ###
+########################################
+
+do_distr_densityplot_report = 'distr_densityplot' in REPORTS
+if (do_distr_densityplot_report):
+    distr_densityplot_reports = REPORTS['distr_densityplot']
+    for feature in distr_densityplot_reports:
+        export_distr_densityplot(feature, data_R, data_S, features_R, features_S)

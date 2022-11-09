@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import seaborn as sns
 import numpy as np
 import scipy.stats
 
@@ -86,4 +87,16 @@ def export_distr_violinplot(feature, data_R, data_S, features_R, features_S):
     ax2.set_xbound(xbound)
     ax2.set_ybound(ybound)
 
+    plt.show()
+
+def export_distr_densityplot(feature, data_R, data_S, features_R, features_S):
+    data_R_f = get_feature_data(feature, data_R, features_R)
+    data_S_f = get_feature_data(feature, data_S, features_S)
+
+    f, ax = plt.subplots(1, 1)
+    f.set_size_inches(9, 7)
+    f.suptitle(f'Distribution density plot of feature {feature}')
+    sns.kdeplot(data_R_f, ax=ax, label='Real dataset', fill=True, common_norm=False, color='#5480d1', alpha=0.5, linewidth=0)
+    sns.kdeplot(data_S_f, ax=ax, label='Simulated dataset', fill=True, common_norm=False, color='#d65161', alpha=0.5, linewidth=0)
+    ax.legend()
     plt.show()
