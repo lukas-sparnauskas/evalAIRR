@@ -6,11 +6,6 @@ import scipy.stats
 def cdf(data):
     data_sorted = np.sort(data)
     p = 1. * np.arange(len(data)) / (len(data) - 1)
-    # ax2 = fig.add_subplot(122)
-    # ax2.plot(data_sorted, p)
-    # ax2.set_xlabel('$x$')
-    # ax2.set_ylabel('$p$')
-    # return x, y
     return data_sorted, p
 
 def get_feature_data(feature, data, features):
@@ -36,7 +31,9 @@ def export_ks_test(feature, data_R, data_S, features_R, features_S):
     ax1.set_title(f'CDF of feature {feature} in the real dataset')
     ax2.plot(cdf_2_x, cdf_2_y, c='#781010')
     ax2.set_title(f'CDF of feature {feature} in the simulated dataset')
-    plt.show()
+    
+    f.savefig(f'./output/temp_figures/ks_test_{feature}.svg')
+    del f
 
 def export_distr_histogram(feature, data_R, data_S, features_R, features_S, n_bins=30):
     data_R_f = get_feature_data(feature, data_R, features_R)
@@ -48,7 +45,9 @@ def export_distr_histogram(feature, data_R, data_S, features_R, features_S, n_bi
     f.suptitle(f'Distribution histograms of feature {feature}')
     ax.hist([data_R_f, data_S_f], bins, label=['Real dataset', 'Simulated dataset'])
     ax.legend(loc='upper right')
-    plt.show()
+    
+    f.savefig(f'./output/temp_figures/histogram_{feature}.svg')
+    del f
 
 def export_distr_boxplot(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
@@ -58,7 +57,9 @@ def export_distr_boxplot(feature, data_R, data_S, features_R, features_S):
     f.set_size_inches(9, 7)
     f.suptitle(f'Distribution boxplots of feature {feature}')
     ax.boxplot([data_R_f, data_S_f], labels=['Real dataset', 'Simulated dataset'])
-    plt.show()
+    
+    f.savefig(f'./output/temp_figures/box_plot_{feature}.svg')
+    del f
 
 def export_distr_violinplot(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
@@ -87,7 +88,8 @@ def export_distr_violinplot(feature, data_R, data_S, features_R, features_S):
     ax2.set_xbound(xbound)
     ax2.set_ybound(ybound)
 
-    plt.show()
+    f.savefig(f'./output/temp_figures/violin_plot_{feature}.svg')
+    del f
 
 def export_distr_densityplot(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
@@ -99,4 +101,6 @@ def export_distr_densityplot(feature, data_R, data_S, features_R, features_S):
     sns.kdeplot(data_R_f, ax=ax, label='Real dataset', fill=True, common_norm=False, color='#5480d1', alpha=0.5, linewidth=0)
     sns.kdeplot(data_S_f, ax=ax, label='Simulated dataset', fill=True, common_norm=False, color='#d65161', alpha=0.5, linewidth=0)
     ax.legend()
-    plt.show()
+
+    f.savefig(f'./output/temp_figures/density_plot_{feature}.svg')
+    del f

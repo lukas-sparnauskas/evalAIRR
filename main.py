@@ -1,6 +1,5 @@
 import yaml
 import argparse
-import numpy as np
 from util.input import read_encoded_csv
 from util.corr import export_corr_heatmap
 from util.pca import export_pca_2d_comparison
@@ -9,6 +8,7 @@ from util.univar import export_distr_histogram
 from util.univar import export_distr_boxplot
 from util.univar import export_distr_violinplot
 from util.univar import export_distr_densityplot
+from util.report import export_report
 
 #######################
 ### PARSE ARGUMENTS ###
@@ -18,19 +18,22 @@ parser = argparse.ArgumentParser(prog='simAIRR_eval')
 parser.add_argument('yaml_file', type=str, help='YAML file path')
 YAML_FILE = parser.parse_args().yaml_file
 
-
 #################
 ### READ YAML ###
 #################
 
 CONFIG = []
-with open(YAML_FILE, "r") as stream:
+with open(YAML_FILE, 'r') as stream:
     try:
         CONFIG = (yaml.safe_load(stream))
     except yaml.YAMLError as exc:
         print(exc)
 
 REPORTS = CONFIG['reports']
+
+OUTPUT = './output/report.html'
+if CONFIG['output'] and CONFIG['output']['path']:
+    OUTPUT = CONFIG['output']['path']
 
 #####################
 ### READ DATASETS ###
@@ -105,3 +108,9 @@ if (do_distr_densityplot_report):
     distr_densityplot_reports = REPORTS['distr_densityplot']
     for feature in distr_densityplot_reports:
         export_distr_densityplot(feature, data_R, data_S, features_R, features_S)
+
+##########################
+### EXPORT HTML REPORT ###
+##########################
+
+export_report(OUTPUT)

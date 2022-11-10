@@ -13,12 +13,14 @@ reports:
   # distr_boxplot:
   #   - TGT
   #   - ANV
-  # distr_violinplot:
-  #   - TGT
-  #   - ANV
+  distr_violinplot:
+    - TGT
+    - ANV
   distr_densityplot:
     - TGT
     - ANV
   # corr:
   #   percent_features: 0.10
   # pca_2d:
+output:
+  path: report.html
