@@ -19,6 +19,9 @@ reports:
   distr_densityplot:
     - TGT
     - ANV
+  distance:
+    - TGT
+    - ANV
   # corr:
   #   percent_features: 0.10
   # pca_2d:

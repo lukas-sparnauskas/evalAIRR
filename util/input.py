@@ -6,7 +6,7 @@ def read_encoded_csv(csv_path):
     data_file = open(csv_path, "r")
     features = data_file.readline().split(',')
     features = [f.replace('\n', '').strip() for f in features]
-    print(f'[LOG] Number of features in "{csv_path}":', len(features))
+    print(f'[LOG] Number of features in "{csv_path}" :', len(features))
     data = []
     for row in data_file:
         row = row.replace('\n', '').split(',')

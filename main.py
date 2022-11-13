@@ -8,6 +8,7 @@ from util.univar import export_distr_histogram
 from util.univar import export_distr_boxplot
 from util.univar import export_distr_violinplot
 from util.univar import export_distr_densityplot
+from util.univar import export_distance
 from util.report import export_report
 
 #######################
@@ -108,6 +109,16 @@ if (do_distr_densityplot_report):
     distr_densityplot_reports = REPORTS['distr_densityplot']
     for feature in distr_densityplot_reports:
         export_distr_densityplot(feature, data_R, data_S, features_R, features_S)
+
+#######################
+### DISTANCE REPORT ###
+#######################
+
+do_distance_report = 'distance' in REPORTS
+if (do_distance_report):
+    distance_reports = REPORTS['distance']
+    for feature in distance_reports:
+        export_distance(feature, data_R, data_S, features_R, features_S)
 
 ##########################
 ### EXPORT HTML REPORT ###

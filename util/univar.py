@@ -18,6 +18,7 @@ def get_feature_data(feature, data, features):
 def export_ks_test(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
     data_S_f = get_feature_data(feature, data_S, features_S)
+
     cdf_1_x, cdf_1_y = cdf(data_R_f)
     cdf_2_x, cdf_2_y = cdf(data_S_f)
     res = scipy.stats.ks_2samp(data_R_f, data_S_f)
@@ -38,6 +39,7 @@ def export_ks_test(feature, data_R, data_S, features_R, features_S):
 def export_distr_histogram(feature, data_R, data_S, features_R, features_S, n_bins=30):
     data_R_f = get_feature_data(feature, data_R, features_R)
     data_S_f = get_feature_data(feature, data_S, features_S)
+
     bins = np.linspace(min(min(data_R_f), min(data_S_f)), max(max(data_R_f), max(data_S_f)), n_bins)
 
     f, ax = plt.subplots(1, 1)
@@ -104,3 +106,9 @@ def export_distr_densityplot(feature, data_R, data_S, features_R, features_S):
 
     f.savefig(f'./output/temp_figures/density_plot_{feature}.svg')
     del f
+
+def export_distance(feature, data_R, data_S, features_R, features_S):
+    data_R_f = get_feature_data(feature, data_R, features_R)
+    data_S_f = get_feature_data(feature, data_S, features_S)
+
+    print(f'[RESULT] Euclidean distance of feature {feature} :', np.linalg.norm(data_R_f - data_S_f))
