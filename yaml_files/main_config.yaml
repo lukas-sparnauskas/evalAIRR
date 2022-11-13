@@ -4,9 +4,9 @@ datasets:
   sim:
     path: ./data/encoded_sim_1000_200.csv
 reports:
-  # ks:
-  #   - TGT
-  #   - ANV
+  ks:
+    - TGT
+    - ANV
   # distr_histogram:
   #   - TGT
   #   - ANV

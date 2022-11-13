@@ -22,9 +22,7 @@ def export_ks_test(feature, data_R, data_S, features_R, features_S):
     cdf_1_x, cdf_1_y = cdf(data_R_f)
     cdf_2_x, cdf_2_y = cdf(data_S_f)
     res = scipy.stats.ks_2samp(data_R_f, data_S_f)
-    print(f'[RESULT] Feature {feature} KS statistic =', res.statistic)
-    print(f'[RESULT] Feature {feature} P value =', res.pvalue)
-
+    
     f,(ax1, ax2) = plt.subplots(1, 2)
     f.set_size_inches(10, 5)
     f.suptitle(f'CDF comparison of feature {feature} in  real and simulated datasets')
@@ -33,6 +31,19 @@ def export_ks_test(feature, data_R, data_S, features_R, features_S):
     ax2.plot(cdf_2_x, cdf_2_y, c='#781010')
     ax2.set_title(f'CDF of feature {feature} in the simulated dataset')
     
+    print(f'[RESULT] Feature {feature} KS statistic =', res.statistic)
+    print(f'[RESULT] Feature {feature} P value =', res.pvalue)
+    with open(f'./output/temp_results/ks_test_{feature}.txt', 'w', encoding="utf-8") as file:
+        file.write('\t\t<tr colspan="2">\n')
+        file.write(f'\t\t\t<td>Feature {feature} KS statistic</td>\n')
+        file.write(f'\t\t\t<td>{res.statistic}</td>\n')
+        file.write('\t\t</tr>\n')
+
+        file.write('\t\t<tr colspan="2">\n')
+        file.write(f'\t\t\t<td>Feature {feature} P value</td>\n')
+        file.write(f'\t\t\t<td>{res.pvalue}</td>\n')
+        file.write('\t\t</tr>\n')
+
     f.savefig(f'./output/temp_figures/ks_test_{feature}.svg')
     del f
 
@@ -111,14 +122,55 @@ def export_distance(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
     data_S_f = get_feature_data(feature, data_S, features_S)
 
-    print(f'[RESULT] Euclidean distance of feature {feature} : {np.linalg.norm(data_R_f - data_S_f)}')
+    dist = np.linalg.norm(data_R_f - data_S_f)
+    print(f'[RESULT] Euclidean distance of feature {feature} : {dist}')
+
+    with open(f'./output/temp_results/distance_{feature}.txt', 'w', encoding="utf-8") as file:
+        file.write('\t\t<tr colspan="2">\n')
+        file.write(f'\t\t\t<td>Euclidean distance of feature {feature}</td>\n')
+        file.write(f'\t\t\t<td>{dist}</td>\n')
+        file.write('\t\t</tr>\n')
     
 def export_statistics(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
     data_S_f = get_feature_data(feature, data_S, features_S)
 
-    print('[RESULT] Average of feature {0:>16} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, np.average(data_R_f), np.average(data_S_f)))
-    print('[RESULT] Mean of feature {0:>19} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, np.mean(data_R_f), np.mean(data_S_f)))
-    print('[RESULT] Median of feature {0:>17} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, np.median(data_R_f), np.median(data_S_f)))
-    print('[RESULT] Standard deviation of feature {0:>5} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, np.std(data_R_f), np.std(data_S_f)))
-    print('[RESULT] Variance of feature {0:>15} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, np.var(data_R_f), np.var(data_S_f)))
+    avg = { 'real': np.average(data_R_f), 'sim': np.average(data_S_f)}
+    mean = { 'real': np.mean(data_R_f), 'sim': np.mean(data_S_f)}
+    median = { 'real': np.median(data_R_f), 'sim': np.median(data_S_f)}
+    std = { 'real': np.std(data_R_f), 'sim': np.std(data_S_f)}
+    var = { 'real': np.var(data_R_f), 'sim': np.var(data_S_f)}
+
+    print('[RESULT] Average of feature {0:>16} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, avg['real'], avg['sim']))
+    print('[RESULT] Mean of feature {0:>19} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, mean['real'], mean['sim']))
+    print('[RESULT] Median of feature {0:>17} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, median['real'], median['sim']))
+    print('[RESULT] Standard deviation of feature {0:>5} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, std['real'], std['sim']))
+    print('[RESULT] Variance of feature {0:>15} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, var['real'], var['sim']))
+
+    with open(f'./output/temp_statistics/{feature}.txt', 'w', encoding="utf-8") as file:
+        file.write('\t\t<tr>\n')
+        file.write(f'\t\t\t<td>Average of feature {feature}</td>\n')
+        file.write(f'\t\t\t<td>{avg["real"]}</td>\n')
+        file.write(f'\t\t\t<td>{avg["sim"]}</td>\n')
+        file.write('\t\t</tr>\n')
+        file.write('\t\t<tr>\n')
+        file.write(f'\t\t\t<td>Mean of feature {feature}</td>\n')
+        file.write(f'\t\t\t<td>{mean["real"]}</td>\n')
+        file.write(f'\t\t\t<td>{mean["sim"]}</td>\n')
+        file.write('\t\t</tr>\n')
+        file.write('\t\t<tr>\n')
+        file.write(f'\t\t\t<td>Median of feature {feature}</td>\n')
+        file.write(f'\t\t\t<td>{median["real"]}</td>\n')
+        file.write(f'\t\t\t<td>{median["sim"]}</td>\n')
+        file.write('\t\t</tr>\n')
+        file.write('\t\t<tr>\n')
+        file.write(f'\t\t\t<td>Standard deviation of feature {feature}</td>\n')
+        file.write(f'\t\t\t<td>{std["real"]}</td>\n')
+        file.write(f'\t\t\t<td>{std["sim"]}</td>\n')
+        file.write('\t\t</tr>\n')
+        file.write('\t\t<tr>\n')
+        file.write(f'\t\t\t<td>Variance of feature {feature}</td>\n')
+        file.write(f'\t\t\t<td>{var["real"]}</td>\n')
+        file.write(f'\t\t\t<td>{var["sim"]}</td>\n')
+        file.write('\t\t</tr>\n')
+        
