@@ -111,4 +111,14 @@ def export_distance(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
     data_S_f = get_feature_data(feature, data_S, features_S)
 
-    print(f'[RESULT] Euclidean distance of feature {feature} :', np.linalg.norm(data_R_f - data_S_f))
+    print(f'[RESULT] Euclidean distance of feature {feature} : {np.linalg.norm(data_R_f - data_S_f)}')
+    
+def export_statistics(feature, data_R, data_S, features_R, features_S):
+    data_R_f = get_feature_data(feature, data_R, features_R)
+    data_S_f = get_feature_data(feature, data_S, features_S)
+
+    print('[RESULT] Average of feature {0:>16} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, np.average(data_R_f), np.average(data_S_f)))
+    print('[RESULT] Mean of feature {0:>19} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, np.mean(data_R_f), np.mean(data_S_f)))
+    print('[RESULT] Median of feature {0:>17} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, np.median(data_R_f), np.median(data_S_f)))
+    print('[RESULT] Standard deviation of feature {0:>5} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, np.std(data_R_f), np.std(data_S_f)))
+    print('[RESULT] Variance of feature {0:>15} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, np.var(data_R_f), np.var(data_S_f)))

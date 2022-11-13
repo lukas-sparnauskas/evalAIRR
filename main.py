@@ -9,6 +9,7 @@ from util.univar import export_distr_boxplot
 from util.univar import export_distr_violinplot
 from util.univar import export_distr_densityplot
 from util.univar import export_distance
+from util.univar import export_statistics
 from util.report import export_report
 
 #######################
@@ -32,10 +33,11 @@ with open(YAML_FILE, 'r') as stream:
 
 REPORTS = CONFIG['reports']
 
-OUTPUT = './output/report.html'
-if CONFIG['output'] and CONFIG['output']['path']:
+try:
     OUTPUT = CONFIG['output']['path']
-
+except: 
+    OUTPUT = './output/report.html'
+    
 #####################
 ### READ DATASETS ###
 #####################
@@ -119,6 +121,16 @@ if (do_distance_report):
     distance_reports = REPORTS['distance']
     for feature in distance_reports:
         export_distance(feature, data_R, data_S, features_R, features_S)
+
+#########################
+### STATISTICS REPORT ###
+#########################
+
+do_statistics_report = 'statistics' in REPORTS
+if (do_statistics_report):
+    statistics_reports = REPORTS['statistics']
+    for feature in statistics_reports:
+        export_statistics(feature, data_R, data_S, features_R, features_S)
 
 ##########################
 ### EXPORT HTML REPORT ###
