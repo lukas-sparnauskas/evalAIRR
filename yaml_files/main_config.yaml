@@ -7,12 +7,12 @@ reports:
   ks:
     - TGT
     - ANV
-  # distr_histogram:
-  #   - TGT
-  #   - ANV
-  # distr_boxplot:
-  #   - TGT
-  #   - ANV
+  distr_histogram:
+    - TGT
+    - ANV
+  distr_boxplot:
+    - TGT
+    - ANV
   distr_violinplot:
     - TGT
     - ANV
@@ -25,6 +25,8 @@ reports:
   statistics:
     - TGT
     - ANV
+  feature_average_vs_variance:
+  observation_average_vs_variance:
   # corr:
   #   percent_features: 0.10
   # pca_2d:

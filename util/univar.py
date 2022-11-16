@@ -118,6 +118,23 @@ def export_distr_densityplot(feature, data_R, data_S, features_R, features_S):
     f.savefig(f'./output/temp_figures/density_plot_{feature}.svg')
     del f
 
+def export_avg_var_scatter_plot(data_R, data_S, axis=0):
+    data_R_x = np.average(data_R, axis=axis)
+    data_R_y = np.var(data_R, axis=axis)
+    data_S_x = np.average(data_S, axis=axis)
+    data_S_y = np.var(data_S, axis=axis)
+
+    f, ax = plt.subplots(1, 1)
+    f.set_size_inches(9, 7)
+    f.suptitle('Feature average value vs variance' if axis == 0 else 'Observation average value vs variance')
+    ax.scatter(data_R_x, data_R_y, c='#5480d1', linewidths=None, alpha=0.5)
+    ax.scatter(data_S_x, data_S_y, c='#d65161', linewidths=None, alpha=0.5)
+    ax.set_xlabel('Average value')
+    ax.set_ylabel('Variance value')
+    
+    f.savefig(f'./output/temp_figures/avg_var_{"feat" if axis == 0 else "obs"}_scatter_plot.svg')
+    del f
+
 def export_distance(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
     data_S_f = get_feature_data(feature, data_S, features_S)
@@ -136,13 +153,11 @@ def export_statistics(feature, data_R, data_S, features_R, features_S):
     data_S_f = get_feature_data(feature, data_S, features_S)
 
     avg = { 'real': np.average(data_R_f), 'sim': np.average(data_S_f)}
-    mean = { 'real': np.mean(data_R_f), 'sim': np.mean(data_S_f)}
     median = { 'real': np.median(data_R_f), 'sim': np.median(data_S_f)}
     std = { 'real': np.std(data_R_f), 'sim': np.std(data_S_f)}
     var = { 'real': np.var(data_R_f), 'sim': np.var(data_S_f)}
 
     print('[RESULT] Average of feature {0:>16} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, avg['real'], avg['sim']))
-    print('[RESULT] Mean of feature {0:>19} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, mean['real'], mean['sim']))
     print('[RESULT] Median of feature {0:>17} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, median['real'], median['sim']))
     print('[RESULT] Standard deviation of feature {0:>5} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, std['real'], std['sim']))
     print('[RESULT] Variance of feature {0:>15} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, var['real'], var['sim']))
@@ -152,11 +167,6 @@ def export_statistics(feature, data_R, data_S, features_R, features_S):
         file.write(f'\t\t\t<td>Average of feature {feature}</td>\n')
         file.write(f'\t\t\t<td>{avg["real"]}</td>\n')
         file.write(f'\t\t\t<td>{avg["sim"]}</td>\n')
-        file.write('\t\t</tr>\n')
-        file.write('\t\t<tr>\n')
-        file.write(f'\t\t\t<td>Mean of feature {feature}</td>\n')
-        file.write(f'\t\t\t<td>{mean["real"]}</td>\n')
-        file.write(f'\t\t\t<td>{mean["sim"]}</td>\n')
         file.write('\t\t</tr>\n')
         file.write('\t\t<tr>\n')
         file.write(f'\t\t\t<td>Median of feature {feature}</td>\n')

@@ -8,6 +8,7 @@ from util.univar import export_distr_histogram
 from util.univar import export_distr_boxplot
 from util.univar import export_distr_violinplot
 from util.univar import export_distr_densityplot
+from util.univar import export_avg_var_scatter_plot
 from util.univar import export_distance
 from util.univar import export_statistics
 from util.report import export_report
@@ -111,6 +112,22 @@ if (do_distr_densityplot_report):
     distr_densityplot_reports = REPORTS['distr_densityplot']
     for feature in distr_densityplot_reports:
         export_distr_densityplot(feature, data_R, data_S, features_R, features_S)
+
+################################################
+### FEATURE AVERAGE VALUE VS VARIANCE REPORT ###
+################################################
+
+do_avg_vs_var_feature_report = 'feature_average_vs_variance' in REPORTS
+if (do_avg_vs_var_feature_report):
+    export_avg_var_scatter_plot(data_R, data_S, axis=0)
+
+####################################################
+### OBSERVATION AVERAGE VALUE VS VARIANCE REPORT ###
+####################################################
+
+do_avg_vs_var_observation_report = 'observation_average_vs_variance' in REPORTS
+if (do_avg_vs_var_observation_report):
+    export_avg_var_scatter_plot(data_R, data_S, axis=1)
 
 #######################
 ### DISTANCE REPORT ###
