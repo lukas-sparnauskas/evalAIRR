@@ -10,21 +10,45 @@ reports:
   distr_histogram:
     - TGT
     - ANV
+  observation_distr_histogram:
+    - 0
+    - 199
+    - 200
   distr_boxplot:
     - TGT
     - ANV
+  observation_distr_boxplot:
+    - 0
+    - 199
+    - 200
   distr_violinplot:
     - TGT
     - ANV
+  observation_distr_violinplot:
+    - 0
+    - 199
+    - 200
   distr_densityplot:
     - TGT
     - ANV
+  observation_distr_densityplot:
+    - 0
+    - 199
+    - 200
   distance:
     - TGT
     - ANV
+  observation_distance:
+    - 0
+    - 199
+    - 200
   statistics:
     - TGT
     - ANV
+  observation_statistics:
+    - 0
+    - 199
+    - 200
   feature_average_vs_variance:
   observation_average_vs_variance:
   # corr:

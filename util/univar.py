@@ -15,9 +15,17 @@ def get_feature_data(feature, data, features):
         return np.array([])
     return data[:, idx].flatten()
 
+def get_observation_data(observation_index, data):
+    if observation_index < 0 or observation_index >= len(data):
+        print(f'[ERROR] Observation with index {observation_index} does not exist!')
+        return np.array([])
+    return data[observation_index, :].flatten()
+
 def export_ks_test(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
     data_S_f = get_feature_data(feature, data_S, features_S)
+    if not any(data_R_f) or not any(data_S_f):
+        return
 
     cdf_1_x, cdf_1_y = cdf(data_R_f)
     cdf_2_x, cdf_2_y = cdf(data_S_f)
@@ -50,6 +58,8 @@ def export_ks_test(feature, data_R, data_S, features_R, features_S):
 def export_distr_histogram(feature, data_R, data_S, features_R, features_S, n_bins=30):
     data_R_f = get_feature_data(feature, data_R, features_R)
     data_S_f = get_feature_data(feature, data_S, features_S)
+    if not any(data_R_f) or not any(data_S_f):
+        return
 
     bins = np.linspace(min(min(data_R_f), min(data_S_f)), max(max(data_R_f), max(data_S_f)), n_bins)
 
@@ -62,9 +72,28 @@ def export_distr_histogram(feature, data_R, data_S, features_R, features_S, n_bi
     f.savefig(f'./output/temp_figures/histogram_{feature}.svg')
     del f
 
+def export_obs_distr_histogram(observation_index, data_R, data_S, n_bins=30):
+    data_R_o = get_observation_data(observation_index, data_R)
+    data_S_o = get_observation_data(observation_index, data_S)
+    if not any(data_R_o) or not any(data_S_o):
+        return
+
+    bins = np.linspace(min(min(data_R_o), min(data_S_o)), max(max(data_R_o), max(data_S_o)), n_bins)
+
+    f, ax = plt.subplots(1, 1)
+    f.set_size_inches(9, 7)
+    f.suptitle(f'Distribution histograms of observation with index {observation_index}')
+    ax.hist([data_R_o, data_S_o], bins, label=['Real dataset', 'Simulated dataset'])
+    ax.legend(loc='upper right')
+    
+    f.savefig(f'./output/temp_figures/histogram_obs_{observation_index}.svg')
+    del f
+
 def export_distr_boxplot(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
     data_S_f = get_feature_data(feature, data_S, features_S)
+    if not any(data_R_f) or not any(data_S_f):
+        return
 
     f, ax = plt.subplots(1, 1)
     f.set_size_inches(9, 7)
@@ -74,10 +103,26 @@ def export_distr_boxplot(feature, data_R, data_S, features_R, features_S):
     f.savefig(f'./output/temp_figures/box_plot_{feature}.svg')
     del f
 
+def export_obs_distr_boxplot(observation_index, data_R, data_S):
+    data_R_o = get_observation_data(observation_index, data_R)
+    data_S_o = get_observation_data(observation_index, data_S)
+    if not any(data_R_o) or not any(data_S_o):
+        return
+
+    f, ax = plt.subplots(1, 1)
+    f.set_size_inches(9, 7)
+    f.suptitle(f'Distribution boxplots of observation with index {observation_index}')
+    ax.boxplot([data_R_o, data_S_o], labels=['Real dataset', 'Simulated dataset'])
+    
+    f.savefig(f'./output/temp_figures/box_plot_obs_{observation_index}.svg')
+    del f
+
 def export_distr_violinplot(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
     data_S_f = get_feature_data(feature, data_S, features_S)
-    
+    if not any(data_R_f) or not any(data_S_f):
+        return
+
     f, [ax1, ax2] = plt.subplots(2, 1)
     f.set_size_inches(9, 7)
     f.suptitle(f'Distribution violin plots of feature {feature}')
@@ -104,9 +149,43 @@ def export_distr_violinplot(feature, data_R, data_S, features_R, features_S):
     f.savefig(f'./output/temp_figures/violin_plot_{feature}.svg')
     del f
 
+def export_obs_distr_violinplot(observation_index, data_R, data_S):
+    data_R_o = get_observation_data(observation_index, data_R)
+    data_S_o = get_observation_data(observation_index, data_S)
+    if not any(data_R_o) or not any(data_S_o):
+        return
+    
+    f, [ax1, ax2] = plt.subplots(2, 1)
+    f.set_size_inches(9, 7)
+    f.suptitle(f'Distribution violin plots of observation with index {observation_index}')
+    ax1.violinplot(data_R_o, vert=False, widths=0.7,
+                     showmeans=True, showextrema=True, showmedians=True)
+    ax1.set_title('Real dataset')
+    ax1.set_yticklabels([])
+    ax1.set_yticks([])
+    ax1.set
+    ax2.violinplot(data_S_o, vert=False, widths=0.7,
+                     showmeans=True, showextrema=True, showmedians=True)
+    ax2.set_title('Simulated dataset')
+    ax2.set_yticklabels([])
+    ax2.set_yticks([])
+
+    xbound = (min(ax1.get_xbound()[0], ax2.get_xbound()[0]), max(ax1.get_xbound()[1], ax2.get_xbound()[1]))
+    ybound = (min(ax1.get_ybound()[0], ax2.get_ybound()[0]), max(ax1.get_ybound()[1], ax2.get_ybound()[1]))
+
+    ax1.set_xbound(xbound)
+    ax1.set_ybound(ybound)
+    ax2.set_xbound(xbound)
+    ax2.set_ybound(ybound)
+
+    f.savefig(f'./output/temp_figures/violin_plot_obs_{observation_index}.svg')
+    del f
+
 def export_distr_densityplot(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
     data_S_f = get_feature_data(feature, data_S, features_S)
+    if not any(data_R_f) or not any(data_S_f):
+        return
 
     f, ax = plt.subplots(1, 1)
     f.set_size_inches(9, 7)
@@ -116,6 +195,22 @@ def export_distr_densityplot(feature, data_R, data_S, features_R, features_S):
     ax.legend()
 
     f.savefig(f'./output/temp_figures/density_plot_{feature}.svg')
+    del f
+
+def export_obs_distr_densityplot(observation_index, data_R, data_S):
+    data_R_o = get_observation_data(observation_index, data_R)
+    data_S_o = get_observation_data(observation_index, data_S)
+    if not any(data_R_o) or not any(data_S_o):
+        return
+
+    f, ax = plt.subplots(1, 1)
+    f.set_size_inches(9, 7)
+    f.suptitle(f'Distribution density plot of observation with index {observation_index}')
+    sns.kdeplot(data_R_o, ax=ax, label='Real dataset', fill=True, common_norm=False, color='#5480d1', alpha=0.5, linewidth=0)
+    sns.kdeplot(data_S_o, ax=ax, label='Simulated dataset', fill=True, common_norm=False, color='#d65161', alpha=0.5, linewidth=0)
+    ax.legend()
+
+    f.savefig(f'./output/temp_figures/density_plot_obs_{observation_index}.svg')
     del f
 
 def export_avg_var_scatter_plot(data_R, data_S, axis=0):
@@ -138,6 +233,8 @@ def export_avg_var_scatter_plot(data_R, data_S, axis=0):
 def export_distance(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
     data_S_f = get_feature_data(feature, data_S, features_S)
+    if not any(data_R_f) or not any(data_S_f):
+        return
 
     dist = np.linalg.norm(data_R_f - data_S_f)
     print(f'[RESULT] Euclidean distance of feature {feature} : {dist}')
@@ -147,10 +244,27 @@ def export_distance(feature, data_R, data_S, features_R, features_S):
         file.write(f'\t\t\t<td>Euclidean distance of feature {feature}</td>\n')
         file.write(f'\t\t\t<td>{dist}</td>\n')
         file.write('\t\t</tr>\n')
+
+def export_obs_distance(observation_index, data_R, data_S):
+    data_R_o = get_observation_data(observation_index, data_R)
+    data_S_o = get_observation_data(observation_index, data_S)
+    if not any(data_R_o) or not any(data_S_o):
+        return
+
+    dist = np.linalg.norm(data_R_o - data_S_o)
+    print(f'[RESULT] Euclidean distance of observation with index {observation_index} : {dist}')
+
+    with open(f'./output/temp_results/distance_obs_{observation_index}.txt', 'w', encoding="utf-8") as file:
+        file.write('\t\t<tr colspan="2">\n')
+        file.write(f'\t\t\t<td>Euclidean distance of observation with index {observation_index}</td>\n')
+        file.write(f'\t\t\t<td>{dist}</td>\n')
+        file.write('\t\t</tr>\n')
     
 def export_statistics(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
     data_S_f = get_feature_data(feature, data_S, features_S)
+    if not any(data_R_f) or not any(data_S_f):
+        return
 
     avg = { 'real': np.average(data_R_f), 'sim': np.average(data_S_f)}
     median = { 'real': np.median(data_R_f), 'sim': np.median(data_S_f)}
@@ -180,6 +294,44 @@ def export_statistics(feature, data_R, data_S, features_R, features_S):
         file.write('\t\t</tr>\n')
         file.write('\t\t<tr>\n')
         file.write(f'\t\t\t<td>Variance of feature {feature}</td>\n')
+        file.write(f'\t\t\t<td>{var["real"]}</td>\n')
+        file.write(f'\t\t\t<td>{var["sim"]}</td>\n')
+        file.write('\t\t</tr>\n')
+
+def export_obs_statistics(observation_index, data_R, data_S):
+    data_R_o = get_observation_data(observation_index, data_R)
+    data_S_o = get_observation_data(observation_index, data_S)
+    if not any(data_R_o) or not any(data_S_o):
+        return
+
+    avg = { 'real': np.average(data_R_o), 'sim': np.average(data_S_o)}
+    median = { 'real': np.median(data_R_o), 'sim': np.median(data_S_o)}
+    std = { 'real': np.std(data_R_o), 'sim': np.std(data_S_o)}
+    var = { 'real': np.var(data_R_o), 'sim': np.var(data_S_o)}
+
+    print('[RESULT] Average of observation with index {0:>16} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(observation_index, avg['real'], avg['sim']))
+    print('[RESULT] Median of observation with index {0:>17} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(observation_index, median['real'], median['sim']))
+    print('[RESULT] Standard deviation of observation with index {0:>5} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(observation_index, std['real'], std['sim']))
+    print('[RESULT] Variance of observation with index {0:>15} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(observation_index, var['real'], var['sim']))
+
+    with open(f'./output/temp_statistics/obs_{observation_index}.txt', 'w', encoding="utf-8") as file:
+        file.write('\t\t<tr>\n')
+        file.write(f'\t\t\t<td>Average of observation with index {observation_index}</td>\n')
+        file.write(f'\t\t\t<td>{avg["real"]}</td>\n')
+        file.write(f'\t\t\t<td>{avg["sim"]}</td>\n')
+        file.write('\t\t</tr>\n')
+        file.write('\t\t<tr>\n')
+        file.write(f'\t\t\t<td>Median of observation with index {observation_index}</td>\n')
+        file.write(f'\t\t\t<td>{median["real"]}</td>\n')
+        file.write(f'\t\t\t<td>{median["sim"]}</td>\n')
+        file.write('\t\t</tr>\n')
+        file.write('\t\t<tr>\n')
+        file.write(f'\t\t\t<td>Standard deviation of observation with index {observation_index}</td>\n')
+        file.write(f'\t\t\t<td>{std["real"]}</td>\n')
+        file.write(f'\t\t\t<td>{std["sim"]}</td>\n')
+        file.write('\t\t</tr>\n')
+        file.write('\t\t<tr>\n')
+        file.write(f'\t\t\t<td>Variance of observation with index {observation_index}</td>\n')
         file.write(f'\t\t\t<td>{var["real"]}</td>\n')
         file.write(f'\t\t\t<td>{var["sim"]}</td>\n')
         file.write('\t\t</tr>\n')

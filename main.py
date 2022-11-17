@@ -4,13 +4,13 @@ from util.input import read_encoded_csv
 from util.corr import export_corr_heatmap
 from util.pca import export_pca_2d_comparison
 from util.univar import export_ks_test
-from util.univar import export_distr_histogram
-from util.univar import export_distr_boxplot
-from util.univar import export_distr_violinplot
-from util.univar import export_distr_densityplot
+from util.univar import export_distr_histogram, export_obs_distr_histogram
+from util.univar import export_distr_boxplot, export_obs_distr_boxplot
+from util.univar import export_distr_violinplot, export_obs_distr_violinplot
+from util.univar import export_distr_densityplot, export_obs_distr_densityplot
 from util.univar import export_avg_var_scatter_plot
-from util.univar import export_distance
-from util.univar import export_statistics
+from util.univar import export_distance, export_obs_distance
+from util.univar import export_statistics, export_obs_statistics
 from util.report import export_report
 
 #######################
@@ -50,8 +50,7 @@ features_S, data_S = read_encoded_csv(CONFIG['datasets']['sim']['path'])
 ### CORR REPORT ###
 ###################
 
-do_corr_report = 'corr' in REPORTS
-if (do_corr_report):
+if ('corr' in REPORTS):
     percent_features = REPORTS['corr']['percent_features']
     export_corr_heatmap(data_R, data_S, len(features_R), len(features_S), percent_features)
 
@@ -59,16 +58,14 @@ if (do_corr_report):
 ### PCA 2D REPORT ###
 #####################
 
-do_pca_2d_report = 'pca_2d' in REPORTS
-if (do_pca_2d_report):
+if ('pca_2d' in REPORTS):
     export_pca_2d_comparison(data_R, data_S)
 
 ######################
 ### KS TEST REPORT ###
 ######################
 
-do_ks_report = 'ks' in REPORTS
-if (do_ks_report):
+if ('ks' in REPORTS):
     ks_reports = REPORTS['ks']
     for feature in ks_reports:
         export_ks_test(feature, data_R, data_S, features_R, features_S)
@@ -77,77 +74,124 @@ if (do_ks_report):
 ### DISTRIBUTION HISTOGRAM REPORT ###
 #####################################
 
-do_distr_histogram_report = 'distr_histogram' in REPORTS
-if (do_distr_histogram_report):
+if ('distr_histogram' in REPORTS):
     distr_histogram_reports = REPORTS['distr_histogram']
     for feature in distr_histogram_reports:
         export_distr_histogram(feature, data_R, data_S, features_R, features_S)
+
+#################################################
+### OBSERVATION DISTRIBUTION HISTOGRAM REPORT ###
+#################################################
+
+if ('observation_distr_histogram' in REPORTS):
+    obs_distr_histogram_reports = REPORTS['observation_distr_histogram']
+    for observation_index in obs_distr_histogram_reports:
+        export_obs_distr_histogram(observation_index, data_R, data_S)
 
 ###################################
 ### DISTRIBUTION BOXPLOT REPORT ###
 ###################################
 
-do_distr_boxplot_report = 'distr_boxplot' in REPORTS
-if (do_distr_boxplot_report):
+if ('distr_boxplot' in REPORTS):
     distr_boxplot_reports = REPORTS['distr_boxplot']
     for feature in distr_boxplot_reports:
         export_distr_boxplot(feature, data_R, data_S, features_R, features_S)
+
+
+###############################################
+### OBSERVATION DISTRIBUTION BOXPLOT REPORT ###
+###############################################
+
+if ('observation_distr_boxplot' in REPORTS):
+    obs_distr_boxplot_reports = REPORTS['observation_distr_boxplot']
+    for observation_index in obs_distr_boxplot_reports:
+        export_obs_distr_boxplot(observation_index, data_R, data_S)
 
 ######################################
 ### DISTRIBUTION VIOLINPLOT REPORT ###
 ######################################
 
-do_distr_violinplot_report = 'distr_violinplot' in REPORTS
-if (do_distr_violinplot_report):
+if ('distr_violinplot' in REPORTS):
     distr_violinplot_reports = REPORTS['distr_violinplot']
     for feature in distr_violinplot_reports:
         export_distr_violinplot(feature, data_R, data_S, features_R, features_S)
+
+##################################################
+### OBSERVATION DISTRIBUTION VIOLINPLOT REPORT ###
+##################################################
+
+if ('observation_distr_violinplot' in REPORTS):
+    obs_distr_violinplot_reports = REPORTS['observation_distr_violinplot']
+    for observation_index in obs_distr_violinplot_reports:
+        export_obs_distr_violinplot(observation_index, data_R, data_S)
 
 ########################################
 ### DISTRIBUTION DENSITY PLOT REPORT ###
 ########################################
 
-do_distr_densityplot_report = 'distr_densityplot' in REPORTS
-if (do_distr_densityplot_report):
+if ('distr_densityplot' in REPORTS):
     distr_densityplot_reports = REPORTS['distr_densityplot']
     for feature in distr_densityplot_reports:
         export_distr_densityplot(feature, data_R, data_S, features_R, features_S)
+
+####################################################
+### OBSERVATION DISTRIBUTION DENSITY PLOT REPORT ###
+####################################################
+
+if ('observation_distr_densityplot' in REPORTS):
+    obs_distr_densityplot_reports = REPORTS['observation_distr_densityplot']
+    for observation_index in obs_distr_densityplot_reports:
+        export_obs_distr_densityplot(observation_index, data_R, data_S)
 
 ################################################
 ### FEATURE AVERAGE VALUE VS VARIANCE REPORT ###
 ################################################
 
-do_avg_vs_var_feature_report = 'feature_average_vs_variance' in REPORTS
-if (do_avg_vs_var_feature_report):
+if ('feature_average_vs_variance' in REPORTS):
     export_avg_var_scatter_plot(data_R, data_S, axis=0)
 
 ####################################################
 ### OBSERVATION AVERAGE VALUE VS VARIANCE REPORT ###
 ####################################################
 
-do_avg_vs_var_observation_report = 'observation_average_vs_variance' in REPORTS
-if (do_avg_vs_var_observation_report):
+if ('observation_average_vs_variance' in REPORTS):
     export_avg_var_scatter_plot(data_R, data_S, axis=1)
 
 #######################
 ### DISTANCE REPORT ###
 #######################
 
-do_distance_report = 'distance' in REPORTS
-if (do_distance_report):
+if ('distance' in REPORTS):
     distance_reports = REPORTS['distance']
     for feature in distance_reports:
         export_distance(feature, data_R, data_S, features_R, features_S)
+
+###################################
+### OBSERVATION DISTANCE REPORT ###
+###################################
+
+if ('observation_distance' in REPORTS):
+    obs_distance_reports = REPORTS['observation_distance']
+    for observation_index in obs_distance_reports:
+        export_obs_distance(observation_index, data_R, data_S)
 
 #########################
 ### STATISTICS REPORT ###
 #########################
 
-do_statistics_report = 'statistics' in REPORTS
-if (do_statistics_report):
+if ('statistics' in REPORTS):
     statistics_reports = REPORTS['statistics']
     for feature in statistics_reports:
         export_statistics(feature, data_R, data_S, features_R, features_S)
+
+#####################################
+### OBSERVATION STATISTICS REPORT ###
+#####################################
+
+if ('observation_statistics' in REPORTS):
+    obs_statistics_reports = REPORTS['observation_statistics']
+    for observation_index in obs_statistics_reports:
+        export_obs_statistics(observation_index, data_R, data_S)
 
 ##########################
 ### EXPORT HTML REPORT ###
