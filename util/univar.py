@@ -6,7 +6,7 @@ import scipy.stats
 def cdf(data):
     data_sorted = np.sort(data)
     p = 1. * np.arange(len(data)) / (len(data) - 1)
-    return data_sorted, p
+    return data_sorted, np.array(p)
 
 def get_feature_data(feature, data, features):
     idx = np.where(features == feature)[0][0]

@@ -1,5 +1,6 @@
 import yaml
 import argparse
+
 from util.input import read_encoded_csv
 from util.corr import export_corr_heatmap
 from util.pca import export_pca_2d_comparison
@@ -11,6 +12,7 @@ from util.univar import export_distr_densityplot, export_obs_distr_densityplot
 from util.univar import export_avg_var_scatter_plot
 from util.univar import export_distance, export_obs_distance
 from util.univar import export_statistics, export_obs_statistics
+from util.copula import export_copula_scatter_plot
 from util.report import export_report
 
 #######################
@@ -192,6 +194,15 @@ if ('observation_statistics' in REPORTS):
     obs_statistics_reports = REPORTS['observation_statistics']
     for observation_index in obs_statistics_reports:
         export_obs_statistics(observation_index, data_R, data_S)
+
+#####################
+### COPULA REPORT ###
+#####################
+
+if ('copula' in REPORTS):
+    copula_reports = REPORTS['copula']
+    for copula_report in copula_reports:
+        export_copula_scatter_plot(copula_reports[copula_report][0], copula_reports[copula_report][1], data_R, data_S, features_R, features_S)
 
 ##########################
 ### EXPORT HTML REPORT ###
