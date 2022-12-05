@@ -54,6 +54,7 @@ def export_ks_test(feature, data_R, data_S, features_R, features_S):
 
     f.savefig(f'./output/temp_figures/ks_test_{feature}.svg')
     del f
+    plt.close()
 
 def export_distr_histogram(feature, data_R, data_S, features_R, features_S, n_bins=30):
     data_R_f = get_feature_data(feature, data_R, features_R)
@@ -71,6 +72,7 @@ def export_distr_histogram(feature, data_R, data_S, features_R, features_S, n_bi
     
     f.savefig(f'./output/temp_figures/histogram_{feature}.svg')
     del f
+    plt.close()
 
 def export_obs_distr_histogram(observation_index, data_R, data_S, n_bins=30):
     data_R_o = get_observation_data(observation_index, data_R)
@@ -88,6 +90,7 @@ def export_obs_distr_histogram(observation_index, data_R, data_S, n_bins=30):
     
     f.savefig(f'./output/temp_figures/histogram_obs_{observation_index}.svg')
     del f
+    plt.close()
 
 def export_distr_boxplot(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
@@ -102,6 +105,7 @@ def export_distr_boxplot(feature, data_R, data_S, features_R, features_S):
     
     f.savefig(f'./output/temp_figures/box_plot_{feature}.svg')
     del f
+    plt.close()
 
 def export_obs_distr_boxplot(observation_index, data_R, data_S):
     data_R_o = get_observation_data(observation_index, data_R)
@@ -116,6 +120,7 @@ def export_obs_distr_boxplot(observation_index, data_R, data_S):
     
     f.savefig(f'./output/temp_figures/box_plot_obs_{observation_index}.svg')
     del f
+    plt.close()
 
 def export_distr_violinplot(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
@@ -148,6 +153,7 @@ def export_distr_violinplot(feature, data_R, data_S, features_R, features_S):
 
     f.savefig(f'./output/temp_figures/violin_plot_{feature}.svg')
     del f
+    plt.close()
 
 def export_obs_distr_violinplot(observation_index, data_R, data_S):
     data_R_o = get_observation_data(observation_index, data_R)
@@ -180,6 +186,7 @@ def export_obs_distr_violinplot(observation_index, data_R, data_S):
 
     f.savefig(f'./output/temp_figures/violin_plot_obs_{observation_index}.svg')
     del f
+    plt.close()
 
 def export_distr_densityplot(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
@@ -196,6 +203,7 @@ def export_distr_densityplot(feature, data_R, data_S, features_R, features_S):
 
     f.savefig(f'./output/temp_figures/density_plot_{feature}.svg')
     del f
+    plt.close()
 
 def export_obs_distr_densityplot(observation_index, data_R, data_S):
     data_R_o = get_observation_data(observation_index, data_R)
@@ -212,6 +220,7 @@ def export_obs_distr_densityplot(observation_index, data_R, data_S):
 
     f.savefig(f'./output/temp_figures/density_plot_obs_{observation_index}.svg')
     del f
+    plt.close()
 
 def export_avg_var_scatter_plot(data_R, data_S, axis=0):
     data_R_x = np.average(data_R, axis=axis)
@@ -229,6 +238,7 @@ def export_avg_var_scatter_plot(data_R, data_S, axis=0):
     
     f.savefig(f'./output/temp_figures/avg_var_{"feat" if axis == 0 else "obs"}_scatter_plot.svg')
     del f
+    plt.close()
 
 def export_distance(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
@@ -251,7 +261,19 @@ def export_obs_distance(observation_index, data_R, data_S):
     if not any(data_R_o) or not any(data_S_o):
         return
 
-    dist = np.linalg.norm(data_R_o - data_S_o)
+    # TODO EXTRACT PADDING SOMEWHERE ELSE
+    dist = []
+    if data_S_o.shape[0] < data_R_o.shape[0]:
+        data_S_o_padded = np.zeros(data_R_o.shape)
+        data_S_o_padded[:data_S_o.shape[0]] = data_S_o
+        dist = np.linalg.norm(data_R_o - data_S_o_padded)
+    elif data_R_o.shape[0] < data_S_o.shape[0]:
+        data_R_o_padded = np.zeros(data_S_o.shape)
+        data_R_o_padded[:data_R_o.shape[0]] = data_R_o
+        dist = np.linalg.norm(data_S_o - data_R_o_padded)
+    else:
+        dist = np.linalg.norm(data_R_o - data_S_o)
+
     print(f'[RESULT] Euclidean distance of observation with index {observation_index} : {dist}')
 
     with open(f'./output/temp_results/distance_obs_{observation_index}.txt', 'w', encoding="utf-8") as file:

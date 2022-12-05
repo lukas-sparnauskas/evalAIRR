@@ -44,3 +44,4 @@ def export_copula_scatter_plot(feature_1, feature_2, data_R, data_S, features_R,
 
     f.savefig(f'./output/temp_figures/copula_plot_{feature_1}_{feature_2}.svg')
     del f
+    plt.close()

@@ -39,3 +39,4 @@ def export_corr_heatmap(data_real, data_sim, n_real_feat = 0, n_sim_feat = 0, pc
     
     f.savefig(f'./output/temp_figures/corr_matrix.svg')
     del f
+    plt.close()

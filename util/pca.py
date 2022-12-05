@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import cupy as cp
 
 def center_data(A):
     # INPUT:
@@ -136,4 +135,6 @@ def export_pca_2d_comparison(data_real, data_sim):
     ax2.set_xbound(xbound)
     ax2.set_ybound(ybound)
 
-    plt.show()
+    f.savefig(f'./output/temp_figures/pca_2d_comparison.svg')
+    del f
+    plt.close()
