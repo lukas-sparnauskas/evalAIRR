@@ -31,13 +31,13 @@ def export_ks_test(feature, data_R, data_S, features_R, features_S):
     cdf_2_x, cdf_2_y = cdf(data_S_f)
     res = scipy.stats.ks_2samp(data_R_f, data_S_f)
     
-    f,(ax1, ax2) = plt.subplots(1, 2)
-    f.set_size_inches(10, 5)
-    f.suptitle(f'CDF comparison of feature {feature} in  real and simulated datasets')
-    ax1.plot(cdf_1_x, cdf_1_y, c='#1b24a8')
-    ax1.set_title(f'CDF of feature {feature} in the real dataset')
-    ax2.plot(cdf_2_x, cdf_2_y, c='#781010')
-    ax2.set_title(f'CDF of feature {feature} in the simulated dataset')
+    f, ax = plt.subplots(1, 1)
+    f.set_size_inches(5, 5)
+    f.suptitle(f'CDF comparison of feature {feature}\nin real and simulated datasets')
+    ax.plot(cdf_1_x, cdf_1_y, c='#1b24a8', label='Real dataset')
+    ax.plot(cdf_2_x, cdf_2_y, c='r', label='Simulated dataset')
+    ax.grid(visible=True)
+    ax.legend()
     
     print(f'[RESULT] Feature {feature} KS statistic =', res.statistic)
     print(f'[RESULT] Feature {feature} P value =', res.pvalue)
@@ -235,6 +235,7 @@ def export_avg_var_scatter_plot(data_R, data_S, axis=0):
     ax.scatter(data_S_x, data_S_y, c='#d65161', linewidths=None, alpha=0.5)
     ax.set_xlabel('Average value')
     ax.set_ylabel('Variance value')
+    ax.legend()
     
     f.savefig(f'./output/temp_figures/avg_var_{"feat" if axis == 0 else "obs"}_scatter_plot.svg')
     del f
