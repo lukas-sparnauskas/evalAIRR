@@ -33,6 +33,8 @@ output:
   path: './output/report.html'
 ```
 
+This report will process the two provided datasets (real and simulated), and create two reports - Kolmogorov–Smirnov test (indicated by `ks`) and a feature distribution density plot (indicated by `distr_densityplot`) for the features `TGT` and `ANV`. It will then export the report to the path `./output/report.html`. More details on what reports can be created can be found in the *YAML Configuration Guidelines* secion.
+
 You can run the program by running this command within the installation directory:
 
 `python main.py <PATH_TO_CONFIGURATION_YAML_FILE>`
@@ -59,7 +61,7 @@ datasets:
 
 In the `reports` section, you can provide the list of report types you want to create and their parameters. Here is the list of reports you can create that compare the features of the real dataset with the simulated dataset:
 
-- `ks` - Kolmogorov-Smirnov statistic. Parameters: list of features you are creating the report for.
+- `ks` - Kolmogorov–Smirnov statistic. Parameters: list of features you are creating the report for.
 - `distr_histogram` - feature distribution histogram. Parameters: list of features you are creating the report for.
 - `observation_distr_histogram` - observation distribution histogram. Parameters: list of observations you are creating the report for.
 - `distr_boxplot` - feature distribution boxplot. Parameters: list of features you are creating the report for.
