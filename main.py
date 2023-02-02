@@ -1,3 +1,4 @@
+import os
 import yaml
 import argparse
 
@@ -12,7 +13,7 @@ from util.univar import export_distr_densityplot, export_obs_distr_densityplot
 from util.univar import export_avg_var_scatter_plot
 from util.univar import export_distance, export_obs_distance
 from util.univar import export_statistics, export_obs_statistics
-from util.copula import export_copula_scatter_plot
+from util.copula import export_copula_2d_scatter_plot, export_copula_3d_scatter_plot
 from util.report import export_report
 
 #######################
@@ -47,6 +48,19 @@ except:
 
 features_R, data_R = read_encoded_csv(CONFIG['datasets']['real']['path'])
 features_S, data_S = read_encoded_csv(CONFIG['datasets']['sim']['path'])
+
+##########################################
+### CREATE OUTPUT AND TEMP DIRECTORIES ###
+##########################################
+
+if not os.path.exists('./output'):
+    os.makedirs('./output')
+if not os.path.exists('./output/temp_figures'):
+    os.makedirs('./output/temp_figures')
+if not os.path.exists('./output/temp_results'):
+    os.makedirs('./output/temp_results')
+if not os.path.exists('./output/temp_statistics'):
+    os.makedirs('./output/temp_statistics')
 
 ###################
 ### CORR REPORT ###
@@ -195,14 +209,33 @@ if ('observation_statistics' in REPORTS):
     for observation_index in obs_statistics_reports:
         export_obs_statistics(observation_index, data_R, data_S)
 
-#####################
-### COPULA REPORT ###
-#####################
+########################
+### COPULA 2D REPORT ###
+########################
 
-if ('copula' in REPORTS):
-    copula_reports = REPORTS['copula']
+if ('copula_2d' in REPORTS):
+    copula_reports = REPORTS['copula_2d']
     for copula_report in copula_reports:
-        export_copula_scatter_plot(copula_reports[copula_report][0], copula_reports[copula_report][1], data_R, data_S, features_R, features_S)
+        if len(copula_reports[copula_report]) > 2:
+            print(f'[WARNING] More than 2 features provided in \'{copula_report}\'! Using only the first 2 for calculations.')
+        elif len(copula_reports[copula_report]) < 2:
+            print(f'[ERROR] 2D copula scatter plot report \'{copula_report}\' requires 2 features!')
+            continue
+        export_copula_2d_scatter_plot(copula_reports[copula_report][0], copula_reports[copula_report][1], data_R, data_S, features_R, features_S)
+
+########################
+### COPULA 3D REPORT ###
+########################
+
+if ('copula_3d' in REPORTS):
+    copula_reports = REPORTS['copula_3d']
+    for copula_report in copula_reports:
+        if len(copula_reports[copula_report]) > 3:
+            print(f'[WARNING] More than 3 features provided in \'{copula_report}\'! Using only the first 3 for calculations.')
+        elif len(copula_reports[copula_report]) < 3:
+            print(f'[ERROR] 3D copula scatter plot report \'{copula_report}\' requires 3 features!')
+            continue
+        export_copula_3d_scatter_plot(copula_reports[copula_report][0], copula_reports[copula_report][1], copula_reports[copula_report][2], data_R, data_S, features_R, features_S)
 
 ##########################
 ### EXPORT HTML REPORT ###

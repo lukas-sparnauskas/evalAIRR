@@ -49,14 +49,19 @@ reports:
     - 0
     - 199
     - 200
-  copula:
+  copula_2d:
     report1:
       - TGT
       - ANV
+  copula_3d:
+    report1:
+      - TGT
+      - ANV
+      - CAS
   feature_average_vs_variance:
   observation_average_vs_variance:
-  # corr:
-  #   percent_features: 0.10
-  # pca_2d:
+  corr:
+    percent_features: 1.0
+  pca_2d:
 # output:
 #   path: report.html
