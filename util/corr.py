@@ -8,8 +8,8 @@ def export_corr_heatmap(data_real, data_sim, n_real_feat = 0, n_sim_feat = 0, pc
     print('[LOG] CORR: Exporting correlation matrix heatmap')
     if n_real_feat != 0 and n_sim_feat != 0 and pca_ratio != 0:
         print('[LOG] CORR: Reducing dimentions using PCA')
-        _, data_real = pca(data_real, math.floor(n_real_feat * pca_ratio))
-        _, data_sim = pca(data_sim, math.floor(n_sim_feat * pca_ratio))
+        _, data_real = pca(data_real, math.floor(min(data_real.shape[0], data_real.shape[1]) * pca_ratio))
+        _, data_sim = pca(data_sim, math.floor(min(data_real.shape[0], data_real.shape[1]) * pca_ratio))
 
     print('[LOG] CORR: Calculating correlation matrices')
     corr_real = pd.DataFrame(data_real).corr()
