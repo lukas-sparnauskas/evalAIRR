@@ -1,0 +1,14 @@
+datasets:
+  real:
+    path: ./data/encoded_real_1000_200.csv
+  sim:
+    path: ./data/encoded_sim_1000_200.csv
+reports:
+  ks:
+    - TGT
+    - ANV
+  distr_densityplot:
+    - TGT
+    - ANV
+output:
+  path: './output/report.html'
