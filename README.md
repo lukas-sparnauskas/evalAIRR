@@ -37,7 +37,7 @@ This report will process the two provided datasets (real and simulated), and cre
 
 You can run the program by running this command within the installation directory:
 
-`python main.py <PATH_TO_CONFIGURATION_YAML_FILE>`
+`python main.py ./yaml_files/quickstart.yaml`
 
 The report will be generated in the specified output path in the configuration file or, if a specific path is not provided, in `<INSTALL_DIRECTORY>/output/report.html`. The report is exported in the HTML format.
 
