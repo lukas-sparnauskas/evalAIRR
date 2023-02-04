@@ -41,6 +41,9 @@ def export_report(OUTPUT):
                         output_file.write(f'<img src="data:image/svg+xml;base64,{svg_base64}" />\n')
                         
                     os.remove('./output/temp_figures/' + figure_file)
+            os.rmdir('./output/temp_results')
+            os.rmdir('./output/temp_statistics')
+            os.rmdir('./output/temp_figures')
     
         print('[LOG] HTML report created')
     except:
