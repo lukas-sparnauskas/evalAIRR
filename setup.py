@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+from version import __version__
 import codecs
 import os
 
@@ -6,16 +7,12 @@ here = os.path.abspath(os.path.dirname(__file__))
 
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
-    print('PATH', os.path.join(here, "README.md"), 'EXISTS')
-with open(os.path.join(here, "VERSION"), encoding="utf-8") as fh:
-    version=fh.read()
-    print('PATH', os.path.join(here, "VERSION"), 'EXISTS')
 
 DESCRIPTION = 'Comparison of real and simulated AIRR datasets'
 
 setup(
     name="evalAIRR",
-    version=version,
+    version=__version__,
     author="Lukas Sparnauskas",
     author_email="<lukas.11sp@gmail.com>",
     description=DESCRIPTION,
