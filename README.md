@@ -1,4 +1,4 @@
-# simAIRR_evaluation
+# evalAIRR
 
 A tool that allows comparison of real and simulated datasets by providing different statistical indicators and dataset visualizations in one report.
 
@@ -10,11 +10,11 @@ Clone the repository and install the required dependencies using this command:
 
 ## Quickstart
 
-simAIRR_evaluation uses a YAML file for configuration. If you are unfamiliar with how YAML files are structured, read this guide to the syntax:
+evalAIRR uses a YAML file for configuration. If you are unfamiliar with how YAML files are structured, read this guide to the syntax:
 
 `https://docs.fileformat.com/programming/yaml/#syntax`
 
-This is the stucture of a sample report configuration file you can use to start off with:
+This is the stucture of a sample report configuration file you can use to start off with (it is included in the repository location ./yaml_files/quickstart.yaml):
 
 ```
 datasets:
