@@ -6,8 +6,10 @@ here = os.path.abspath(os.path.dirname(__file__))
 
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
+    print('PATH', os.path.join(here, "README.md"), 'EXISTS')
 with open(os.path.join(here, "VERSION"), encoding="utf-8") as fh:
     version=fh.read()
+    print('PATH', os.path.join(here, "VERSION"), 'EXISTS')
 
 DESCRIPTION = 'Comparison of real and simulated AIRR datasets'
 
