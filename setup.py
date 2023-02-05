@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-from version import __version__
+from evalAIRR.version import __version__
 import codecs
 import os
 
