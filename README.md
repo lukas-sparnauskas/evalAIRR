@@ -8,6 +8,12 @@ Clone the repository and install the required dependencies using this command:
 
 `pip install -r <INSTALL_DIRECTORY>/requirements.txt`
 
+The versions of python that evalAIRR was tested with are 3.8 and 3.10
+
+It is recommended to use a virtual python environment to run evalAIRR if another python environment is used. Here is a quick guide on how you can set up a virtual environment:
+
+`https://docs.python.org/3/tutorial/venv.html#creating-virtual-environments`
+
 ## Quickstart
 
 evalAIRR uses a YAML file for configuration. If you are unfamiliar with how YAML files are structured, read this guide to the syntax:
