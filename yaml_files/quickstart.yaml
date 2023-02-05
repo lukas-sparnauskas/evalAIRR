@@ -1,14 +1,63 @@
+# datasets:
+#   real:
+#     path: ./data/encoded_real_1000_200.csv
+#   sim:
+#     path: ./data/encoded_sim_1000_200.csv
+# reports:
+#   ks:
+#     - TGT
+#     - ANV
+#   distr_densityplot:
+#     - TGT
+#     - ANV
+# output:
+#   path: './output/report.html'
+
 datasets:
   real:
     path: ./data/encoded_real_1000_200.csv
   sim:
     path: ./data/encoded_sim_1000_200.csv
 reports:
-  ks:
-    - TGT
-    - ANV
-  distr_densityplot:
-    - TGT
-    - ANV
+  # feature_based:
+  #   report1:
+  #     features:
+  #       - TGT
+  #       - ANV
+  #     report_types:
+  #       - ks
+  #       - distr_histogram
+  #       - distr_boxplot
+  #       - distr_violinplot
+  #       - distr_densityplot
+  #       - distance
+  #       - statistics
+  # observation_based:
+  #   report1:
+  #     observations:
+  #       - 0
+  #       - all
+  #     report_types:
+  #       - observation_distr_histogram
+  #       - observation_distr_boxplot
+  #       - observation_distr_violinplot
+  #       - observation_distr_densityplot
+  #       - observation_distance
+  #       - observation_statistics
+  general:
+    # copula_2d:
+    #   report1:
+    #     - TGT
+    #     - ANV
+    # copula_3d:
+    #   report1:
+    #     - TGT
+    #     - ANV
+    #     - CAS
+    feature_average_vs_variance:
+    observation_average_vs_variance:
+    # corr:
+    #   percent_features: 1.0
+    pca_2d:
 output:
-  path: './output/report.html'
+  path: "./output/report.html"

@@ -62,180 +62,125 @@ if not os.path.exists('./output/temp_results'):
 if not os.path.exists('./output/temp_statistics'):
     os.makedirs('./output/temp_statistics')
 
-###################
-### CORR REPORT ###
-###################
+#############################
+### FEATURE BASED REPORTS ###
+#############################
 
-if ('corr' in REPORTS):
-    percent_features = REPORTS['corr']['percent_features']
-    export_corr_heatmap(data_R, data_S, len(features_R), len(features_S), percent_features)
+if ('feature_based' in REPORTS):
+    reports_f = REPORTS['feature_based']
+    for report in reports_f:
+        features = reports_f[report]['features']
+        report_types = reports_f[report]['report_types']
+        for feature in features:
 
-#####################
-### PCA 2D REPORT ###
-#####################
+            # KOLMOGOROV-SMIRNOV TEST REPORT
+            if 'ks' in report_types:
+                export_ks_test(feature, data_R, data_S, features_R, features_S)
 
-if ('pca_2d' in REPORTS):
-    export_pca_2d_comparison(data_R, data_S)
+            # DISTRIBUTION HISTOGRAM REPORT
+            if 'distr_histogram' in report_types:
+                export_distr_histogram(feature, data_R, data_S, features_R, features_S)
 
-######################
-### KS TEST REPORT ###
-######################
+            # DISTRIBUTION BOX PLOT REPORT
+            if 'distr_boxplot' in report_types:
+                export_distr_boxplot(feature, data_R, data_S, features_R, features_S)
 
-if ('ks' in REPORTS):
-    ks_reports = REPORTS['ks']
-    for feature in ks_reports:
-        export_ks_test(feature, data_R, data_S, features_R, features_S)
+            # DISTRIBUTION VIOLIN PLOT REPORT
+            if 'distr_violinplot' in report_types:
+                export_distr_violinplot(feature, data_R, data_S, features_R, features_S)
 
-#####################################
-### DISTRIBUTION HISTOGRAM REPORT ###
-#####################################
+            # DISTRIBUTION DENSITY PLOT REPORT
+            if 'distr_densityplot' in report_types:
+                export_distr_densityplot(feature, data_R, data_S, features_R, features_S)
 
-if ('distr_histogram' in REPORTS):
-    distr_histogram_reports = REPORTS['distr_histogram']
-    for feature in distr_histogram_reports:
-        export_distr_histogram(feature, data_R, data_S, features_R, features_S)
+            # EUCLIDEAN DISTANCE REPORT
+            if 'distance' in report_types:
+                export_distance(feature, data_R, data_S, features_R, features_S)
 
-#################################################
-### OBSERVATION DISTRIBUTION HISTOGRAM REPORT ###
-#################################################
+            # STATISTICS REPORT
+            if 'statistics' in report_types:
+                export_statistics(feature, data_R, data_S, features_R, features_S)
 
-if ('observation_distr_histogram' in REPORTS):
-    obs_distr_histogram_reports = REPORTS['observation_distr_histogram']
-    for observation_index in obs_distr_histogram_reports:
-        export_obs_distr_histogram(observation_index, data_R, data_S)
+#################################
+### OBSERVATION BASED REPORTS ###
+#################################
 
-###################################
-### DISTRIBUTION BOXPLOT REPORT ###
-###################################
+if ('observation_based' in REPORTS):
+    reports_o = REPORTS['observation_based']
+    for report in reports_o:
+        observations = reports_o[report]['observations']
+        report_types = reports_o[report]['report_types']
+        for observation_index in observations:
 
-if ('distr_boxplot' in REPORTS):
-    distr_boxplot_reports = REPORTS['distr_boxplot']
-    for feature in distr_boxplot_reports:
-        export_distr_boxplot(feature, data_R, data_S, features_R, features_S)
+            # OBSERVATION DISTRIBUTION HISTOGRAM REPORT
+            if 'observation_distr_histogram' in report_types:
+                export_obs_distr_histogram(observation_index, data_R, data_S)
 
+            # OBSERVATION DISTRIBUTION BOX PLOT REPORT
+            if 'observation_distr_boxplot' in report_types:
+                export_obs_distr_boxplot(observation_index, data_R, data_S)
 
-###############################################
-### OBSERVATION DISTRIBUTION BOXPLOT REPORT ###
-###############################################
+            # OBSERVATION DISTRIBUTION VIOLIN PLOT REPORT
+            if 'observation_distr_violinplot' in report_types:
+                export_obs_distr_violinplot(observation_index, data_R, data_S)
 
-if ('observation_distr_boxplot' in REPORTS):
-    obs_distr_boxplot_reports = REPORTS['observation_distr_boxplot']
-    for observation_index in obs_distr_boxplot_reports:
-        export_obs_distr_boxplot(observation_index, data_R, data_S)
+            # OBSERVATION DISTRIBUTION DENSITY PLOT REPORT
+            if 'observation_distr_densityplot' in report_types:
+                export_obs_distr_densityplot(observation_index, data_R, data_S)
 
-######################################
-### DISTRIBUTION VIOLINPLOT REPORT ###
-######################################
+            # OBSERVATION EUCLIDEAN DISTANCE REPORT
+            if 'observation_distance' in report_types:
+                export_obs_distance(observation_index, data_R, data_S)
 
-if ('distr_violinplot' in REPORTS):
-    distr_violinplot_reports = REPORTS['distr_violinplot']
-    for feature in distr_violinplot_reports:
-        export_distr_violinplot(feature, data_R, data_S, features_R, features_S)
-
-##################################################
-### OBSERVATION DISTRIBUTION VIOLINPLOT REPORT ###
-##################################################
-
-if ('observation_distr_violinplot' in REPORTS):
-    obs_distr_violinplot_reports = REPORTS['observation_distr_violinplot']
-    for observation_index in obs_distr_violinplot_reports:
-        export_obs_distr_violinplot(observation_index, data_R, data_S)
-
-########################################
-### DISTRIBUTION DENSITY PLOT REPORT ###
-########################################
-
-if ('distr_densityplot' in REPORTS):
-    distr_densityplot_reports = REPORTS['distr_densityplot']
-    for feature in distr_densityplot_reports:
-        export_distr_densityplot(feature, data_R, data_S, features_R, features_S)
-
-####################################################
-### OBSERVATION DISTRIBUTION DENSITY PLOT REPORT ###
-####################################################
-
-if ('observation_distr_densityplot' in REPORTS):
-    obs_distr_densityplot_reports = REPORTS['observation_distr_densityplot']
-    for observation_index in obs_distr_densityplot_reports:
-        export_obs_distr_densityplot(observation_index, data_R, data_S)
-
-################################################
-### FEATURE AVERAGE VALUE VS VARIANCE REPORT ###
-################################################
-
-if ('feature_average_vs_variance' in REPORTS):
-    export_avg_var_scatter_plot(data_R, data_S, axis=0)
-
-####################################################
-### OBSERVATION AVERAGE VALUE VS VARIANCE REPORT ###
-####################################################
-
-if ('observation_average_vs_variance' in REPORTS):
-    export_avg_var_scatter_plot(data_R, data_S, axis=1)
+            # OBSERVATION STATISTICS REPORT
+            if 'observation_statistics' in report_types:
+                export_obs_statistics(observation_index, data_R, data_S)
 
 #######################
-### DISTANCE REPORT ###
+### GENERAL REPORTS ###
 #######################
 
-if ('distance' in REPORTS):
-    distance_reports = REPORTS['distance']
-    for feature in distance_reports:
-        export_distance(feature, data_R, data_S, features_R, features_S)
+if ('general' in REPORTS):
+    reports_g = REPORTS['general']
 
-###################################
-### OBSERVATION DISTANCE REPORT ###
-###################################
+    # CORRELATION MATRIX REPORT
+    if ('corr' in reports_g):
+        percent_features = reports_g['corr']['percent_features']
+        export_corr_heatmap(data_R, data_S, len(features_R), len(features_S), percent_features)
 
-if ('observation_distance' in REPORTS):
-    obs_distance_reports = REPORTS['observation_distance']
-    for observation_index in obs_distance_reports:
-        export_obs_distance(observation_index, data_R, data_S)
+    # PCA 2D REPORT
+    if ('pca_2d' in reports_g):
+        export_pca_2d_comparison(data_R, data_S)
 
-#########################
-### STATISTICS REPORT ###
-#########################
+    # FEATURE AVERAGE VALUE VS VARIANCE REPORT
+    if ('feature_average_vs_variance' in reports_g):
+        export_avg_var_scatter_plot(data_R, data_S, axis=0)
 
-if ('statistics' in REPORTS):
-    statistics_reports = REPORTS['statistics']
-    for feature in statistics_reports:
-        export_statistics(feature, data_R, data_S, features_R, features_S)
+    # OBSERVATION AVERAGE VALUE VS VARIANCE REPORT
+    if ('observation_average_vs_variance' in reports_g):
+        export_avg_var_scatter_plot(data_R, data_S, axis=1)
 
-#####################################
-### OBSERVATION STATISTICS REPORT ###
-#####################################
+    # COPULA 2D REPORT
+    if ('copula_2d' in reports_g):
+        copula_reports = reports_g['copula_2d']
+        for copula_report in copula_reports:
+            if len(copula_reports[copula_report]) > 2:
+                print(f'[WARNING] More than 2 features provided in \'{copula_report}\'! Using only the first 2 for calculations.')
+            elif len(copula_reports[copula_report]) < 2:
+                print(f'[ERROR] 2D copula scatter plot report \'{copula_report}\' requires 2 features!')
+                continue
+            export_copula_2d_scatter_plot(copula_reports[copula_report][0], copula_reports[copula_report][1], data_R, data_S, features_R, features_S)
 
-if ('observation_statistics' in REPORTS):
-    obs_statistics_reports = REPORTS['observation_statistics']
-    for observation_index in obs_statistics_reports:
-        export_obs_statistics(observation_index, data_R, data_S)
-
-########################
-### COPULA 2D REPORT ###
-########################
-
-if ('copula_2d' in REPORTS):
-    copula_reports = REPORTS['copula_2d']
-    for copula_report in copula_reports:
-        if len(copula_reports[copula_report]) > 2:
-            print(f'[WARNING] More than 2 features provided in \'{copula_report}\'! Using only the first 2 for calculations.')
-        elif len(copula_reports[copula_report]) < 2:
-            print(f'[ERROR] 2D copula scatter plot report \'{copula_report}\' requires 2 features!')
-            continue
-        export_copula_2d_scatter_plot(copula_reports[copula_report][0], copula_reports[copula_report][1], data_R, data_S, features_R, features_S)
-
-########################
-### COPULA 3D REPORT ###
-########################
-
-if ('copula_3d' in REPORTS):
-    copula_reports = REPORTS['copula_3d']
-    for copula_report in copula_reports:
-        if len(copula_reports[copula_report]) > 3:
-            print(f'[WARNING] More than 3 features provided in \'{copula_report}\'! Using only the first 3 for calculations.')
-        elif len(copula_reports[copula_report]) < 3:
-            print(f'[ERROR] 3D copula scatter plot report \'{copula_report}\' requires 3 features!')
-            continue
-        export_copula_3d_scatter_plot(copula_reports[copula_report][0], copula_reports[copula_report][1], copula_reports[copula_report][2], data_R, data_S, features_R, features_S)
+    # COPULA 3D REPORT
+    if ('copula_3d' in reports_g):
+        copula_reports = reports_g['copula_3d']
+        for copula_report in copula_reports:
+            if len(copula_reports[copula_report]) > 3:
+                print(f'[WARNING] More than 3 features provided in \'{copula_report}\'! Using only the first 3 for calculations.')
+            elif len(copula_reports[copula_report]) < 3:
+                print(f'[ERROR] 3D copula scatter plot report \'{copula_report}\' requires 3 features!')
+                continue
+            export_copula_3d_scatter_plot(copula_reports[copula_report][0], copula_reports[copula_report][1], copula_reports[copula_report][2], data_R, data_S, features_R, features_S)
 
 ##########################
 ### EXPORT HTML REPORT ###

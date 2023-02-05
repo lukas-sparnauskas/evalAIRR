@@ -38,7 +38,7 @@ def export_report(OUTPUT):
                             output_file.write('<br>\n')
                             fig_type = figure_file[:5]
                         svg_base64 = str(base64.b64encode(svg.read()),'utf-8')
-                        output_file.write(f'<img src="data:image/svg+xml;base64,{svg_base64}" />\n')
+                        output_file.write(f'<img style="border-style:solid; border-width:3px; border-color:#AAAAAA;" src="data:image/svg+xml;base64,{svg_base64}" />\n')
                         
                     os.remove('./output/temp_figures/' + figure_file)
             os.rmdir('./output/temp_results')

@@ -75,6 +75,9 @@ def export_distr_histogram(feature, data_R, data_S, features_R, features_S, n_bi
     plt.close()
 
 def export_obs_distr_histogram(observation_index, data_R, data_S, n_bins=30):
+    if observation_index == 'all':
+        print('[ERROR] Observation distribution histogram report does not support the visualization of all observations')
+        return
     data_R_o = get_observation_data(observation_index, data_R)
     data_S_o = get_observation_data(observation_index, data_S)
     if not any(data_R_o) or not any(data_S_o):
@@ -108,6 +111,9 @@ def export_distr_boxplot(feature, data_R, data_S, features_R, features_S):
     plt.close()
 
 def export_obs_distr_boxplot(observation_index, data_R, data_S):
+    if observation_index == 'all':
+        print('[ERROR] Observation distribution box plot report does not support the visualization of all observations')
+        return
     data_R_o = get_observation_data(observation_index, data_R)
     data_S_o = get_observation_data(observation_index, data_S)
     if not any(data_R_o) or not any(data_S_o):
@@ -156,6 +162,9 @@ def export_distr_violinplot(feature, data_R, data_S, features_R, features_S):
     plt.close()
 
 def export_obs_distr_violinplot(observation_index, data_R, data_S):
+    if observation_index == 'all':
+        print('[ERROR] Observation distribution violin plot report does not support the visualization of all observations')
+        return
     data_R_o = get_observation_data(observation_index, data_R)
     data_S_o = get_observation_data(observation_index, data_S)
     if not any(data_R_o) or not any(data_S_o):
@@ -206,18 +215,30 @@ def export_distr_densityplot(feature, data_R, data_S, features_R, features_S):
     plt.close()
 
 def export_obs_distr_densityplot(observation_index, data_R, data_S):
-    data_R_o = get_observation_data(observation_index, data_R)
-    data_S_o = get_observation_data(observation_index, data_S)
-    if not any(data_R_o) or not any(data_S_o):
-        return
+    if observation_index != 'all':
+        data_R_o = get_observation_data(observation_index, data_R)
+        data_S_o = get_observation_data(observation_index, data_S)
+        if not any(data_R_o) or not any(data_S_o):
+            return
 
     f, ax = plt.subplots(1, 1)
     f.set_size_inches(9, 7)
-    f.suptitle(f'Distribution density plot of observation with index {observation_index}')
-    sns.kdeplot(data_R_o, ax=ax, label='Real dataset', fill=True, common_norm=False, color='#5480d1', alpha=0.5, linewidth=0)
-    sns.kdeplot(data_S_o, ax=ax, label='Simulated dataset', fill=True, common_norm=False, color='#d65161', alpha=0.5, linewidth=0)
-    ax.legend()
+    
+    if observation_index == 'all':
+        f.suptitle(f'Distribution density plot of all observations')
+        for index in range(len(data_R)):
+            data_R_o = get_observation_data(index, data_R)
+            data_S_o = get_observation_data(index, data_S)
+            label = 'Real dataset' if index == 0 else None
+            sns.kdeplot(data_R_o, ax=ax, label=label, fill=True, common_norm=False, color='#5480d1', alpha=0.2, linewidth=0)
+            label = 'Simulated dataset' if index == 0 else None
+            sns.kdeplot(data_S_o, ax=ax, label=label, fill=True, common_norm=False, color='#d65161', alpha=0.2, linewidth=0)
+    else:
+        f.suptitle(f'Distribution density plot of observation with index {observation_index}')
+        sns.kdeplot(data_R_o, ax=ax, label='Real dataset', fill=True, common_norm=False, color='#5480d1', alpha=0.5, linewidth=0)
+        sns.kdeplot(data_S_o, ax=ax, label='Simulated dataset', fill=True, common_norm=False, color='#d65161', alpha=0.5, linewidth=0)
 
+    ax.legend()
     f.savefig(f'./output/temp_figures/density_plot_obs_{observation_index}.svg')
     del f
     plt.close()
@@ -231,8 +252,8 @@ def export_avg_var_scatter_plot(data_R, data_S, axis=0):
     f, ax = plt.subplots(1, 1)
     f.set_size_inches(9, 7)
     f.suptitle('Feature average value vs variance' if axis == 0 else 'Observation average value vs variance')
-    ax.scatter(data_R_x, data_R_y, c='#5480d1', linewidths=None, alpha=0.5)
-    ax.scatter(data_S_x, data_S_y, c='#d65161', linewidths=None, alpha=0.5)
+    ax.scatter(data_R_x, data_R_y, c='#5480d1', linewidths=None, alpha=0.5, label='Real')
+    ax.scatter(data_S_x, data_S_y, c='#d65161', linewidths=None, alpha=0.5, label='Simulated')
     ax.set_xlabel('Average value')
     ax.set_ylabel('Variance value')
     ax.legend()
@@ -257,12 +278,14 @@ def export_distance(feature, data_R, data_S, features_R, features_S):
         file.write('\t\t</tr>\n')
 
 def export_obs_distance(observation_index, data_R, data_S):
+    if observation_index == 'all':
+        print('[ERROR] Observation Euclidean distance report does not support reporting on all observations')
+        return
     data_R_o = get_observation_data(observation_index, data_R)
     data_S_o = get_observation_data(observation_index, data_S)
     if not any(data_R_o) or not any(data_S_o):
         return
 
-    # TODO EXTRACT PADDING SOMEWHERE ELSE
     dist = []
     if data_S_o.shape[0] < data_R_o.shape[0]:
         data_S_o_padded = np.zeros(data_R_o.shape)
@@ -322,6 +345,9 @@ def export_statistics(feature, data_R, data_S, features_R, features_S):
         file.write('\t\t</tr>\n')
 
 def export_obs_statistics(observation_index, data_R, data_S):
+    if observation_index == 'all':
+        print('[ERROR] Observation statistics report does not support reporting on all observations')
+        return
     data_R_o = get_observation_data(observation_index, data_R)
     data_S_o = get_observation_data(observation_index, data_S)
     if not any(data_R_o) or not any(data_S_o):
