@@ -4,64 +4,45 @@ datasets:
   sim:
     path: ./data/encoded_sim_1000_200.csv
 reports:
-  ks:
-    - TGT
-    - ANV
-  distr_histogram:
-    - TGT
-    - ANV
-  observation_distr_histogram:
-    - 0
-    - 199
-    - 200
-  distr_boxplot:
-    - TGT
-    - ANV
-  observation_distr_boxplot:
-    - 0
-    - 199
-    - 200
-  distr_violinplot:
-    - TGT
-    - ANV
-  observation_distr_violinplot:
-    - 0
-    - 199
-    - 200
-  distr_densityplot:
-    - TGT
-    - ANV
-  observation_distr_densityplot:
-    - 0
-    - 199
-    - 200
-  distance:
-    - TGT
-    - ANV
-  observation_distance:
-    - 0
-    - 199
-    - 200
-  statistics:
-    - TGT
-    - ANV
-  observation_statistics:
-    - 0
-    - 199
-    - 200
-  copula_2d:
+  feature_based:
     report1:
-      - TGT
-      - ANV
-  copula_3d:
+      features:
+        - TGT
+        - ANV
+      report_types:
+        - ks
+        - distr_histogram
+        - distr_boxplot
+        - distr_violinplot
+        - distr_densityplot
+        - distance
+        - statistics
+  observation_based:
     report1:
-      - TGT
-      - ANV
-      - CAS
-  feature_average_vs_variance:
-  observation_average_vs_variance:
-  corr:
-    percent_features: 1.0
-  pca_2d:
-# output:
-#   path: report.html
+      observations:
+        - 0
+        - all
+      report_types:
+        - observation_distr_histogram
+        - observation_distr_boxplot
+        - observation_distr_violinplot
+        - observation_distr_densityplot
+        - observation_distance
+        - observation_statistics
+  general:
+    copula_2d:
+      report1:
+        - TGT
+        - ANV
+    copula_3d:
+      report1:
+        - TGT
+        - ANV
+        - CAS
+    feature_average_vs_variance:
+    observation_average_vs_variance:
+    corr:
+      percent_features: 1.0
+    pca_2d:
+output:
+  path: "./output/report.html"
