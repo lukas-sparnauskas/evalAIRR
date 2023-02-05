@@ -2,19 +2,19 @@ import os
 import yaml
 import argparse
 
-from util.input import read_encoded_csv
-from util.corr import export_corr_heatmap
-from util.pca import export_pca_2d_comparison
-from util.univar import export_ks_test
-from util.univar import export_distr_histogram, export_obs_distr_histogram
-from util.univar import export_distr_boxplot, export_obs_distr_boxplot
-from util.univar import export_distr_violinplot, export_obs_distr_violinplot
-from util.univar import export_distr_densityplot, export_obs_distr_densityplot
-from util.univar import export_avg_var_scatter_plot
-from util.univar import export_distance, export_obs_distance
-from util.univar import export_statistics, export_obs_statistics
-from util.copula import export_copula_2d_scatter_plot, export_copula_3d_scatter_plot
-from util.report import export_report
+from evalAIRR.util.input import read_encoded_csv
+from evalAIRR.util.corr import export_corr_heatmap
+from evalAIRR.util.pca import export_pca_2d_comparison
+from evalAIRR.util.univar import export_ks_test
+from evalAIRR.util.univar import export_distr_histogram, export_obs_distr_histogram
+from evalAIRR.util.univar import export_distr_boxplot, export_obs_distr_boxplot
+from evalAIRR.util.univar import export_distr_violinplot, export_obs_distr_violinplot
+from evalAIRR.util.univar import export_distr_densityplot, export_obs_distr_densityplot
+from evalAIRR.util.univar import export_avg_var_scatter_plot
+from evalAIRR.util.univar import export_distance, export_obs_distance
+from evalAIRR.util.univar import export_statistics, export_obs_statistics
+from evalAIRR.util.copula import export_copula_2d_scatter_plot, export_copula_3d_scatter_plot
+from evalAIRR.util.report import export_report
 
 #######################
 ### PARSE ARGUMENTS ###

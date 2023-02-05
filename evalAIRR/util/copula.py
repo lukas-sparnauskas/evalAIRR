@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from util.univar import get_feature_data
+from evalAIRR.util.univar import get_feature_data
 
 from copulas.univariate import Univariate
 from copulas.multivariate import GaussianMultivariate

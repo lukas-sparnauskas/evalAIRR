@@ -2,7 +2,7 @@ import math
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from util.pca import pca
+from evalAIRR.util.pca import pca
 
 def export_corr_heatmap(data_real, data_sim, n_real_feat = 0, n_sim_feat = 0, pca_ratio = 0):
     print('[LOG] CORR: Exporting correlation matrix heatmap')

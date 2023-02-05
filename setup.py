@@ -7,7 +7,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
 
-VERSION = '0.0.1'
+VERSION = '0.0.6'
 DESCRIPTION = 'Comparison of real and simulated AIRR datasets'
 
 setup(
@@ -22,7 +22,7 @@ setup(
     license='MIT',
     packages=find_packages(),
     keywords=['python', 'airr', 'simulated data'],
-    entry_points={'console_scripts': ['evalairr=evalairr.main:run']},
+    entry_points={'console_scripts': ['evalairr=evalAIRR.cli.main:run']},
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Science/Research",

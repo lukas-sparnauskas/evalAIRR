@@ -12,5 +12,3 @@ reports:
       report_types:
         - ks
         - distr_densityplot
-output:
-  path: "./output/report.html"
