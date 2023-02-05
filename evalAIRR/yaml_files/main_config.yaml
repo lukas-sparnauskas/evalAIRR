@@ -21,7 +21,6 @@ reports:
     report1:
       observations:
         - 0
-        - all
       report_types:
         - observation_distr_histogram
         - observation_distr_boxplot
@@ -29,6 +28,11 @@ reports:
         - observation_distr_densityplot
         - observation_distance
         - observation_statistics
+    report2:
+      observations:
+        - all
+      report_types:
+        - observation_distr_densityplot
   general:
     copula_2d:
       report1:
@@ -42,7 +46,7 @@ reports:
     feature_average_vs_variance:
     observation_average_vs_variance:
     corr:
-      percent_features: 1.0
+      percent_features: 0.6
     pca_2d:
 output:
   path: "./output/report.html"
