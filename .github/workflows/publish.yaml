@@ -3,7 +3,7 @@ name: Publish
 on:
   push:
     paths:
-      - "VERSION"
+      - "version.py"
 
 jobs:
   publish:
