@@ -9,7 +9,6 @@ with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
 
 VERSION = '0.0.7'
 DESCRIPTION = 'Comparison of real and simulated AIRR datasets'
-
 setup(
     name="evalAIRR",
     version=VERSION,
