@@ -58,7 +58,7 @@ The configuration YAML file consists of 3 main sections: `datasets`, `reports` a
 
 ### Datasets
 
-In the `datasets` section, you have to provide paths to a real and a simulated datasets that you are comparing. This can be done by specifying the file path of each file in the `path` variable under the sections `real` and `sim` respectively. Here is an example of how a configured `datasets` section looks like:
+In the `datasets` section, you have to provide paths to a real and a simulated datasets that you are comparing. CSV files with encoded kmer data are supported. This can be done by specifying the file path of each file in the `path` variable under the sections `real` and `sim` respectively. Here is an example of how a configured `datasets` section looks like:
 
 ```
 datasets:
