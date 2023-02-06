@@ -42,7 +42,7 @@ output:
 
 ```
 
-This report will process the two provided datasets (real and simulated), and create an HTML report with feature-based report types - Kolmogorov–Smirnov test (indicated by `ks`) and a feature distribution density plot (indicated by `distr_densityplot`) for the features `TGT` and `ANV`. It will then export the report to the path `./output/report.html`. More details on what reports can be created can be found in the *YAML Configuration Guidelines* secion.
+This report will process the two provided datasets (real and simulated) with encoded kmer data, and create an HTML report with feature-based report types - Kolmogorov–Smirnov test (indicated by `ks`) and a feature distribution density plot (indicated by `distr_densityplot`) for the features `TGT` and `ANV`. It will then export the report to the path `./output/report.html`. More details on what reports can be created can be found in the *YAML Configuration Guidelines* secion.
 
 The repository contains sample datafiles and a quickstart YAML configuration files. You can clone the repository and run evalAIRR within it to use sample data.
 
