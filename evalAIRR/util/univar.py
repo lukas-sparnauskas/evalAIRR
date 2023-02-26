@@ -2,6 +2,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import scipy.stats
+import time
+
+from evalAIRR.util.ml import ml_simulated_dataset
 
 def cdf(data):
     data_sorted = np.sort(data)
@@ -10,7 +13,7 @@ def cdf(data):
 
 def get_feature_data(feature, data, features):
     idx = np.where(features == feature)[0][0]
-    if not idx:
+    if idx == None:
         print(f'[ERROR] Feature {feature} not found!')
         return np.array([])
     return data[:, idx].flatten()
@@ -21,7 +24,25 @@ def get_observation_data(observation_index, data):
         return np.array([])
     return data[observation_index, :].flatten()
 
-def export_ks_test(feature, data_R, data_S, features_R, features_S):
+def export_ks_test(data_R, data_S, features_R, features_S, output):
+    ks_results = []
+    for f_idx in range(len(features_R)):
+        data_R_f = get_feature_data(features_R[f_idx], data_R, features_R)
+        data_S_f = get_feature_data(features_S[f_idx], data_S, features_S)
+
+        ks = scipy.stats.ks_2samp(data_R_f, data_S_f)
+        ks_results.append(str(ks.statistic))
+    ks_results = np.array(ks_results)
+    if output:
+        try:
+            with open(output, 'w', encoding="utf-8") as output_file:
+                output_file.write(','.join(ks_results))
+            print('[LOG] KS test result file created')
+        except: 
+            print('[ERROR] Failed to export KS test results to file')
+
+
+def export_feature_ks_test(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
     data_S_f = get_feature_data(feature, data_S, features_S)
     if not any(data_R_f) or not any(data_S_f):
@@ -52,7 +73,7 @@ def export_ks_test(feature, data_R, data_S, features_R, features_S):
         file.write(f'\t\t\t<td>{res.pvalue}</td>\n')
         file.write('\t\t</tr>\n')
 
-    f.savefig(f'./output/temp_figures/ks_test_{feature}.svg')
+    f.savefig(f'./output/temp_figures/ks_test_{feature}_{int(time.time())}.svg')
     del f
     plt.close()
 
@@ -70,7 +91,7 @@ def export_distr_histogram(feature, data_R, data_S, features_R, features_S, n_bi
     ax.hist([data_R_f, data_S_f], bins, label=['Real dataset', 'Simulated dataset'])
     ax.legend(loc='upper right')
     
-    f.savefig(f'./output/temp_figures/histogram_{feature}.svg')
+    f.savefig(f'./output/temp_figures/histogram_{feature}_{int(time.time())}.svg')
     del f
     plt.close()
 
@@ -91,7 +112,7 @@ def export_obs_distr_histogram(observation_index, data_R, data_S, n_bins=30):
     ax.hist([data_R_o, data_S_o], bins, label=['Real dataset', 'Simulated dataset'])
     ax.legend(loc='upper right')
     
-    f.savefig(f'./output/temp_figures/histogram_obs_{observation_index}.svg')
+    f.savefig(f'./output/temp_figures/histogram_obs_{observation_index}_{int(time.time())}.svg')
     del f
     plt.close()
 
@@ -106,7 +127,7 @@ def export_distr_boxplot(feature, data_R, data_S, features_R, features_S):
     f.suptitle(f'Distribution boxplots of feature {feature}')
     ax.boxplot([data_R_f, data_S_f], labels=['Real dataset', 'Simulated dataset'])
     
-    f.savefig(f'./output/temp_figures/box_plot_{feature}.svg')
+    f.savefig(f'./output/temp_figures/box_plot_{feature}_{int(time.time())}.svg')
     del f
     plt.close()
 
@@ -124,7 +145,7 @@ def export_obs_distr_boxplot(observation_index, data_R, data_S):
     f.suptitle(f'Distribution boxplots of observation with index {observation_index}')
     ax.boxplot([data_R_o, data_S_o], labels=['Real dataset', 'Simulated dataset'])
     
-    f.savefig(f'./output/temp_figures/box_plot_obs_{observation_index}.svg')
+    f.savefig(f'./output/temp_figures/box_plot_obs_{observation_index}_{int(time.time())}.svg')
     del f
     plt.close()
 
@@ -157,7 +178,7 @@ def export_distr_violinplot(feature, data_R, data_S, features_R, features_S):
     ax2.set_xbound(xbound)
     ax2.set_ybound(ybound)
 
-    f.savefig(f'./output/temp_figures/violin_plot_{feature}.svg')
+    f.savefig(f'./output/temp_figures/violin_plot_{feature}_{int(time.time())}.svg')
     del f
     plt.close()
 
@@ -193,7 +214,7 @@ def export_obs_distr_violinplot(observation_index, data_R, data_S):
     ax2.set_xbound(xbound)
     ax2.set_ybound(ybound)
 
-    f.savefig(f'./output/temp_figures/violin_plot_obs_{observation_index}.svg')
+    f.savefig(f'./output/temp_figures/violin_plot_obs_{observation_index}_{int(time.time())}.svg')
     del f
     plt.close()
 
@@ -210,11 +231,11 @@ def export_distr_densityplot(feature, data_R, data_S, features_R, features_S):
     sns.kdeplot(data_S_f, ax=ax, label='Simulated dataset', fill=True, common_norm=False, color='#d65161', alpha=0.5, linewidth=0)
     ax.legend()
 
-    f.savefig(f'./output/temp_figures/density_plot_{feature}.svg')
+    f.savefig(f'./output/temp_figures/density_plot_{feature}_{int(time.time())}.svg')
     del f
     plt.close()
 
-def export_obs_distr_densityplot(observation_index, data_R, data_S):
+def export_obs_distr_densityplot(observation_index, data_R, data_S, with_ml_sim, ml_random_state):
     if observation_index != 'all':
         data_R_o = get_observation_data(observation_index, data_R)
         data_S_o = get_observation_data(observation_index, data_S)
@@ -225,6 +246,9 @@ def export_obs_distr_densityplot(observation_index, data_R, data_S):
     f.set_size_inches(9, 7)
     
     if observation_index == 'all':
+        if with_ml_sim:
+            print('[LOG] OBS DENSITY PLT: Generating ML dataset')
+            data_ML = ml_simulated_dataset(data_R, ml_random_state)
         f.suptitle(f'Distribution density plot of all observations')
         for index in range(len(data_R)):
             data_R_o = get_observation_data(index, data_R)
@@ -233,32 +257,43 @@ def export_obs_distr_densityplot(observation_index, data_R, data_S):
             sns.kdeplot(data_R_o, ax=ax, label=label, fill=True, common_norm=False, color='#5480d1', alpha=0.2, linewidth=0)
             label = 'Simulated dataset' if index == 0 else None
             sns.kdeplot(data_S_o, ax=ax, label=label, fill=True, common_norm=False, color='#d65161', alpha=0.2, linewidth=0)
+            if with_ml_sim:
+                data_ML_o = get_observation_data(index, data_ML)
+                label = 'ML generated dataset' if index == 0 else None
+                sns.kdeplot(data_ML_o, ax=ax, label=label, fill=True, common_norm=False, color='#2af52d', alpha=0.2, linewidth=0)
     else:
         f.suptitle(f'Distribution density plot of observation with index {observation_index}')
         sns.kdeplot(data_R_o, ax=ax, label='Real dataset', fill=True, common_norm=False, color='#5480d1', alpha=0.5, linewidth=0)
         sns.kdeplot(data_S_o, ax=ax, label='Simulated dataset', fill=True, common_norm=False, color='#d65161', alpha=0.5, linewidth=0)
 
     ax.legend()
-    f.savefig(f'./output/temp_figures/density_plot_obs_{observation_index}.svg')
+    f.savefig(f'./output/temp_figures/density_plot_obs_{observation_index}_{int(time.time())}.svg')
     del f
     plt.close()
 
-def export_avg_var_scatter_plot(data_R, data_S, axis=0):
+def export_avg_var_scatter_plot(data_R, data_S, axis=0, with_ml_sim = False, ml_random_state = None):
     data_R_x = np.average(data_R, axis=axis)
     data_R_y = np.var(data_R, axis=axis)
     data_S_x = np.average(data_S, axis=axis)
     data_S_y = np.var(data_S, axis=axis)
+    if with_ml_sim:
+        print('[LOG] AVG VS VAR: Generating ML dataset')
+        data_ML = ml_simulated_dataset(data_R, ml_random_state)
+        data_ML_x = np.average(data_ML, axis=axis)
+        data_ML_y = np.var(data_ML, axis=axis)
 
     f, ax = plt.subplots(1, 1)
     f.set_size_inches(9, 7)
     f.suptitle('Feature average value vs variance' if axis == 0 else 'Observation average value vs variance')
     ax.scatter(data_R_x, data_R_y, c='#5480d1', linewidths=None, alpha=0.5, label='Real')
     ax.scatter(data_S_x, data_S_y, c='#d65161', linewidths=None, alpha=0.5, label='Simulated')
+    if with_ml_sim:
+        ax.scatter(data_ML_x, data_ML_y, c='#53d453', linewidths=None, alpha=0.5, label='ML generated')
     ax.set_xlabel('Average value')
     ax.set_ylabel('Variance value')
     ax.legend()
     
-    f.savefig(f'./output/temp_figures/avg_var_{"feat" if axis == 0 else "obs"}_scatter_plot.svg')
+    f.savefig(f'./output/temp_figures/avg_var_{"feat" if axis == 0 else "obs"}_scatter_plot_{int(time.time())}.svg')
     del f
     plt.close()
 

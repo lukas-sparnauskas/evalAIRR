@@ -1,3 +1,4 @@
+import time
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -53,7 +54,7 @@ def export_copula_2d_scatter_plot(feature_1, feature_2, data_R, data_S, features
 
     compare_2d(df_R, df_S)
     plt.suptitle(f'Distribution of {feature_1} and {feature_2} in copula space')
-    plt.savefig(f'./output/temp_figures/copula_2d_plot_{feature_1}_{feature_2}.svg')
+    plt.savefig(f'./output/temp_figures/copula_2d_plot_{feature_1}_{feature_2}_{int(time.time())}.svg')
     plt.close()
 
 def export_copula_3d_scatter_plot(feature_1, feature_2, feature_3, data_R, data_S, features_R, features_S):
@@ -120,6 +121,6 @@ def export_copula_3d_scatter_plot(feature_1, feature_2, feature_3, data_R, data_
         ax.set_ylabel(feature_2)
         ax.set_zlabel(feature_3)
     fig.tight_layout()
-    fig.savefig(f'./output/temp_figures/copula_3d_plot_{feature_1}_{feature_2}_{feature_3}.svg')
+    fig.savefig(f'./output/temp_figures/copula_3d_plot_{feature_1}_{feature_2}_{feature_3}_{int(time.time())}.svg')
     del fig
     plt.close()

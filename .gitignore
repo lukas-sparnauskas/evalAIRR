@@ -3,4 +3,5 @@ build/
 dist/
 evalAIRR.egg-info/
 evalAIRR/util/__pycache__
-evalAIRR/output/
+output/
+__pycache__/

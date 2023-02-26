@@ -38,11 +38,11 @@ reports:
         - ks
         - distr_densityplot
 output:
-  path: './output/report.html'
+  path: ./output/report.html
 
 ```
 
-This report will process the two provided datasets (real and simulated), and create an HTML report with feature-based report types - Kolmogorov–Smirnov test (indicated by `ks`) and a feature distribution density plot (indicated by `distr_densityplot`) for the features `TGT` and `ANV`. It will then export the report to the path `./output/report.html`. More details on what reports can be created can be found in the *YAML Configuration Guidelines* secion.
+This report will process the two provided datasets (real and simulated), and create an HTML report with feature-based report types - Kolmogorov–Smirnov test (indicated by `ks`) and a feature distribution density plot (indicated by `distr_densityplot`) for the features `TGT` and `ANV`. It will then export the report to the path `./output/report.html`. More details on what reports can be created can be found in the _YAML Configuration Guidelines_ section.
 
 You can run the program by running this command within the installation directory:
 
@@ -71,6 +71,7 @@ datasets:
 In the `reports` section, you can provide the list of report types you want to create and their parameters. There are three types of report groups depending on the different parameters: `feature_based`, `observation_based` and `generic`. Here is the list of reports you can create that compare the features of the real dataset with the simulated dataset:
 
 #### Feature-based reports
+
 - `ks` - Kolmogorov–Smirnov statistic. Parameters: list of features you are creating the report for.
 - `distr_histogram` - feature distribution histogram. Parameters: list of features you are creating the report for.
 - `distr_boxplot` - feature distribution boxplot. Parameters: list of features you are creating the report for.
@@ -80,20 +81,25 @@ In the `reports` section, you can provide the list of report types you want to c
 - `statistics` - statistical indicators (average, median, standard deviation and variance) of a feature in both real and simulated datasets. Parameters: list of features you are creating the report for.
 
 #### Observation-based reports
+
 - `observation_distr_histogram` - observation distribution histogram. Parameters: list of observations you are creating the report for.
 - `observation_distr_boxplot` - observation distribution boxplot. Parameters: list of observations you are creating the report for.
 - `observation_distr_violinplot` - observation distribution violin plot. Parameters: list of observations you are creating the report for.
-- `observation_distr_densityplot` - observation distribution density plot. Parameters: list of observations you are creating the report for. The observation index 'all' can be used to report on all observations in one plot.
+- `observation_distr_densityplot` - observation distribution density plot. Parameters: list of observations you are creating the report for. The observation index `all` can be used to report on all observations in one plot.
 - `observation_distance` - Euclidean distance between the real and simulated observation. Parameters: list of observations you are creating the report for.
 - `observation_statistics` - statistical indicators (average, median, standard deviation and variance) of an observation in both real and simulated datasets. Parameters: list of observations you are creating the report for.
 
+Additional parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset (currently, only applies to the report type `observation_distr_densityplot` in reports with `all` observations). `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
+
 #### General reports
+
+- `ks` - Kolmogorov–Smirnov statistic for all features. Parameters: `output` - optional parameter, that specifies the path of text/csv file the the results will be exported to.
 - `copula_2d` - a 2D scatter plot that displays two features in a Gausian Multivariate copula space. Parameters: a report section of any name, under which the compared features are specified.
 - `copula_3d` - a 3D scatter plot that displays three features in a Gausian Multivariate copula space. Parameters: a report section of any name, under which the compared features are specified.
-- `feature_average_vs_variance` - a scatter plot that displays the average value of every feature on one axis and the variance of every feature on the other axis.
-- `observation_average_vs_variance` - a scatter plot that displays the average value of every observation on one axis and the variance of every observation on the other axis.
-- `corr` - correlation matrix heatmaps of the real and simulated datasets. Parameters: `percent_features` - an optional parameter for dimensionality reduction using PCA. A float value corresponding with the ratio of feature reduction (e.g. `percent_features` equal to 0.5 would reduce the feature count by half). 
-- `pca_2d` - two scatter plots with both datasets reduced to two dimensions using PCA.
+- `feature_average_vs_variance` - a scatter plot that displays the average value of every feature on one axis and the variance of every feature on the other axis. Parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
+- `observation_average_vs_variance` - a scatter plot that displays the average value of every observation on one axis and the variance of every observation on the other axis. Parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
+- `corr` - correlation matrix heatmaps of the real and simulated datasets. Parameters: `reduce_to_n_features` - an optional parameter for dimensionality reduction using PCA. The number of features to reduce the dataset to (must be reduce_to_n_features < min(n_observations, n_features)). `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
+- `pca_2d` - two scatter plots with both datasets reduced to two dimensions using PCA. Parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
 
 Here is a sample `reports` section of a configuration file containing all of the reports:
 
@@ -128,6 +134,8 @@ reports:
         - all
       report_types:
         - observation_distr_densityplot
+      with_ml_sim: True
+      ml_random_state: 0
   general:
     copula_2d:
       report1:
@@ -139,19 +147,29 @@ reports:
         - ANV
         - CAS
     feature_average_vs_variance:
+      with_ml_sim: True
+      ml_random_state: 0
     observation_average_vs_variance:
+      with_ml_sim: True
+      ml_random_state: 0
     corr:
-      percent_features: 0.6
+      reduce_to_n_features: 150
+      with_ml_sim: True
+      ml_random_state: 0
     pca_2d:
+      with_ml_sim: True
+      ml_random_state: 0
+    ks:
+      output: ./output/ks.csv
 ```
 
 ### Output
 
-An optional section where you can specify the file path of the generated report. The default path of the generated report is `<INSTALL_DIRECTORY>/output/report.html`. The report is exported in the HTML format.
+An optional section where you can specify the file path of the generated report. The default path of the generated report is `<CURRENT_DIRECTORY>/output/report.html`. The report is exported in the HTML format.
 
 An example output section:
 
 ```
 output:
-  path: './output/report.html'
+  path: ./output/report.html
 ```

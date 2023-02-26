@@ -2,10 +2,11 @@ import os
 import yaml
 import argparse
 
+from evalAIRR.version import __version__
 from evalAIRR.util.input import read_encoded_csv
 from evalAIRR.util.corr import export_corr_heatmap
 from evalAIRR.util.pca import export_pca_2d_comparison
-from evalAIRR.util.univar import export_ks_test
+from evalAIRR.util.univar import export_feature_ks_test, export_ks_test
 from evalAIRR.util.univar import export_distr_histogram, export_obs_distr_histogram
 from evalAIRR.util.univar import export_distr_boxplot, export_obs_distr_boxplot
 from evalAIRR.util.univar import export_distr_violinplot, export_obs_distr_violinplot
@@ -22,6 +23,7 @@ from evalAIRR.util.report import export_report
 
 parser = argparse.ArgumentParser(prog='evalairr')
 parser.add_argument('-i', '--config', help='path to YAML confuguration file', required=True)
+parser.add_argument('-v', '--version', action='version', version=__version__, help='check the version of evalAIRR')
 
 def run():
 
@@ -77,7 +79,7 @@ def run():
 
                 # KOLMOGOROV-SMIRNOV TEST REPORT
                 if 'ks' in report_types:
-                    export_ks_test(feature, data_R, data_S, features_R, features_S)
+                    export_feature_ks_test(feature, data_R, data_S, features_R, features_S)
 
                 # DISTRIBUTION HISTOGRAM REPORT
                 if 'distr_histogram' in report_types:
@@ -128,7 +130,15 @@ def run():
 
                 # OBSERVATION DISTRIBUTION DENSITY PLOT REPORT
                 if 'observation_distr_densityplot' in report_types:
-                    export_obs_distr_densityplot(observation_index, data_R, data_S)
+                    try:
+                        with_ml_sim = reports_o[report]['with_ml_sim']
+                    except: 
+                        with_ml_sim = False
+                    try:
+                        ml_random_state = reports_o[report]['ml_random_state']
+                    except: 
+                        ml_random_state = None
+                    export_obs_distr_densityplot(observation_index, data_R, data_S, with_ml_sim, ml_random_state)
 
                 # OBSERVATION EUCLIDEAN DISTANCE REPORT
                 if 'observation_distance' in report_types:
@@ -145,22 +155,65 @@ def run():
     if ('general' in REPORTS):
         reports_g = REPORTS['general']
 
+        # KOLMOGOROV-SMIRNOV TEST REPORT FOR ALL FEATURES
+        if ('ks' in reports_g):
+            try:
+                output = reports_g['ks']['output']
+            except: 
+                output = None
+            export_ks_test(data_R, data_S, features_R, features_S, output)
+
         # CORRELATION MATRIX REPORT
         if ('corr' in reports_g):
-            percent_features = reports_g['corr']['percent_features']
-            export_corr_heatmap(data_R, data_S, len(features_R), len(features_S), percent_features)
+            try:
+                reduce_to_n_features = reports_g['corr']['reduce_to_n_features']
+            except: 
+                reduce_to_n_features = 0
+            try:
+                with_ml_sim = reports_g['corr']['with_ml_sim']
+            except: 
+                with_ml_sim = False
+            try:
+                ml_random_state = reports_g['corr']['ml_random_state']
+            except: 
+                ml_random_state = None
+            export_corr_heatmap(data_R, data_S, len(features_R), len(features_S), reduce_to_n_features, with_ml_sim, ml_random_state)
 
         # PCA 2D REPORT
         if ('pca_2d' in reports_g):
-            export_pca_2d_comparison(data_R, data_S)
+            try:
+                with_ml_sim = reports_g['pca_2d']['with_ml_sim']
+            except: 
+                with_ml_sim = False
+            try:
+                ml_random_state = reports_g['pca_2d']['ml_random_state']
+            except: 
+                ml_random_state = None
+            export_pca_2d_comparison(data_R, data_S, with_ml_sim, ml_random_state)
 
         # FEATURE AVERAGE VALUE VS VARIANCE REPORT
         if ('feature_average_vs_variance' in reports_g):
-            export_avg_var_scatter_plot(data_R, data_S, axis=0)
+            try:
+                with_ml_sim = reports_g['feature_average_vs_variance']['with_ml_sim']
+            except: 
+                with_ml_sim = False
+            try:
+                ml_random_state = reports_g['feature_average_vs_variance']['ml_random_state']
+            except: 
+                ml_random_state = None
+            export_avg_var_scatter_plot(data_R, data_S, axis=0, with_ml_sim=with_ml_sim, ml_random_state=ml_random_state)
 
         # OBSERVATION AVERAGE VALUE VS VARIANCE REPORT
         if ('observation_average_vs_variance' in reports_g):
-            export_avg_var_scatter_plot(data_R, data_S, axis=1)
+            try:
+                with_ml_sim = reports_g['observation_average_vs_variance']['with_ml_sim']
+            except: 
+                with_ml_sim = False
+            try:
+                ml_random_state = reports_g['observation_average_vs_variance']['ml_random_state']
+            except: 
+                ml_random_state = None
+            export_avg_var_scatter_plot(data_R, data_S, axis=1, with_ml_sim=with_ml_sim, ml_random_state=ml_random_state)
 
         # COPULA 2D REPORT
         if ('copula_2d' in reports_g):
