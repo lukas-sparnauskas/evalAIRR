@@ -39,12 +39,13 @@ reports:
         - distr_densityplot
 output:
   path: ./output/report.html
-
 ```
 
-This report will process the two provided datasets (real and simulated), and create an HTML report with feature-based report types - Kolmogorov–Smirnov test (indicated by `ks`) and a feature distribution density plot (indicated by `distr_densityplot`) for the features `TGT` and `ANV`. It will then export the report to the path `./output/report.html`. More details on what reports can be created can be found in the _YAML Configuration Guidelines_ section.
+This report will process the two provided datasets (real and simulated) with encoded kmer data, and create an HTML report with feature-based report types - Kolmogorov–Smirnov test (indicated by `ks`) and a feature distribution density plot (indicated by `distr_densityplot`) for the features `TGT` and `ANV`. It will then export the report to the path `./output/report.html`. More details on what reports can be created can be found in the _YAML Configuration Guidelines_ section.
 
-You can run the program by running this command within the installation directory:
+The repository contains sample datafiles and a quickstart YAML configuration files. You can clone the repository and run evalAIRR within it to use sample data.
+
+Within the cloned repository run the command:
 
 `evalairr -i ./yaml_files/quickstart.yaml`
 
@@ -56,7 +57,7 @@ The configuration YAML file consists of 3 main sections: `datasets`, `reports` a
 
 ### Datasets
 
-In the `datasets` section, you have to provide paths to a real and a simulated datasets that you are comparing. This can be done by specifying the file path of each file in the `path` variable under the sections `real` and `sim` respectively. Here is an example of how a configured `datasets` section looks like:
+In the `datasets` section, you have to provide paths to a real and a simulated datasets that you are comparing. CSV files with encoded kmer data are supported. This can be done by specifying the file path of each file in the `path` variable under the sections `real` and `sim` respectively. Here is an example of how a configured `datasets` section looks like:
 
 ```
 datasets:
