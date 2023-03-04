@@ -94,13 +94,17 @@ Additional parameters: `with_ml_sim` - optional parameter, which if True, instru
 
 #### General reports
 
-- `ks` - Kolmogorov–Smirnov statistic for all features. Parameters: `output` - optional parameter, that specifies the path of text/csv file the the results will be exported to.
+- `ks` - Kolmogorov–Smirnov statistic for all features. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/ks.csv`).
 - `copula_2d` - a 2D scatter plot that displays two features in a Gausian Multivariate copula space. Parameters: a report section of any name, under which the compared features are specified.
 - `copula_3d` - a 3D scatter plot that displays three features in a Gausian Multivariate copula space. Parameters: a report section of any name, under which the compared features are specified.
 - `feature_average_vs_variance` - a scatter plot that displays the average value of every feature on one axis and the variance of every feature on the other axis. Parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
 - `observation_average_vs_variance` - a scatter plot that displays the average value of every observation on one axis and the variance of every observation on the other axis. Parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
 - `corr` - correlation matrix heatmaps of the real and simulated datasets. Parameters: `reduce_to_n_features` - an optional parameter for dimensionality reduction using PCA. The number of features to reduce the dataset to (must be reduce_to_n_features < min(n_observations, n_features)). `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
 - `pca_2d` - two scatter plots with both datasets reduced to two dimensions using PCA. Parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
+- `distance` - Euclidean distance between the real and simulated features. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/dist.csv`).
+- `statistics` - statistical indicators (average, median, standard deviation and variance) of all features in both real and simulated datasets. Parameters: `output_dir` - optional parameter, that specifies the directory for the csv files in which the csv result files `real_stat.csv` and `sim_stat.csv` will be exported to (default value is set to `./output/`). Each csv file contain four rows, each with a different statistic: 1 - average, 2 - median, 3 - standard deviation, 4 - variance.
+- `observation_distance` - Euclidean distance between the real and simulated observations. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/obs_dist.csv`).
+- `observation_statistics` - statistical indicators (average, median, standard deviation and variance) of all observation in both real and simulated datasets. Parameters: `output_dir` - optional parameter, that specifies the directory for the csv files in which the csv result files `real_obs_stat.csv` and `sim_obs_stat.csv` will be exported to (default value is set to `./output/`). Each csv file contain four rows, each with a different statistic: 1 - average, 2 - median, 3 - standard deviation, 4 - variance.
 
 Here is a sample `reports` section of a configuration file containing all of the reports:
 
@@ -162,11 +166,19 @@ reports:
       ml_random_state: 0
     ks:
       output: ./output/ks.csv
+    statistics:
+      output_dir: ./output/
+    observation_statistics:
+      output_dir: ./output/
+    distance:
+      output: ./output/dist.csv
+    observation_distance:
+      output: ./output/obs_dist.csv
 ```
 
 ### Output
 
-An optional section where you can specify the file path of the generated report. The default path of the generated report is `<CURRENT_DIRECTORY>/output/report.html`. The report is exported in the HTML format.
+An optional section where you can specify the file path of the generated report. The default path of the generated report is `<CURRENT_DIRECTORY>/output/report.html`. The report is exported in the HTML format. If you declare the path as 'NONE', the report will not be created.
 
 An example output section:
 

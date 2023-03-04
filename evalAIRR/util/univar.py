@@ -2,9 +2,17 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import scipy.stats
+import decimal
 import time
 
 from evalAIRR.util.ml import ml_simulated_dataset
+
+ctx = decimal.Context()
+ctx.prec = 20
+
+def float_to_str(f):
+    d1 = ctx.create_decimal(repr(f))
+    return format(d1, 'f')
 
 def cdf(data):
     data_sorted = np.sort(data)
@@ -31,7 +39,7 @@ def export_ks_test(data_R, data_S, features_R, features_S, output):
         data_S_f = get_feature_data(features_S[f_idx], data_S, features_S)
 
         ks = scipy.stats.ks_2samp(data_R_f, data_S_f)
-        ks_results.append(str(ks.statistic))
+        ks_results.append(float_to_str(ks.statistic))
     ks_results = np.array(ks_results)
     if output:
         try:
@@ -312,9 +320,26 @@ def export_distance(feature, data_R, data_S, features_R, features_S):
         file.write(f'\t\t\t<td>{dist}</td>\n')
         file.write('\t\t</tr>\n')
 
+def export_distance_all(data_R, data_S, features_R, features_S, output):
+    distance_results = []
+    for f_idx in range(len(features_R)):
+        data_R_f = get_feature_data(features_R[f_idx], data_R, features_R)
+        data_S_f = get_feature_data(features_S[f_idx], data_S, features_S)
+
+        dist = np.linalg.norm(data_R_f - data_S_f)
+        distance_results.append(float_to_str(dist))
+    distance_results = np.array(distance_results)
+    if output:
+        try:
+            with open(output, 'w', encoding="utf-8") as output_file:
+                output_file.write(','.join(distance_results))
+            print('[LOG] Distance result file created')
+        except: 
+            print('[ERROR] Failed to export distance results to file')
+
 def export_obs_distance(observation_index, data_R, data_S):
     if observation_index == 'all':
-        print('[ERROR] Observation Euclidean distance report does not support reporting on all observations')
+        print('[ERROR] Observation Euclidean distance report does not support reporting on all observations. Use general report to csv `observation_distance` instead.')
         return
     data_R_o = get_observation_data(observation_index, data_R)
     data_S_o = get_observation_data(observation_index, data_S)
@@ -340,7 +365,34 @@ def export_obs_distance(observation_index, data_R, data_S):
         file.write(f'\t\t\t<td>Euclidean distance of observation with index {observation_index}</td>\n')
         file.write(f'\t\t\t<td>{dist}</td>\n')
         file.write('\t\t</tr>\n')
-    
+
+def export_obs_distance_all(data_R, data_S, output):
+    distance_results = []
+    for o_idx in range(len(data_R)):
+        data_R_o = get_observation_data(o_idx, data_R)
+        data_S_o = get_observation_data(o_idx, data_S)
+
+        dist = []
+        if data_S_o.shape[0] < data_R_o.shape[0]:
+            data_S_o_padded = np.zeros(data_R_o.shape)
+            data_S_o_padded[:data_S_o.shape[0]] = data_S_o
+            dist = np.linalg.norm(data_R_o - data_S_o_padded)
+        elif data_R_o.shape[0] < data_S_o.shape[0]:
+            data_R_o_padded = np.zeros(data_S_o.shape)
+            data_R_o_padded[:data_R_o.shape[0]] = data_R_o
+            dist = np.linalg.norm(data_S_o - data_R_o_padded)
+        else:
+            dist = np.linalg.norm(data_R_o - data_S_o)
+        distance_results.append(float_to_str(dist))
+    distance_results = np.array(distance_results)
+    if output:
+        try:
+            with open(output, 'w', encoding="utf-8") as output_file:
+                output_file.write(','.join(distance_results))
+            print('[LOG] Observation distance result file created')
+        except: 
+            print('[ERROR] Failed to export observation distance results to file')
+
 def export_statistics(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
     data_S_f = get_feature_data(feature, data_S, features_S)
@@ -379,9 +431,83 @@ def export_statistics(feature, data_R, data_S, features_R, features_S):
         file.write(f'\t\t\t<td>{var["sim"]}</td>\n')
         file.write('\t\t</tr>\n')
 
+def export_statistics_all(data_R, data_S, features_R, features_S, output_dir):
+    R_avg, S_avg = [], []
+    R_median, S_median = [], []
+    R_std, S_std = [], []
+    R_var, S_var = [], []
+    for f_idx in range(len(features_R)):
+        data_R_f = np.array(get_feature_data(features_R[f_idx], data_R, features_R), dtype=float)
+        data_S_f = np.array(get_feature_data(features_S[f_idx], data_S, features_S), dtype=float)
+
+        R_avg.append(float_to_str(np.average(data_R_f)))
+        R_median.append(float_to_str(np.median(data_R_f)))
+        R_std.append(float_to_str(np.std(data_R_f)))
+        R_var.append(float_to_str(np.var(data_R_f)))
+
+        S_avg.append(float_to_str(np.average(data_S_f)))
+        S_median.append(float_to_str(np.median(data_S_f)))
+        S_std.append(float_to_str(np.std(data_S_f)))
+        S_var.append(float_to_str(np.var(data_S_f)))
+        
+    if output_dir:
+        try:
+            if not str(output_dir).strip().endswith('/') and not str(output_dir).endswith('\\'):
+                output_dir = output_dir.strip() + '/'
+            with open(output_dir + '/real_stat.csv', 'w', encoding="utf-8") as output_file:
+                output_file.write(','.join(R_avg) + '\n')
+                output_file.write(','.join(R_median) + '\n')
+                output_file.write(','.join(R_std) + '\n')
+                output_file.write(','.join(R_var))
+            with open(output_dir + '/sim_stat.csv', 'w', encoding="utf-8") as output_file:
+                output_file.write(','.join(S_avg) + '\n')
+                output_file.write(','.join(S_median) + '\n')
+                output_file.write(','.join(S_std) + '\n')
+                output_file.write(','.join(S_var))
+            print('[LOG] Statistics result files created')
+        except: 
+            print('[ERROR] Failed to export statistic results to file')
+
+def export_obs_statistics_all(data_R, data_S, output_dir):
+    R_avg, S_avg = [], []
+    R_median, S_median = [], []
+    R_std, S_std = [], []
+    R_var, S_var = [], []
+    for o_idx in range(len(data_R)):
+        data_R_o = np.array(get_observation_data(o_idx, data_R), dtype=float)
+        data_S_o = np.array(get_observation_data(o_idx, data_S), dtype=float)
+
+        R_avg.append(float_to_str(np.average(data_R_o)))
+        R_median.append(float_to_str(np.median(data_R_o)))
+        R_std.append(float_to_str(np.std(data_R_o)))
+        R_var.append(float_to_str(np.var(data_R_o)))
+
+        S_avg.append(float_to_str(np.average(data_S_o)))
+        S_median.append(float_to_str(np.median(data_S_o)))
+        S_std.append(float_to_str(np.std(data_S_o)))
+        S_var.append(float_to_str(np.var(data_S_o)))
+        
+    if output_dir:
+        try:
+            if not str(output_dir).strip().endswith('/') and not str(output_dir).endswith('\\'):
+                output_dir = output_dir.strip() + '/'
+            with open(output_dir + '/real_obs_stat.csv', 'w', encoding="utf-8") as output_file:
+                output_file.write(','.join(R_avg) + '\n')
+                output_file.write(','.join(R_median) + '\n')
+                output_file.write(','.join(R_std) + '\n')
+                output_file.write(','.join(R_var))
+            with open(output_dir + '/sim_obs_stat.csv', 'w', encoding="utf-8") as output_file:
+                output_file.write(','.join(S_avg) + '\n')
+                output_file.write(','.join(S_median) + '\n')
+                output_file.write(','.join(S_std) + '\n')
+                output_file.write(','.join(S_var))
+            print('[LOG] Observation statistics result files created')
+        except: 
+            print('[ERROR] Failed to export observation statistic results to file')
+
 def export_obs_statistics(observation_index, data_R, data_S):
     if observation_index == 'all':
-        print('[ERROR] Observation statistics report does not support reporting on all observations')
+        print('[ERROR] Observation statistics report does not support reporting on all observations. Use general report to csv `observation_statistics` instead.')
         return
     data_R_o = get_observation_data(observation_index, data_R)
     data_S_o = get_observation_data(observation_index, data_S)
@@ -419,4 +545,3 @@ def export_obs_statistics(observation_index, data_R, data_S):
         file.write(f'\t\t\t<td>{var["real"]}</td>\n')
         file.write(f'\t\t\t<td>{var["sim"]}</td>\n')
         file.write('\t\t</tr>\n')
-        

@@ -2,6 +2,7 @@
 build/
 dist/
 evalAIRR.egg-info/
-evalAIRR/util/__pycache__
+evalAIRR/util/__pycache__/
 output/
 __pycache__/
+tests/data/

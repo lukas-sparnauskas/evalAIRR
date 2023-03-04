@@ -14,6 +14,8 @@ from evalAIRR.util.univar import export_distr_densityplot, export_obs_distr_dens
 from evalAIRR.util.univar import export_avg_var_scatter_plot
 from evalAIRR.util.univar import export_distance, export_obs_distance
 from evalAIRR.util.univar import export_statistics, export_obs_statistics
+from evalAIRR.util.univar import export_distance_all, export_obs_distance_all
+from evalAIRR.util.univar import export_statistics_all, export_obs_statistics_all
 from evalAIRR.util.copula import export_copula_2d_scatter_plot, export_copula_3d_scatter_plot
 from evalAIRR.util.report import export_report
 
@@ -43,6 +45,8 @@ def run():
 
     try:
         OUTPUT = CONFIG['output']['path']
+        if str(OUTPUT).capitalize().strip() == 'NONE':
+            OUTPUT = None
     except: 
         OUTPUT = './output/report.html'
         
@@ -51,7 +55,11 @@ def run():
     #####################
 
     features_R, data_R = read_encoded_csv(CONFIG['datasets']['real']['path'])
+    if data_R is None:
+        return
     features_S, data_S = read_encoded_csv(CONFIG['datasets']['sim']['path'])
+    if data_S is None:
+        return
 
     ##########################################
     ### CREATE OUTPUT AND TEMP DIRECTORIES ###
@@ -160,8 +168,40 @@ def run():
             try:
                 output = reports_g['ks']['output']
             except: 
-                output = None
+                output = './output/ks.csv'
             export_ks_test(data_R, data_S, features_R, features_S, output)
+
+        # STATISTICS REPORT
+        if 'statistics' in reports_g:
+            try:
+                output_dir = reports_g['statistics']['output_dir']
+            except:
+                output_dir = './output/'
+            export_statistics_all(data_R, data_S, features_R, features_S, output_dir)
+
+        # OBSERVATION STATISTICS REPORT
+        if 'observation_statistics' in reports_g:
+            try:
+                output_dir = reports_g['observation_statistics']['output_dir']
+            except: 
+                output_dir = './output/'
+            export_obs_statistics_all(data_R, data_S, output_dir)
+
+        # EUCLIDEAN DISTANCE REPORT
+        if 'distance' in reports_g:
+            try:
+                output = reports_g['distance']['output']
+            except:
+                output = './output/dist.csv'
+            export_distance_all(data_R, data_S, features_R, features_S, output)
+
+        # OBSERVATION EUCLIDEAN DISTANCE REPORT
+        if 'observation_distance' in reports_g:
+            try:
+                output = reports_g['observation_distance']['output']
+            except: 
+                output = './output/obs_dist.csv'
+            export_obs_distance_all(data_R, data_S, output)
 
         # CORRELATION MATRIX REPORT
         if ('corr' in reports_g):
@@ -241,4 +281,5 @@ def run():
     ### EXPORT HTML REPORT ###
     ##########################
 
-    export_report(OUTPUT)
+    if OUTPUT is not None:
+        export_report(OUTPUT)

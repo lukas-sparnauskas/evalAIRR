@@ -60,5 +60,13 @@ reports:
       ml_random_state: 0
     ks:
       output: ./output/ks.csv
+    statistics:
+      output_dir: ./output/
+    observation_statistics:
+      output_dir: ./output/
+    distance:
+      output: ./output/dist.csv
+    observation_distance:
+      output: ./output/obs_dist.csv
 output:
   path: ./output/report.html
