@@ -3,7 +3,7 @@ import yaml
 import argparse
 
 from evalAIRR.version import __version__
-from evalAIRR.util.input import read_encoded_csv
+from evalAIRR.util.input import read_encoded_csv, remove_non_mutual_features
 from evalAIRR.util.corr import export_corr_heatmap
 from evalAIRR.util.pca import export_pca_2d_comparison
 from evalAIRR.util.univar import export_feature_ks_test, export_ks_test
@@ -60,6 +60,10 @@ def run():
     features_S, data_S = read_encoded_csv(CONFIG['datasets']['sim']['path'])
     if data_S is None:
         return
+
+    # IF THE DATA IS PRE-ENCODED, ONLY USE MATCHING FEATURES
+    matching_features, data_R, data_S = remove_non_mutual_features(features_R, features_S, data_R, data_S)
+    features_R = features_S = matching_features
 
     ##########################################
     ### CREATE OUTPUT AND TEMP DIRECTORIES ###

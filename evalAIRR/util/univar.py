@@ -20,11 +20,15 @@ def cdf(data):
     return data_sorted, np.array(p)
 
 def get_feature_data(feature, data, features):
-    idx = np.where(features == feature)[0][0]
-    if idx == None:
+    try:
+        idx = np.where(features == feature)[0][0]
+        if idx == None:
+            print(f'[ERROR] Feature {feature} not found!')
+            return np.array([])
+        return data[:, idx].flatten()
+    except:
         print(f'[ERROR] Feature {feature} not found!')
         return np.array([])
-    return data[:, idx].flatten()
 
 def get_observation_data(observation_index, data):
     if observation_index < 0 or observation_index >= len(data):
