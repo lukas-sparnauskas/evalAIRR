@@ -186,3 +186,10 @@ An example output section:
 output:
   path: ./output/report.html
 ```
+
+For example, this output section would result in a report file not being created:
+
+```
+output:
+  path: NONE
+```
