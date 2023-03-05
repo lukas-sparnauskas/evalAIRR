@@ -7,13 +7,6 @@ import time
 
 from evalAIRR.util.ml import ml_simulated_dataset
 
-ctx = decimal.Context()
-ctx.prec = 20
-
-def float_to_str(f):
-    d1 = ctx.create_decimal(repr(f))
-    return format(d1, 'f')
-
 def cdf(data):
     data_sorted = np.sort(data)
     p = 1. * np.arange(len(data)) / (len(data) - 1)
@@ -43,7 +36,7 @@ def export_ks_test(data_R, data_S, features_R, features_S, output):
         data_S_f = get_feature_data(features_S[f_idx], data_S, features_S)
 
         ks = scipy.stats.ks_2samp(data_R_f, data_S_f)
-        ks_results.append(float_to_str(ks.statistic))
+        ks_results.append(str(ks.statistic))
     ks_results = np.array(ks_results)
     if output:
         try:
@@ -331,7 +324,7 @@ def export_distance_all(data_R, data_S, features_R, features_S, output):
         data_S_f = get_feature_data(features_S[f_idx], data_S, features_S)
 
         dist = np.linalg.norm(data_R_f - data_S_f)
-        distance_results.append(float_to_str(dist))
+        distance_results.append(str(dist))
     distance_results = np.array(distance_results)
     if output:
         try:
@@ -387,7 +380,7 @@ def export_obs_distance_all(data_R, data_S, output):
             dist = np.linalg.norm(data_S_o - data_R_o_padded)
         else:
             dist = np.linalg.norm(data_R_o - data_S_o)
-        distance_results.append(float_to_str(dist))
+        distance_results.append(str(dist))
     distance_results = np.array(distance_results)
     if output:
         try:
@@ -444,15 +437,15 @@ def export_statistics_all(data_R, data_S, features_R, features_S, output_dir):
         data_R_f = np.array(get_feature_data(features_R[f_idx], data_R, features_R), dtype=float)
         data_S_f = np.array(get_feature_data(features_S[f_idx], data_S, features_S), dtype=float)
 
-        R_avg.append(float_to_str(np.average(data_R_f)))
-        R_median.append(float_to_str(np.median(data_R_f)))
-        R_std.append(float_to_str(np.std(data_R_f)))
-        R_var.append(float_to_str(np.var(data_R_f)))
+        R_avg.append(str(np.average(data_R_f)))
+        R_median.append(str(np.median(data_R_f)))
+        R_std.append(str(np.std(data_R_f)))
+        R_var.append(str(np.var(data_R_f)))
 
-        S_avg.append(float_to_str(np.average(data_S_f)))
-        S_median.append(float_to_str(np.median(data_S_f)))
-        S_std.append(float_to_str(np.std(data_S_f)))
-        S_var.append(float_to_str(np.var(data_S_f)))
+        S_avg.append(str(np.average(data_S_f)))
+        S_median.append(str(np.median(data_S_f)))
+        S_std.append(str(np.std(data_S_f)))
+        S_var.append(str(np.var(data_S_f)))
         
     if output_dir:
         try:
@@ -481,15 +474,15 @@ def export_obs_statistics_all(data_R, data_S, output_dir):
         data_R_o = np.array(get_observation_data(o_idx, data_R), dtype=float)
         data_S_o = np.array(get_observation_data(o_idx, data_S), dtype=float)
 
-        R_avg.append(float_to_str(np.average(data_R_o)))
-        R_median.append(float_to_str(np.median(data_R_o)))
-        R_std.append(float_to_str(np.std(data_R_o)))
-        R_var.append(float_to_str(np.var(data_R_o)))
+        R_avg.append(str(np.average(data_R_o)))
+        R_median.append(str(np.median(data_R_o)))
+        R_std.append(str(np.std(data_R_o)))
+        R_var.append(str(np.var(data_R_o)))
 
-        S_avg.append(float_to_str(np.average(data_S_o)))
-        S_median.append(float_to_str(np.median(data_S_o)))
-        S_std.append(float_to_str(np.std(data_S_o)))
-        S_var.append(float_to_str(np.var(data_S_o)))
+        S_avg.append(str(np.average(data_S_o)))
+        S_median.append(str(np.median(data_S_o)))
+        S_std.append(str(np.std(data_S_o)))
+        S_var.append(str(np.var(data_S_o)))
         
     if output_dir:
         try:
