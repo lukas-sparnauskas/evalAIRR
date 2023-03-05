@@ -45,7 +45,7 @@ def run():
 
     try:
         OUTPUT = CONFIG['output']['path']
-        if str(OUTPUT).capitalize().strip() == 'NONE':
+        if str(OUTPUT).lower().strip() == 'none':
             OUTPUT = None
     except: 
         OUTPUT = './output/report.html'
