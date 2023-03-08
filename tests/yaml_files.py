@@ -4,12 +4,14 @@ def immuneml_spec(run, timestamp):
     sim_dataset:
       format: OLGA
       params:
+        number_of_processes: 6
         path: \"/data/sim_data/temp/\"
         is_repertoire: True
         metadata_file: \"/data/sim_data/metadata_{run}_{timestamp}.csv\"
     real_dataset:
       format: AIRR
       params:
+        number_of_processes: 6
         path: \"/data/real_data/temp/\"
         is_repertoire: True
         metadata_file: \"/data/real_data/metadata_{timestamp}.csv\"

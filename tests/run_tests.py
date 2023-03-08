@@ -10,14 +10,29 @@ import matplotlib.pyplot as plt
 
 from yaml_files import immuneml_spec, evalairr_spec
 
-max_reps = 3
-max_seqs = 50
-n_runs = 3
+max_reps = 200
+max_seqs = 20000
+n_runs = 15
+thresholds = {
+    'ks': 0.4,
+    'ks_pval': 0.8,
+    'dist': 3,
+    'dist_obs': 10,
+    'avg': 0.1,
+    'avg_obs': 0.3,
+    'median': 1,
+    'median_obs': 0.5,
+    'var': 0.3,
+    'var_obs': 0.3,
+    'std': 1,
+    'std_obs': 0.1
+}
 
 ks_results = []
 
 run_timestamp = int(time.time()) - 1
 timestamps = []
+start_time = time.process_time()
 
 for n in range(0, n_runs):
     print(f'[LOG] RUNNING ITERATION {n+1}/{n_runs}')
@@ -29,6 +44,7 @@ for n in range(0, n_runs):
     
     ### CREATE METADATA FILES
     
+    print(f'[LOG] CREATING METADATA FILES')
     real_data_list = os.listdir('/home/mint/masters/data/real_data/repertoires/')
     sim_data_list = os.listdir(f'/home/mint/masters/data/sim_data/{random_n}/simulated_repertoires/')
     rnd.shuffle(real_data_list)
@@ -65,6 +81,7 @@ for n in range(0, n_runs):
             
     ### CREATE TEMP DATA FILES
     
+    print(f'[LOG] CREATING TEMP DATA FILES')
     subprocess.run(f'sudo rm -r /home/mint/masters/data/real_data/temp', shell=True)
     subprocess.run(f'sudo rm -r /home/mint/masters/data/sim_data/temp', shell=True)
     subprocess.run(f'sudo mkdir /home/mint/masters/data/real_data/temp', shell=True)
@@ -86,11 +103,13 @@ for n in range(0, n_runs):
     
     ### RUN IMMUNEML ENCODING
     
+    print(f'[LOG] RUNNING IMMUNEML ENCODING')
     subprocess.run(f'sudo echo \"{immuneml_spec(run_timestamp, output_timestamp)}\" > /home/mint/masters/data/immunemldata/yaml_files/immuneml_spec_{output_timestamp}.yaml', shell=True)
     subprocess.run(f'sudo docker run -it -v /home/mint/masters/data:/data milenapavlovic/immuneml:sha-5de9c51 immune-ml /data/immunemldata/yaml_files/immuneml_spec_{output_timestamp}.yaml /data/immunemldata/output_{output_timestamp}/', shell=True)
     
     ### RUN EVALAIRR
     
+    print(f'[LOG] RUNNING EVALAIRR')
     subprocess.run(f'sudo mkdir /home/mint/masters/data/evalairrdata/run_{run_timestamp}', shell=True)
     subprocess.run(f'sudo mkdir /home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_{output_timestamp}/', shell=True)
     subprocess.run(f'echo \"{evalairr_spec(run_timestamp, output_timestamp)}\" > /home/mint/masters/data/evalairrdata/yaml_files/main_yaml_{output_timestamp}.yaml', shell=True)
@@ -123,13 +142,45 @@ for t in timestamps:
     with open(f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_{t}/sim_obs_stat.csv', 'r') as file:
         final_stat_obs_S[t] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
 
+### CALCULATIONS
 final_stat = dict()
 final_stat_obs = dict()
+t_results = {
+    'ks': [],
+    'ks_pval': [],
+    'dist': [],
+    'dist_obs': [],
+    'avg': [],
+    'avg_obs': [],
+    'median': [],
+    'median_obs': [],
+    'var': [],
+    'var_obs': [],
+    'std': [],
+    'std_obs': []
+}
 for t in timestamps:
     final_stat[t] = np.absolute(final_stat_R[t] - final_stat_S[t])
     final_stat_obs[t] = np.absolute(final_stat_obs_R[t] - final_stat_obs_S[t])
+    
+    t_results['ks'].append(float(np.count_nonzero(np.where(final_ks[t][0] <= thresholds['ks'], final_ks[t][0], 0))) / len(final_ks[t][0]))
+    t_results['ks_pval'].append(float(np.count_nonzero(np.where(final_ks[t][1] >= thresholds['ks_pval'], final_ks[t][1], 0))) / len(final_ks[t][1]))
+    t_results['dist'].append(float(np.count_nonzero(np.where(final_dist[t][0] <= thresholds['dist'], final_dist[t][0], 0))) / len(final_dist[t][0]))
+    t_results['dist_obs'].append(float(np.count_nonzero(np.where(final_dist_obs[t][0] <= thresholds['dist_obs'], final_dist_obs[t][0], 0))) / len(final_dist_obs[t][0]))
+    t_results['avg'].append(float(np.count_nonzero(np.where(final_stat[t][0] <= thresholds['avg'], final_stat[t][0], 0))) / len(final_stat[t][0]))
+    t_results['avg_obs'].append(float(np.count_nonzero(np.where(final_stat_obs[t][0] <= thresholds['avg_obs'], final_stat_obs[t][0], 0))) / len(final_stat_obs[t][0]))
+    t_results['median'].append(float(np.count_nonzero(np.where(final_stat[t][1] <= thresholds['median'], final_stat[t][1], 0))) / len(final_stat[t][1]))
+    t_results['median_obs'].append(float(np.count_nonzero(np.where(final_stat_obs[t][1] <= thresholds['median_obs'], final_stat_obs[t][1], 0))) / len(final_stat_obs[t][1]))
+    t_results['var'].append(float(np.count_nonzero(np.where(final_stat[t][2] <= thresholds['var'], final_stat[t][2], 0))) / len(final_stat[t][2]))
+    t_results['var_obs'].append(float(np.count_nonzero(np.where(final_stat_obs[t][2] <= thresholds['var_obs'], final_stat_obs[t][2], 0))) / len(final_stat_obs[t][2]))
+    t_results['std'].append(float(np.count_nonzero(np.where(final_stat[t][3] <= thresholds['std'], final_stat[t][3], 0))) / len(final_stat[t][3]))
+    t_results['std_obs'].append(float(np.count_nonzero(np.where(final_stat_obs[t][3] <= thresholds['std_obs'], final_stat_obs[t][3], 0))) / len(final_stat_obs[t][3]))
 
 ### FINAL RESULT FIGURE EXPORT
+for key in ['ks', 'ks_pval', 'dist', 'dist_obs', 'avg', 'avg_obs', 'median', 'median_obs', 'var', 'var_obs', 'std', 'std_obs']:
+    ab_be = 'above' if key == 'ks' else 'below'
+    print(f'[RESULT] Indicator:{key} - % {ab_be} threshold: {np.average(t_results[key]) * 100}')
+
 colours = sns.color_palette(cc.glasbey, n_runs).as_hex()
 def draw_kdeplot(data, title, xlabel, output, stat=None):
     f, ax = plt.subplots(1, 1)
@@ -148,7 +199,13 @@ def draw_kdeplot(data, title, xlabel, output, stat=None):
 title = 'Distribution of KS statistic on each iteration'
 xlabel = 'Kolmogorov-Smirnov statistic'
 output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_ks.png'
-draw_kdeplot(final_ks, title, xlabel, output)
+draw_kdeplot(final_ks, title, xlabel, output, 0)
+
+# KS P-values
+title = 'Distribution of KS P-values on each iteration'
+xlabel = 'Kolmogorov-Smirnov P-values'
+output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_ks_pval.png'
+draw_kdeplot(final_ks, title, xlabel, output, 1)
 
 # Euclidean distance
 title = 'Distribution of Euclidean distance between features on each iteration'
@@ -203,3 +260,5 @@ title = 'Distribution of the difference between the real and simulated\nobservat
 xlabel = 'Difference between the real and simulated observation variance'
 output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_stat_obs_var.png'
 draw_kdeplot(final_stat_obs, title, xlabel, output, 3)
+
+print(f'[LOG] EXECUTION TIME {(time.process_time() - start_time) / 60} m')
