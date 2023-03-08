@@ -31,17 +31,20 @@ def get_observation_data(observation_index, data):
 
 def export_ks_test(data_R, data_S, features_R, features_S, output):
     ks_results = []
+    pvalue_results = []
     for f_idx in range(len(features_R)):
         data_R_f = get_feature_data(features_R[f_idx], data_R, features_R)
         data_S_f = get_feature_data(features_S[f_idx], data_S, features_S)
 
         ks = scipy.stats.ks_2samp(data_R_f, data_S_f)
         ks_results.append(str(ks.statistic))
+        pvalue_results.append(str(ks.pvalue))
     ks_results = np.array(ks_results)
     if output:
         try:
             with open(output, 'w', encoding="utf-8") as output_file:
-                output_file.write(','.join(ks_results))
+                output_file.write(','.join(ks_results) + '\n')
+                output_file.write(','.join(pvalue_results))
             print('[LOG] KS test result file created')
         except: 
             print('[ERROR] Failed to export KS test results to file')
