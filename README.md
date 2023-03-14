@@ -94,7 +94,7 @@ Additional parameters: `with_ml_sim` - optional parameter, which if True, instru
 
 #### General reports
 
-- <b>`ks`</b> - Kolmogorov–Smirnov statistic for all features. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/ks.csv`).
+- <b>`ks`</b> - Kolmogorov–Smirnov statistic for all features. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/ks.csv`). The csv file contains two rows, with the first row containing the ks-statistic and the second one - the p-values.
 - <b>`copula_2d`</b> - a 2D scatter plot that displays two features in a Gausian Multivariate copula space. Parameters: a report section of any name, under which the compared features are specified.
 - <b>`copula_3d`</b> - a 3D scatter plot that displays three features in a Gausian Multivariate copula space. Parameters: a report section of any name, under which the compared features are specified.
 - <b>`feature_average_vs_variance`</b> - a scatter plot that displays the average value of every feature on one axis and the variance of every feature on the other axis. Parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
