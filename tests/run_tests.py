@@ -10,29 +10,29 @@ import matplotlib.pyplot as plt
 
 from yaml_files import immuneml_spec, evalairr_spec
 
-max_reps = 200
-max_seqs = 20000
-n_runs = 15
+max_reps = 50
+max_seqs = 100000
+n_runs = 10
 thresholds = {
     'ks': 0.4,
     'ks_pval': 0.8,
     'dist': 3,
     'dist_obs': 10,
     'avg': 0.1,
-    'avg_obs': 0.3,
-    'median': 1,
-    'median_obs': 0.5,
+    'avg_obs': 0.2,
+    'median': 0.5,
+    'median_obs': 0.3,
     'var': 0.3,
     'var_obs': 0.3,
     'std': 1,
-    'std_obs': 0.1
+    'std_obs': 0.2
 }
 
 ks_results = []
 
 run_timestamp = int(time.time()) - 1
 timestamps = []
-start_time = time.process_time()
+start_time = time.time()
 
 for n in range(0, n_runs):
     print(f'[LOG] RUNNING ITERATION {n+1}/{n_runs}')
@@ -177,8 +177,8 @@ for t in timestamps:
     t_results['std_obs'].append(float(np.count_nonzero(np.where(final_stat_obs[t][3] <= thresholds['std_obs'], final_stat_obs[t][3], 0))) / len(final_stat_obs[t][3]))
 
 ### FINAL RESULT FIGURE EXPORT
-for key in ['ks', 'ks_pval', 'dist', 'dist_obs', 'avg', 'avg_obs', 'median', 'median_obs', 'var', 'var_obs', 'std', 'std_obs']:
-    ab_be = 'above' if key == 'ks' else 'below'
+for key in ['ks_pval', 'dist', 'dist_obs', 'avg', 'avg_obs', 'median', 'median_obs', 'var', 'var_obs', 'std', 'std_obs']:
+    ab_be = 'above' if key == 'ks_pval' else 'below'
     print(f'[RESULT] Indicator:{key} - % {ab_be} threshold: {np.average(t_results[key]) * 100}')
 
 colours = sns.color_palette(cc.glasbey, n_runs).as_hex()
@@ -196,69 +196,69 @@ def draw_kdeplot(data, title, xlabel, output, stat=None):
     plt.close()
 
 # KS Statistic
-title = 'Distribution of KS statistic on each iteration'
+title = 'Distribution of KS statistic for each iteration'
 xlabel = 'Kolmogorov-Smirnov statistic'
 output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_ks.png'
 draw_kdeplot(final_ks, title, xlabel, output, 0)
 
 # KS P-values
-title = 'Distribution of KS P-values on each iteration'
+title = 'Distribution of KS P-values for each iteration'
 xlabel = 'Kolmogorov-Smirnov P-values'
 output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_ks_pval.png'
 draw_kdeplot(final_ks, title, xlabel, output, 1)
 
 # Euclidean distance
-title = 'Distribution of Euclidean distance between features on each iteration'
-xlabel = 'Euclidean distance between features'
+title = 'Distribution of Euclidean distance between real and simulated\nfeatures for each iteration'
+xlabel = 'Euclidean distance between real and simulated features'
 output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_dist.png'
 draw_kdeplot(final_dist, title, xlabel, output)
 
 # Observation Euclidean distance
-title = 'Distribution of Euclidean distance between observations on each iteration'
-xlabel = 'Euclidean distance between observations'
+title = 'Distribution of Euclidean distance between real and simulated\nobservations for each iteration'
+xlabel = 'Euclidean distance between real and simulated observations'
 output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_dist_obs.png'
 draw_kdeplot(final_dist_obs, title, xlabel, output)
 
 # Statistics
-title = 'Distribution of the difference between the real and simulated\naverage feature values on each iteration'
+title = 'Distribution of the difference between the real and simulated\naverage feature values for each iteration'
 xlabel = 'Difference between the real and simulated average feature values'
 output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_stat_average.png'
 draw_kdeplot(final_stat, title, xlabel, output, 0)
 
-title = 'Distribution of the difference between the real and simulated\nmedian feature values on each iteration'
+title = 'Distribution of the difference between the real and simulated\nmedian feature values for each iteration'
 xlabel = 'Difference between the real and simulated median feature values'
 output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_stat_median.png'
 draw_kdeplot(final_stat, title, xlabel, output, 1)
 
-title = 'Distribution of the difference between the real and simulated\nfeature standard deviation on each iteration'
+title = 'Distribution of the difference between the real and simulated\nfeature standard deviation for each iteration'
 xlabel = 'Difference between the real and simulated feature standard deviation'
 output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_stat_std.png'
 draw_kdeplot(final_stat, title, xlabel, output, 2)
 
-title = 'Distribution of the difference between the real and simulated\nfeature variance on each iteration'
+title = 'Distribution of the difference between the real and simulated\nfeature variance for each iteration'
 xlabel = 'Difference between the real and simulated feature variance'
 output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_stat_var.png'
 draw_kdeplot(final_stat, title, xlabel, output, 3)
 
 # Observation statistics
-title = 'Distribution of the difference between the real and simulated\naverage observation values on each iteration'
+title = 'Distribution of the difference between the real and simulated\naverage observation values for each iteration'
 xlabel = 'Difference between the real and simulated average observation values'
 output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_stat_obs_average.png'
 draw_kdeplot(final_stat_obs, title, xlabel, output, 0)
 
-title = 'Distribution of the difference between the real and simulated\nmedian observation values on each iteration'
+title = 'Distribution of the difference between the real and simulated\nmedian observation values for each iteration'
 xlabel = 'Difference between the real and simulated median observation values'
 output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_stat_obs_median.png'
 draw_kdeplot(final_stat_obs, title, xlabel, output, 1)
 
-title = 'Distribution of the difference between the real and simulated\nobservation standard deviation on each iteration'
+title = 'Distribution of the difference between the real and simulated\nobservation standard deviation for each iteration'
 xlabel = 'Difference between the real and simulated observation standard deviation'
 output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_stat_obs_std.png'
 draw_kdeplot(final_stat_obs, title, xlabel, output, 2)
 
-title = 'Distribution of the difference between the real and simulated\nobservation variance on each iteration'
+title = 'Distribution of the difference between the real and simulated\nobservation variance for each iteration'
 xlabel = 'Difference between the real and simulated observation variance'
 output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_stat_obs_var.png'
 draw_kdeplot(final_stat_obs, title, xlabel, output, 3)
 
-print(f'[LOG] EXECUTION TIME {(time.process_time() - start_time) / 60} m')
+print(f'[LOG] EXECUTION TIME {(time.time() - start_time) / 60} m')
