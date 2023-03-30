@@ -171,10 +171,10 @@ for t in timestamps:
     t_results['avg_obs'].append(float(np.count_nonzero(np.where(final_stat_obs[t][0] <= thresholds['avg_obs'], final_stat_obs[t][0], 0))) / len(final_stat_obs[t][0]))
     t_results['median'].append(float(np.count_nonzero(np.where(final_stat[t][1] <= thresholds['median'], final_stat[t][1], 0))) / len(final_stat[t][1]))
     t_results['median_obs'].append(float(np.count_nonzero(np.where(final_stat_obs[t][1] <= thresholds['median_obs'], final_stat_obs[t][1], 0))) / len(final_stat_obs[t][1]))
-    t_results['var'].append(float(np.count_nonzero(np.where(final_stat[t][2] <= thresholds['var'], final_stat[t][2], 0))) / len(final_stat[t][2]))
-    t_results['var_obs'].append(float(np.count_nonzero(np.where(final_stat_obs[t][2] <= thresholds['var_obs'], final_stat_obs[t][2], 0))) / len(final_stat_obs[t][2]))
-    t_results['std'].append(float(np.count_nonzero(np.where(final_stat[t][3] <= thresholds['std'], final_stat[t][3], 0))) / len(final_stat[t][3]))
-    t_results['std_obs'].append(float(np.count_nonzero(np.where(final_stat_obs[t][3] <= thresholds['std_obs'], final_stat_obs[t][3], 0))) / len(final_stat_obs[t][3]))
+    t_results['std'].append(float(np.count_nonzero(np.where(final_stat[t][2] <= thresholds['std'], final_stat[t][2], 0))) / len(final_stat[t][2]))
+    t_results['std_obs'].append(float(np.count_nonzero(np.where(final_stat_obs[t][2] <= thresholds['std_obs'], final_stat_obs[t][2], 0))) / len(final_stat_obs[t][2]))
+    t_results['var'].append(float(np.count_nonzero(np.where(final_stat[t][3] <= thresholds['var'], final_stat[t][3], 0))) / len(final_stat[t][3]))
+    t_results['var_obs'].append(float(np.count_nonzero(np.where(final_stat_obs[t][3] <= thresholds['var_obs'], final_stat_obs[t][3], 0))) / len(final_stat_obs[t][3]))
 
 ### FINAL RESULT FIGURE EXPORT
 for key in ['ks_pval', 'dist', 'dist_obs', 'avg', 'avg_obs', 'median', 'median_obs', 'var', 'var_obs', 'std', 'std_obs']:
