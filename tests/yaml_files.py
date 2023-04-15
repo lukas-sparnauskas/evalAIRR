@@ -64,3 +64,70 @@ reports:
 output:
   path: NONE
   '''
+
+def threshold_test_immuneml_spec(run, timestamp):
+  return f'''definitions:
+  datasets:
+    data1:
+      format: AIRR
+      params:
+        number_of_processes: 6
+        path: \"/data/th_data_1/temp/\"
+        is_repertoire: True
+        metadata_file: \"/data/th_data_1/metadata_{timestamp}.csv\"
+    data2:
+      format: AIRR
+      params:
+        number_of_processes: 6
+        path: \"/data/th_data_2/temp/\"
+        is_repertoire: True
+        metadata_file: \"/data/th_data_2/metadata_{timestamp}.csv\"
+  encodings:
+    continuous_kmer:
+      KmerFrequency:
+        reads: ALL
+        sequence_encoding: CONTINUOUS_KMER
+        k: 3
+        scale_to_unit_variance: True
+        scale_to_zero_mean: True
+  reports:
+    dme_report:
+      DesignMatrixExporter:
+        file_format: csv
+instructions:
+  expl_analysis_instruction:
+    type: ExploratoryAnalysis
+    analyses:
+      data1:
+        dataset: data1
+        encoding: continuous_kmer
+        report: dme_report
+      data2:
+        dataset: data2
+        encoding: continuous_kmer
+        report: dme_report
+output:
+  format: HTML
+  '''
+
+def threshold_test_evalairr_spec(run, timestamp):
+  return f'''datasets:
+  real:
+    path: \"/home/mint/masters/data/immunemldata/th_output_{timestamp}/expl_analysis_instruction/analysis_data1/report/design_matrix.csv\"
+  sim:
+    path: \"/home/mint/masters/data/immunemldata/th_output_{timestamp}/expl_analysis_instruction/analysis_data2/report/design_matrix.csv\"
+reports:
+  general:
+    ks:
+      output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/ks.csv\"
+    statistics:
+      output_dir: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/\"
+    observation_statistics:
+      output_dir: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/\"
+    distance:
+      output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/dist.csv\"
+    observation_distance:
+      output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/dist_obs.csv\"
+output:
+  path: NONE
+  '''
