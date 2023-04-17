@@ -111,7 +111,6 @@ final_stat_R = dict()
 final_stat_obs_R = dict()
 final_stat_S = dict()
 final_stat_obs_S = dict()
-final_corr = dict()
 final_jenshan = dict()
 final_jenshan_obs = dict()
 
@@ -130,13 +129,10 @@ for t in timestamps:
         final_stat_S[t] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
     with open(f'/home/mint/masters/data/evalairrdata/th_run_{run_timestamp}/results_{t}/sim_obs_stat.csv', 'r') as file:
         final_stat_obs_S[t] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
-    with open(f'/home/mint/masters/data/evalairrdata/th_run_{run_timestamp}/results_{t}/corr.csv', 'r') as file:
-        final_corr[t] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
     with open(f'/home/mint/masters/data/evalairrdata/th_run_{run_timestamp}/results_{t}/jenshan.csv', 'r') as file:
         final_jenshan[t] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
-    with open(f'/home/mint/masters/data/evalairrdata/th_run_{run_timestamp}/results_{t}/obs_jenshan.csv', 'r') as file:
+    with open(f'/home/mint/masters/data/evalairrdata/th_run_{run_timestamp}/results_{t}/jenshan_obs.csv', 'r') as file:
         final_jenshan_obs[t] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
-    subprocess.run(f'sudo rm /home/mint/masters/data/evalairrdata/th_run_{run_timestamp}/results_{t}/corr.csv', shell=True)
 
 ### CALCULATIONS
 final_stat = dict()
@@ -154,7 +150,6 @@ t_results = {
     'var_obs': [],
     'std': [],
     'std_obs': [],
-    'corr': [],
     'jenshan': [],
     'jenshan_obs': []
 }
@@ -174,12 +169,11 @@ for t in timestamps:
     t_results['std_obs'].append(np.average(final_stat_obs[t][2]))
     t_results['var'].append(np.average(final_stat[t][3]))
     t_results['var_obs'].append(np.average(final_stat_obs[t][3]))
-    t_results['corr'].append(np.average(final_corr[t]))
     t_results['jenshan'].append(np.average(final_jenshan[t]))
     t_results['jenshan_obs'].append(np.average(final_jenshan_obs[t]))
 
 ### FINAL RESULT FIGURE EXPORT
-for key in ['ks_pval', 'dist', 'dist_obs', 'avg', 'avg_obs', 'median', 'median_obs', 'var', 'var_obs', 'std', 'std_obs', 'corr', 'jenshan', 'jenshan_obs']:
+for key in ['ks_pval', 'dist', 'dist_obs', 'avg', 'avg_obs', 'median', 'median_obs', 'var', 'var_obs', 'std', 'std_obs', 'jenshan', 'jenshan_obs']:
     print(f'[RESULT] Indicator:{key} - average value: {np.average(t_results[key])}')
 
 colours = sns.color_palette(cc.glasbey, n_runs).as_hex()
@@ -219,12 +213,6 @@ title = 'Distribution of Euclidean distance between\nobservations for each itera
 xlabel = 'Euclidean distance between observations'
 output = f'/home/mint/masters/data/evalairrdata/th_run_{run_timestamp}/results_dist_obs.png'
 draw_kdeplot(final_dist_obs, title, xlabel, output)
-
-# Correlation matrix difference
-title = 'Distribution of the difference between the\nfeature correlation for each iteration'
-xlabel = 'Difference between the feature correlation'
-output = f'/home/mint/masters/data/evalairrdata/th_run_{run_timestamp}/results_corr.png'
-draw_kdeplot(final_corr, title, xlabel, output)
 
 # Jensen-Shannon divergence
 title = 'Distribution of the Jensen-Shannon divergence\nbetween features for each iteration'

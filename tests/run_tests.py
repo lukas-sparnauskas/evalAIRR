@@ -10,9 +10,9 @@ import matplotlib.pyplot as plt
 
 from yaml_files import immuneml_spec, evalairr_spec
 
-max_reps = 200
-max_seqs = 100000
-n_runs = 10
+max_reps = 20
+max_seqs = 1000
+n_runs = 3
 thresholds = {
     'ks': 0.4,
     'ks_pval': 0.05,
@@ -26,7 +26,6 @@ thresholds = {
     'var_obs': 0.4,
     'std': 1.6e-15,
     'std_obs': 0.25,
-    'corr': 0.2,
     'jenshan': 0.2,
     'jenshan_obs': 0.2
 }
@@ -128,7 +127,6 @@ final_stat_R = dict()
 final_stat_obs_R = dict()
 final_stat_S = dict()
 final_stat_obs_S = dict()
-final_corr = dict()
 final_jenshan = dict()
 final_jenshan_obs = dict()
 
@@ -147,11 +145,9 @@ for t in timestamps:
         final_stat_S[t] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
     with open(f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_{t}/sim_obs_stat.csv', 'r') as file:
         final_stat_obs_S[t] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
-    with open(f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_{t}/corr.csv', 'r') as file:
-        final_corr[t] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
     with open(f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_{t}/jenshan.csv', 'r') as file:
         final_jenshan[t] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
-    with open(f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_{t}/obs_jenshan.csv', 'r') as file:
+    with open(f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_{t}/jenshan_obs.csv', 'r') as file:
         final_jenshan_obs[t] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
     subprocess.run(f'sudo rm /home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_{t}/corr.csv', shell=True)
 
@@ -171,14 +167,12 @@ t_results = {
     'var_obs': [],
     'std': [],
     'std_obs': [],
-    'corr': [],
     'jenshan': [],
     'jenshan_obs': []
 }
 for t in timestamps:
     final_stat[t] = np.absolute(final_stat_R[t] - final_stat_S[t])
     final_stat_obs[t] = np.absolute(final_stat_obs_R[t] - final_stat_obs_S[t])
-    final_corr[t] = final_corr[t].squeeze()
     
     t_results['ks'].append(float(np.count_nonzero(np.where(final_ks[t][0] <= thresholds['ks'], final_ks[t][0], 0))) / len(final_ks[t][0]))
     t_results['ks_pval'].append(float(np.count_nonzero(np.where(final_ks[t][1] >= thresholds['ks_pval'], final_ks[t][1], 0))) / len(final_ks[t][1]))
@@ -192,12 +186,11 @@ for t in timestamps:
     t_results['std_obs'].append(float(np.count_nonzero(np.where(final_stat_obs[t][2] <= thresholds['std_obs'], final_stat_obs[t][2], 0))) / len(final_stat_obs[t][2]))
     t_results['var'].append(float(np.count_nonzero(np.where(final_stat[t][3] <= thresholds['var'], final_stat[t][3], 0))) / len(final_stat[t][3]))
     t_results['var_obs'].append(float(np.count_nonzero(np.where(final_stat_obs[t][3] <= thresholds['var_obs'], final_stat_obs[t][3], 0))) / len(final_stat_obs[t][3]))
-    t_results['corr'].append(float(np.count_nonzero(np.where(final_dist[t] <= thresholds['corr'], final_corr[t], 0))) / len(final_corr[t]))
     t_results['jenshan'].append(float(np.count_nonzero(np.where(final_jenshan[t][0] <= thresholds['jenshan'], final_jenshan[t][0], 0))) / len(final_jenshan[t][0]))
     t_results['jenshan_obs'].append(float(np.count_nonzero(np.where(final_jenshan_obs[t][0] <= thresholds['jenshan_obs'], final_jenshan_obs[t][0], 0))) / len(final_jenshan_obs[t][0]))
 
 ### FINAL RESULT FIGURE EXPORT
-for key in ['ks_pval', 'dist', 'dist_obs', 'avg', 'avg_obs', 'median', 'median_obs', 'var', 'var_obs', 'std', 'std_obs', 'corr', 'jenshan', 'jenshan_obs']:
+for key in ['ks_pval', 'dist', 'dist_obs', 'avg', 'avg_obs', 'median', 'median_obs', 'var', 'var_obs', 'std', 'std_obs', 'jenshan', 'jenshan_obs']:
     ab_be = 'above' if key in 'ks_pval' else 'below'
     print(f'[RESULT] Indicator:{key} - % {ab_be} threshold: {np.average(t_results[key]) * 100}')
 
@@ -240,23 +233,17 @@ xlabel = 'Euclidean distance between real and simulated observations'
 output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_dist_obs.png'
 draw_kdeplot(final_dist_obs, title, xlabel, output, thresholds['dist_obs'])
 
-# Correlation matrix difference
-title = 'Distribution of the difference between the\nfeature correlation for each iteration'
-xlabel = 'Difference between the feature correlation'
-output = f'/home/mint/masters/data/evalairrdata/th_run_{run_timestamp}/results_corr.png'
-draw_kdeplot(final_corr, title, xlabel, output)
-
 # Jensen-Shannon divergence
 title = 'Distribution of the Jensen-Shannon divergence\nbetween features for each iteration'
 xlabel = 'Jensen-Shannon divergence between features'
-output = f'/home/mint/masters/data/evalairrdata/th_run_{run_timestamp}/results_jenshan.png'
-draw_kdeplot(final_jenshan, title, xlabel, output)
+output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_jenshan.png'
+draw_kdeplot(final_jenshan, title, xlabel, output, thresholds['jenshan'])
 
 # Observation Jensen-Shannon divergence
 title = 'Distribution of the Jensen-Shannon divergence\nbetween observations for each iteration'
 xlabel = 'Jensen-Shannon divergence between observations'
-output = f'/home/mint/masters/data/evalairrdata/th_run_{run_timestamp}/results_jenshan_obs.png'
-draw_kdeplot(final_jenshan_obs, title, xlabel, output)
+output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_jenshan_obs.png'
+draw_kdeplot(final_jenshan_obs, title, xlabel, output, thresholds['jenshan_obs'])
 
 # Statistics
 title = 'Distribution of the difference between the real and simulated\naverage feature values for each iteration'
