@@ -131,11 +131,41 @@ for t in timestamps:
 ### CALCULATIONS
 final_stat = dict()
 final_stat_obs = dict()
+t_results = {
+    'ks': [],
+    'ks_pval': [],
+    'dist': [],
+    'dist_obs': [],
+    'avg': [],
+    'avg_obs': [],
+    'median': [],
+    'median_obs': [],
+    'var': [],
+    'var_obs': [],
+    'std': [],
+    'std_obs': []
+}
 for t in timestamps:
     final_stat[t] = np.absolute(final_stat_R[t] - final_stat_S[t])
     final_stat_obs[t] = np.absolute(final_stat_obs_R[t] - final_stat_obs_S[t])
+    
+    t_results['ks'].append(np.average(final_ks[t][0]))
+    t_results['ks_pval'].append(np.average(final_ks[t][1]))
+    t_results['dist'].append(np.average(final_dist[t][0]))
+    t_results['dist_obs'].append(np.average(final_dist_obs[t][0]))
+    t_results['avg'].append(np.average(final_stat[t][0]))
+    t_results['avg_obs'].append(np.average(final_stat_obs[t][0]))
+    t_results['median'].append(np.average(final_stat[t][1]))
+    t_results['median_obs'].append(np.average(final_stat_obs[t][1]))
+    t_results['std'].append(np.average(final_stat[t][2]))
+    t_results['std_obs'].append(np.average(final_stat_obs[t][2]))
+    t_results['var'].append(np.average(final_stat[t][3]))
+    t_results['var_obs'].append(np.average(final_stat_obs[t][3]))
 
 ### FINAL RESULT FIGURE EXPORT
+for key in ['ks_pval', 'dist', 'dist_obs', 'avg', 'avg_obs', 'median', 'median_obs', 'var', 'var_obs', 'std', 'std_obs']:
+    print(f'[RESULT] Indicator:{key} - average value: {np.average(t_results[key])}')
+
 colours = sns.color_palette(cc.glasbey, n_runs).as_hex()
 def draw_kdeplot(data, title, xlabel, output, stat=None):
     f, ax = plt.subplots(1, 1)
