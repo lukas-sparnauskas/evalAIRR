@@ -58,6 +58,8 @@ reports:
     pca_2d:
       with_ml_sim: True
       ml_random_state: 0
+    corr_csv:
+      output: ./output/corr.csv
     ks:
       output: ./output/ks.csv
     statistics:
@@ -68,5 +70,9 @@ reports:
       output: ./output/dist.csv
     observation_distance:
       output: ./output/obs_dist.csv
+    jensen_shannon:
+      output: ./output/jenshan.csv
+    observation_jensen_shannon:
+      output: ./output/obs_jenshan.csv
 output:
   path: ./output/report.html

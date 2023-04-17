@@ -1,5 +1,6 @@
 import time
 import math
+import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -65,3 +66,18 @@ def export_corr_heatmap(data_real, data_sim, n_real_feat = 0, n_sim_feat = 0, re
     f.savefig(f'./output/temp_figures/corr_matrix_{int(time.time())}.svg')
     del f
     plt.close()
+
+def export_csv_corr_matrix(data_real, data_sim, output):
+    corr_real = pd.DataFrame(data_real).corr()
+    corr_sim = pd.DataFrame(data_sim).corr()
+    diff_corrs = corr_real.sub(corr_sim).abs()
+    diff_corrs = np.array(diff_corrs)
+    if output:
+        try:
+            with open(output, 'w', encoding="utf-8") as output_file:
+                for row in diff_corrs:
+                    output_file.write(','.join([str(i) for i in row]) + '\n')
+            print('[LOG] CORR Matrix file created')
+        except Exception as e: 
+            print(e)
+            print('[ERROR] Failed to export CORR Matrix to file')

@@ -4,7 +4,7 @@ import argparse
 
 from evalAIRR.version import __version__
 from evalAIRR.util.input import read_encoded_csv, remove_non_mutual_features
-from evalAIRR.util.corr import export_corr_heatmap
+from evalAIRR.util.corr import export_corr_heatmap, export_csv_corr_matrix
 from evalAIRR.util.pca import export_pca_2d_comparison
 from evalAIRR.util.univar import export_feature_ks_test, export_ks_test
 from evalAIRR.util.univar import export_distr_histogram, export_obs_distr_histogram
@@ -12,6 +12,7 @@ from evalAIRR.util.univar import export_distr_boxplot, export_obs_distr_boxplot
 from evalAIRR.util.univar import export_distr_violinplot, export_obs_distr_violinplot
 from evalAIRR.util.univar import export_distr_densityplot, export_obs_distr_densityplot
 from evalAIRR.util.univar import export_avg_var_scatter_plot
+from evalAIRR.util.univar import export_jensenshannon
 from evalAIRR.util.univar import export_distance, export_obs_distance
 from evalAIRR.util.univar import export_statistics, export_obs_statistics
 from evalAIRR.util.univar import export_distance_all, export_obs_distance_all
@@ -207,6 +208,22 @@ def run():
                 output = './output/obs_dist.csv'
             export_obs_distance_all(data_R, data_S, output)
 
+        # JENSEN-SHANNON DIVERGENCE REPORT
+        if 'jensen_shannon' in reports_g:
+            try:
+                output = reports_g['jensen_shannon']['output']
+            except:
+                output = './output/jenshan.csv'
+            export_jensenshannon(data_R, data_S, output, axis=0)
+
+        # OBSERVATION JENSEN-SHANNON DIVERGENCE REPORT
+        if 'observation_jensen_shannon' in reports_g:
+            try:
+                output = reports_g['observation_jensen_shannon']['output']
+            except: 
+                output = './output/obs_jenshan.csv'
+            export_jensenshannon(data_R, data_S, output, axis=1)
+
         # CORRELATION MATRIX REPORT
         if ('corr' in reports_g):
             try:
@@ -222,6 +239,14 @@ def run():
             except: 
                 ml_random_state = None
             export_corr_heatmap(data_R, data_S, len(features_R), len(features_S), reduce_to_n_features, with_ml_sim, ml_random_state)
+
+        # CORRELATION MATRIX CSV EXPORT
+        if ('corr_csv' in reports_g):
+            try:
+                output = reports_g['corr_csv']['output']
+            except: 
+                output = './output/corr.csv'
+            export_csv_corr_matrix(data_R, data_S, output)
 
         # PCA 2D REPORT
         if ('pca_2d' in reports_g):

@@ -1,11 +1,14 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+import scipy.spatial
 import scipy.stats
 import decimal
 import time
 
 from evalAIRR.util.ml import ml_simulated_dataset
+
+from sklearn.preprocessing import MinMaxScaler
 
 def cdf(data):
     data_sorted = np.sort(data)
@@ -336,6 +339,20 @@ def export_distance_all(data_R, data_S, features_R, features_S, output):
             print('[LOG] Distance result file created')
         except: 
             print('[ERROR] Failed to export distance results to file')
+
+def export_jensenshannon(data_R, data_S, output, axis=0):
+    scaler = MinMaxScaler((0, 1))
+    data_R = scaler.fit_transform(data_R)
+    data_S = scaler.fit_transform(data_S)
+    jenshan = scipy.spatial.distance.jensenshannon(data_R, data_S, base=2, axis=axis) ** 2
+    if output:
+        try:
+            with open(output, 'w', encoding="utf-8") as output_file:
+                output_file.write(','.join([str(i) for i in jenshan]))
+            print('[LOG] Jensen-Shannon divergence result file created')
+        except Exception as e: 
+            print(e)
+            print('[ERROR] Failed to export Jensen-Shannon divergence results to file')
 
 def export_obs_distance(observation_index, data_R, data_S):
     if observation_index == 'all':
