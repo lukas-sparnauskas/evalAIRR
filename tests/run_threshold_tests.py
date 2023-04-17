@@ -31,8 +31,8 @@ for n in range(0, n_runs):
     ### CREATE METADATA FILES
     
     print(f'[LOG] CREATING METADATA FILES')
-    data_1_list = sorted(os.listdir('/home/mint/masters/data/real_data/repertoires/'))[:563]
-    data_2_list = sorted(os.listdir('/home/mint/masters/data/real_data/repertoires/'))[:563]
+    data_1_list = os.listdir('/home/mint/masters/data/real_data/repertoires/')
+    data_2_list = os.listdir('/home/mint/masters/data/real_data/repertoires/')
     rnd.shuffle(data_1_list)
     rnd.shuffle(data_2_list)
     n_reps = min(max_reps, len(data_1_list), len(data_2_list))

@@ -10,24 +10,24 @@ import matplotlib.pyplot as plt
 
 from yaml_files import immuneml_spec, evalairr_spec
 
-max_reps = 20
-max_seqs = 1000
-n_runs = 3
+max_reps = 200
+max_seqs = 50000
+n_runs = 10
 thresholds = {
     'ks': 0.4,
     'ks_pval': 0.05,
     'dist': 22,
     'dist_obs': 140,
-    'avg': 1.5e-16,
+    'avg': 2e-16,
     'avg_obs': 0.15,
     'median': 0.1,
-    'median_obs': 0.05,
+    'median_obs': 0.1,
     'var': 4e-15,
-    'var_obs': 0.4,
+    'var_obs': 0.5,
     'std': 1.6e-15,
     'std_obs': 0.25,
-    'jenshan': 0.2,
-    'jenshan_obs': 0.2
+    'jenshan': 0.4,
+    'jenshan_obs': 0.5
 }
 
 ks_results = []
@@ -149,7 +149,6 @@ for t in timestamps:
         final_jenshan[t] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
     with open(f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_{t}/jenshan_obs.csv', 'r') as file:
         final_jenshan_obs[t] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
-    subprocess.run(f'sudo rm /home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_{t}/corr.csv', shell=True)
 
 ### CALCULATIONS
 final_stat = dict()

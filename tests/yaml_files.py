@@ -61,8 +61,6 @@ reports:
       output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/dist.csv\"
     observation_distance:
       output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/dist_obs.csv\"
-    corr_csv:
-      output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/corr.csv\"
     jensen_shannon:
       output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/jenshan.csv\"
     observation_jensen_shannon:
@@ -134,8 +132,6 @@ reports:
       output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/dist.csv\"
     observation_distance:
       output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/dist_obs.csv\"
-    corr_csv:
-      output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/corr.csv\"
     jensen_shannon:
       output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/jenshan.csv\"
     observation_jensen_shannon:
