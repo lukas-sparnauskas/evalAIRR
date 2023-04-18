@@ -34,30 +34,34 @@ def read_encoded_csv(csv_path):
 def add_feature_noise(data, rate_of_features, rate_of_noise):
     if rate_of_features <= 0 or rate_of_noise <= 0:
         return data
-    features_to_transform = rnd.shuffle(range(data.shape[1]))[:math.floor(data.shape[1] * rate_of_features)]
+    indeces = list(range(data.shape[1]))
+    rnd.shuffle(indeces)
+    features_to_transform = indeces[:math.floor(data.shape[1] * rate_of_features)]
     with_noise = np.array(data)
     min_value = np.min(data)
     max_value = np.max(data)
-    range = np.absolute(max_value - min_value)
+    data_range = np.absolute(max_value - min_value)
     for j in features_to_transform:
         for i in range(data.shape[0]):
-            min_limit = max(min_value, with_noise[i,j] - range * rate_of_noise)
-            max_limit = min(max_value, with_noise[i,j] + range * rate_of_noise)
+            min_limit = max(min_value, with_noise[i,j] - data_range * rate_of_noise)
+            max_limit = min(max_value, with_noise[i,j] + data_range * rate_of_noise)
             with_noise[i,j] = rnd.uniform(min_limit, max_limit)
     return with_noise
 
 def add_observation_noise(data, rate_of_observations, rate_of_noise):
     if rate_of_observations <= 0 or rate_of_noise <= 0:
         return data
-    observations_to_transform = rnd.shuffle(range(data.shape[0]))[:math.floor(data.shape[0] * rate_of_observations)]
+    indeces = list(range(data.shape[0]))
+    rnd.shuffle(indeces)
+    observations_to_transform = indeces[:math.floor(data.shape[0] * rate_of_observations)]
     with_noise = np.array(data)
     min_value = np.min(data)
     max_value = np.max(data)
-    range = np.absolute(max_value - min_value)
+    data_range = np.absolute(max_value - min_value)
     for i in observations_to_transform:
         for j in range(data.shape[1]):
-            min_limit = max(min_value, with_noise[i,j] - range * rate_of_noise)
-            max_limit = min(max_value, with_noise[i,j] + range * rate_of_noise)
+            min_limit = max(min_value, with_noise[i,j] - data_range * rate_of_noise)
+            max_limit = min(max_value, with_noise[i,j] + data_range * rate_of_noise)
             with_noise[i,j] = rnd.uniform(min_limit, max_limit)
     return with_noise
 
