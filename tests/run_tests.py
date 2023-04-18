@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from yaml_files import immuneml_spec, evalairr_spec
 
 max_reps = 200
-max_seqs = 50000
+max_seqs = 100000
 n_runs = 10
 thresholds = {
     'ks': 0.4,
