@@ -7,8 +7,8 @@ input_file_name = '/home/mint/masters/data/noise_data/original.csv'
 output_file_name = '/home/mint/masters/data/noise_data/with_noise.csv'
 rate_of_features = 0.2
 rate_of_feature_noise = 0.2
-rate_of_observations = 0.2
-rate_of_observation_noise = 0.2
+rate_of_observations = 0
+rate_of_observation_noise = 0
 
 #region FUNCTIONS
 def read_encoded_csv(csv_path):

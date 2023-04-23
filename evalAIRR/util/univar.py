@@ -107,7 +107,7 @@ def export_distr_histogram(feature, data_R, data_S, features_R, features_S, n_bi
     plt.close()
 
 def export_obs_distr_histogram(observation_index, data_R, data_S, n_bins=30):
-    if observation_index == 'all':
+    if observation_index == '_all_':
         print('[ERROR] Observation distribution histogram report does not support the visualization of all observations')
         return
     data_R_o = get_observation_data(observation_index, data_R)
@@ -135,6 +135,7 @@ def export_distr_boxplot(feature, data_R, data_S, features_R, features_S):
 
     f, ax = plt.subplots(1, 1)
     f.set_size_inches(9, 7)
+    
     f.suptitle(f'Distribution boxplots of feature {feature}')
     ax.boxplot([data_R_f, data_S_f], labels=['Real dataset', 'Simulated dataset'])
     
@@ -143,7 +144,7 @@ def export_distr_boxplot(feature, data_R, data_S, features_R, features_S):
     plt.close()
 
 def export_obs_distr_boxplot(observation_index, data_R, data_S):
-    if observation_index == 'all':
+    if observation_index == '_all_':
         print('[ERROR] Observation distribution box plot report does not support the visualization of all observations')
         return
     data_R_o = get_observation_data(observation_index, data_R)
@@ -194,7 +195,7 @@ def export_distr_violinplot(feature, data_R, data_S, features_R, features_S):
     plt.close()
 
 def export_obs_distr_violinplot(observation_index, data_R, data_S):
-    if observation_index == 'all':
+    if observation_index == '_all_':
         print('[ERROR] Observation distribution violin plot report does not support the visualization of all observations')
         return
     data_R_o = get_observation_data(observation_index, data_R)
@@ -230,24 +231,37 @@ def export_obs_distr_violinplot(observation_index, data_R, data_S):
     plt.close()
 
 def export_distr_densityplot(feature, data_R, data_S, features_R, features_S):
-    data_R_f = get_feature_data(feature, data_R, features_R)
-    data_S_f = get_feature_data(feature, data_S, features_S)
-    if not any(data_R_f) or not any(data_S_f):
-        return
-
+    if feature != '_all_':
+        data_R_f = get_feature_data(feature, data_R, features_R)
+        data_S_f = get_feature_data(feature, data_S, features_S)
+        if not any(data_R_f) or not any(data_S_f):
+            return
+        
     f, ax = plt.subplots(1, 1)
     f.set_size_inches(9, 7)
-    f.suptitle(f'Distribution density plot of feature {feature}')
-    sns.kdeplot(data_R_f, ax=ax, label='Real dataset', fill=True, common_norm=False, color='#5480d1', alpha=0.5, linewidth=0)
-    sns.kdeplot(data_S_f, ax=ax, label='Simulated dataset', fill=True, common_norm=False, color='#d65161', alpha=0.5, linewidth=0)
+    
+    if feature == '_all_':
+        f.suptitle(f'Distribution density plot of all features')
+        first = True
+        for feat in features_R:
+            data_R_f = get_feature_data(feat, data_R, features_R)
+            data_S_f = get_feature_data(feat, data_S, features_S)
+            label = 'Real dataset' if first else None
+            sns.kdeplot(data_R_f, ax=ax, label=label, fill=True, common_norm=False, color='#5480d1', alpha=0.5, linewidth=0)
+            label = 'Simulated dataset' if first else None
+            sns.kdeplot(data_S_f, ax=ax, label=label, fill=True, common_norm=False, color='#d65161', alpha=0.5, linewidth=0)
+            first = False
+    else:
+        f.suptitle(f'Distribution density plot of feature {feature}')
+        sns.kdeplot(data_R_f, ax=ax, label='Real dataset', fill=True, common_norm=False, color='#5480d1', alpha=0.5, linewidth=0)
+        sns.kdeplot(data_S_f, ax=ax, label='Simulated dataset', fill=True, common_norm=False, color='#d65161', alpha=0.5, linewidth=0)
     ax.legend()
-
     f.savefig(f'./output/temp_figures/density_plot_{feature}_{int(time.time())}.svg')
     del f
     plt.close()
 
 def export_obs_distr_densityplot(observation_index, data_R, data_S, with_ml_sim, ml_random_state):
-    if observation_index != 'all':
+    if observation_index != '_all_':
         data_R_o = get_observation_data(observation_index, data_R)
         data_S_o = get_observation_data(observation_index, data_S)
         if not any(data_R_o) or not any(data_S_o):
@@ -256,7 +270,7 @@ def export_obs_distr_densityplot(observation_index, data_R, data_S, with_ml_sim,
     f, ax = plt.subplots(1, 1)
     f.set_size_inches(9, 7)
     
-    if observation_index == 'all':
+    if observation_index == '_all_':
         if with_ml_sim:
             print('[LOG] OBS DENSITY PLT: Generating ML dataset')
             data_ML = ml_simulated_dataset(data_R, ml_random_state)
@@ -355,7 +369,7 @@ def export_jensenshannon(data_R, data_S, output, axis=0):
             print('[ERROR] Failed to export Jensen-Shannon divergence results to file')
 
 def export_obs_distance(observation_index, data_R, data_S):
-    if observation_index == 'all':
+    if observation_index == '_all_':
         print('[ERROR] Observation Euclidean distance report does not support reporting on all observations. Use general report to csv `observation_distance` instead.')
         return
     data_R_o = get_observation_data(observation_index, data_R)
@@ -523,7 +537,7 @@ def export_obs_statistics_all(data_R, data_S, output_dir):
             print('[ERROR] Failed to export observation statistic results to file')
 
 def export_obs_statistics(observation_index, data_R, data_S):
-    if observation_index == 'all':
+    if observation_index == '_all_':
         print('[ERROR] Observation statistics report does not support reporting on all observations. Use general report to csv `observation_statistics` instead.')
         return
     data_R_o = get_observation_data(observation_index, data_R)
