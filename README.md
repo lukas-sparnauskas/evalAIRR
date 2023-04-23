@@ -77,7 +77,7 @@ In the `reports` section, you can provide the list of report types you want to c
 - <b>`distr_histogram`</b> - feature distribution histogram. Parameters: list of features you are creating the report for.
 - <b>`distr_boxplot`</b> - feature distribution boxplot. Parameters: list of features you are creating the report for.
 - <b>`distr_violinplot`</b> - feature distribution violin plot. Parameters: list of features you are creating the report for.
-- <b>`distr_densityplot`</b> - feature distribution density plot. Parameters: list of features you are creating the report for. The feature name `_all_` can be used to report on all features in one plot.
+- <b>`distr_densityplot`</b> - feature distribution density plot. Parameters: list of features you are creating the report for.
 - <b>`distance`</b> - Euclidean distance between the real and simulated feature. Parameters: list of features you are creating the report for.
 - <b>`statistics`</b> - statistical indicators (average, median, standard deviation and variance) of a feature in both real and simulated datasets. Parameters: list of features you are creating the report for.
 
@@ -86,11 +86,11 @@ In the `reports` section, you can provide the list of report types you want to c
 - <b>`observation_distr_histogram`</b> - observation distribution histogram. Parameters: list of observations you are creating the report for.
 - <b>`observation_distr_boxplot`</b> - observation distribution boxplot. Parameters: list of observations you are creating the report for.
 - <b>`observation_distr_violinplot`</b> - observation distribution violin plot. Parameters: list of observations you are creating the report for.
-- <b>`observation_distr_densityplot`</b> - observation distribution density plot. Parameters: list of observations you are creating the report for. The observation index `_all_` can be used to report on all observations in one plot.
+- <b>`observation_distr_densityplot`</b> - observation distribution density plot. Parameters: list of observations you are creating the report for. The observation index `all` can be used to report on all observations in one plot.
 - <b>`observation_distance`</b> - Euclidean distance between the real and simulated observation. Parameters: list of observations you are creating the report for.
 - <b>`observation_statistics`</b> - statistical indicators (average, median, standard deviation and variance) of an observation in both real and simulated datasets. Parameters: list of observations you are creating the report for.
 
-Additional parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset (currently, only applies to the report type `observation_distr_densityplot` in reports with `_all_` observations). `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
+Additional parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset (currently, only applies to the report type `observation_distr_densityplot` in reports with `all` observations). `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
 
 #### General reports
 
@@ -126,11 +126,6 @@ reports:
         - distr_densityplot
         - distance
         - statistics
-    report2:
-      features:
-        - _all_
-      report_types:
-        - distr_densityplot
   observation_based:
     report1:
       observations:
@@ -144,7 +139,7 @@ reports:
         - observation_statistics
     report2:
       observations:
-        - _all_
+        - all
       report_types:
         - observation_distr_densityplot
       with_ml_sim: True

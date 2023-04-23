@@ -17,11 +17,6 @@ reports:
         - distr_densityplot
         - distance
         - statistics
-    report2:
-      features:
-        - _all_
-      report_types:
-        - distr_densityplot
   observation_based:
     report1:
       observations:
@@ -35,7 +30,7 @@ reports:
         - observation_statistics
     report2:
       observations:
-        - _all_
+        - all
       report_types:
         - observation_distr_densityplot
       with_ml_sim: True
