@@ -41,19 +41,16 @@ def export_pca_2d_comparison(data_real, data_sim, with_ml_sim = False, ml_random
     f.suptitle('PCA comparison in two dimensions')
 
     ax1.scatter(pca_R[:, 0], pca_R[:, 1])
-    ax1.plot(pc_R_x, pc_R_y, c='#1b24a8')
+    # ax1.plot(pc_R_x, pc_R_y, c='#1b24a8')
     ax1.set_title('Real dataset')
 
     ax2.scatter(pca_S[:, 0], pca_S[:, 1], c='red')
-    ax2.plot(pc_S_x, pc_S_y, c='#781010')
-    # ax2.set_ylabel('')
-    # ax2.set_yticklabels([])
-    # ax2.set_yticks([])
+    # ax2.plot(pc_S_x, pc_S_y, c='#781010')
     ax2.set_title('Simulated dataset')
 
     if with_ml_sim:
         ax3.scatter(pca_ML[:, 0], pca_ML[:, 1], c='green')
-        ax3.plot(pc_ML_x, pc_ML_y, c='#0a4711')
+        # ax3.plot(pc_ML_x, pc_ML_y, c='#0a4711')
         ax3.set_title('ML generated dataset')
 
         xbound = (min(ax1.get_xbound()[0], ax2.get_xbound()[0], ax3.get_xbound()[0]), max(ax1.get_xbound()[1], ax2.get_xbound()[1], ax3.get_xbound()[1]))
