@@ -296,10 +296,10 @@ def export_avg_var_scatter_plot(data_R, data_S, axis=0, with_ml_sim = False, ml_
     f, ax = plt.subplots(1, 1)
     f.set_size_inches(9, 7)
     f.suptitle('Feature average value vs variance' if axis == 0 else 'Observation average value vs variance')
-    ax.scatter(data_S_x, data_S_y, c='#d65161', linewidths=None, alpha=0.5, label='Simulated')
-    ax.scatter(data_R_x, data_R_y, c='#5480d1', linewidths=None, alpha=0.5, label='Real')
+    ax.scatter(data_S_x, data_S_y, s=10, c='#d65161', linewidths=None, alpha=0.5, label='Simulated')
+    ax.scatter(data_R_x, data_R_y, s=10, c='#5480d1', linewidths=None, alpha=0.5, label='Real')
     if with_ml_sim:
-        ax.scatter(data_ML_x, data_ML_y, c='#53d453', linewidths=None, alpha=0.5, label='ML generated')
+        ax.scatter(data_ML_x, data_ML_y, s=0.5, c='#53d453', linewidths=None, alpha=0.5, label='ML generated')
     ax.set_xlabel('Average value')
     ax.set_ylabel('Variance value')
     ax.legend()
