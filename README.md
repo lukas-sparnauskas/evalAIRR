@@ -83,6 +83,7 @@ In the `reports` section, you can provide the list of report types you want to c
 
 #### Observation-based reports
 
+- <b>`ks`</b> - Kolmogorov–Smirnov statistic. Parameters: list of observations you are creating the report for.
 - <b>`observation_distr_histogram`</b> - observation distribution histogram. Parameters: list of observations you are creating the report for.
 - <b>`observation_distr_boxplot`</b> - observation distribution boxplot. Parameters: list of observations you are creating the report for.
 - <b>`observation_distr_violinplot`</b> - observation distribution violin plot. Parameters: list of observations you are creating the report for.
@@ -94,7 +95,8 @@ Additional parameters: `with_ml_sim` - optional parameter, which if True, instru
 
 #### General reports
 
-- <b>`ks`</b> - Kolmogorov–Smirnov statistic for all features. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/ks.csv`). The csv file contains two rows, with the first row containing the ks-statistic and the second one - the p-values.
+- <b>`ks_feat`</b> - Kolmogorov–Smirnov statistic for all features. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/ks_feat.csv`). The csv file contains two rows, with the first row containing the ks-statistic and the second one - the p-values.
+- <b>`ks_obs`</b> - Kolmogorov–Smirnov statistic for all observations. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/ks_obs.csv`). The csv file contains two rows, with the first row containing the ks-statistic and the second one - the p-values.
 - <b>`copula_2d`</b> - a 2D scatter plot that displays two features in a Gausian Multivariate copula space. Parameters: a report section of any name, under which the compared features are specified.
 - <b>`copula_3d`</b> - a 3D scatter plot that displays three features in a Gausian Multivariate copula space. Parameters: a report section of any name, under which the compared features are specified.
 - <b>`feature_average_vs_variance`</b> - a scatter plot that displays the average value of every feature on one axis and the variance of every feature on the other axis. Parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
@@ -131,6 +133,7 @@ reports:
       observations:
         - 0
       report_types:
+        - ks
         - observation_distr_histogram
         - observation_distr_boxplot
         - observation_distr_violinplot
@@ -169,8 +172,10 @@ reports:
       ml_random_state: 0
     corr_csv:
       output: ./output/corr.csv
-    ks:
-      output: ./output/ks.csv
+    ks_feat:
+      output: ./output/ks_feat.csv
+    ks_obs:
+      output: ./output/ks_obs.csv
     statistics:
       output_dir: ./output/
     observation_statistics:

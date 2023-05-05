@@ -6,7 +6,8 @@ from evalAIRR.version import __version__
 from evalAIRR.util.input import read_encoded_csv, remove_non_mutual_features
 from evalAIRR.util.corr import export_corr_heatmap, export_csv_corr_matrix
 from evalAIRR.util.pca import export_pca_2d_comparison
-from evalAIRR.util.univar import export_feature_ks_test, export_ks_test
+from evalAIRR.util.univar import export_ks_test_of_feature, export_ks_test_of_observation
+from evalAIRR.util.univar import export_ks_test_all_features, export_ks_test_all_observations
 from evalAIRR.util.univar import export_distr_histogram, export_obs_distr_histogram
 from evalAIRR.util.univar import export_distr_boxplot, export_obs_distr_boxplot
 from evalAIRR.util.univar import export_distr_violinplot, export_obs_distr_violinplot
@@ -92,7 +93,7 @@ def run():
 
                 # KOLMOGOROV-SMIRNOV TEST REPORT
                 if 'ks' in report_types:
-                    export_feature_ks_test(feature, data_R, data_S, features_R, features_S)
+                    export_ks_test_of_feature(feature, data_R, data_S, features_R, features_S)
 
                 # DISTRIBUTION HISTOGRAM REPORT
                 if 'distr_histogram' in report_types:
@@ -128,6 +129,10 @@ def run():
             observations = reports_o[report]['observations']
             report_types = reports_o[report]['report_types']
             for observation_index in observations:
+
+                # KOLMOGOROV-SMIRNOV TEST REPORT
+                if 'ks' in report_types:
+                    export_ks_test_of_observation(observation_index, data_R, data_S)
 
                 # OBSERVATION DISTRIBUTION HISTOGRAM REPORT
                 if 'observation_distr_histogram' in report_types:
@@ -169,12 +174,20 @@ def run():
         reports_g = REPORTS['general']
 
         # KOLMOGOROV-SMIRNOV TEST REPORT FOR ALL FEATURES
-        if ('ks' in reports_g):
+        if ('ks_feat' in reports_g):
             try:
-                output = reports_g['ks']['output']
+                output = reports_g['ks_feat']['output']
             except: 
-                output = './output/ks.csv'
-            export_ks_test(data_R, data_S, features_R, features_S, output)
+                output = './output/ks_feat.csv'
+            export_ks_test_all_features(data_R, data_S, features_R, features_S, output)
+        
+        # KOLMOGOROV-SMIRNOV TEST REPORT FOR ALL OBSERVATIONS
+        if ('ks_obs' in reports_g):
+            try:
+                output = reports_g['ks_obs']['output']
+            except: 
+                output = './output/ks_obs.csv'
+            export_ks_test_all_observations(data_R, data_S, output)
 
         # STATISTICS REPORT
         if 'statistics' in reports_g:

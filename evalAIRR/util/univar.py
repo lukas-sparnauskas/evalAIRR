@@ -32,7 +32,7 @@ def get_observation_data(observation_index, data):
         return np.array([])
     return data[observation_index, :].flatten()
 
-def export_ks_test(data_R, data_S, features_R, features_S, output):
+def export_ks_test_all_features(data_R, data_S, features_R, features_S, output):
     ks_results = []
     pvalue_results = []
     for f_idx in range(len(features_R)):
@@ -48,12 +48,32 @@ def export_ks_test(data_R, data_S, features_R, features_S, output):
             with open(output, 'w', encoding="utf-8") as output_file:
                 output_file.write(','.join(ks_results) + '\n')
                 output_file.write(','.join(pvalue_results))
-            print('[LOG] KS test result file created')
+            print('[LOG] Feature KS test result file created')
         except: 
-            print('[ERROR] Failed to export KS test results to file')
+            print('[ERROR] Failed to export feature KS test results to file')
+            
+def export_ks_test_all_observations(data_R, data_S, output):
+    ks_results = []
+    pvalue_results = []
 
+    for o_idx in range(len(data_R)):
+        data_R_o = get_observation_data(o_idx, data_R)
+        data_S_o = get_observation_data(o_idx, data_S)
 
-def export_feature_ks_test(feature, data_R, data_S, features_R, features_S):
+        ks = scipy.stats.ks_2samp(data_R_o, data_S_o)
+        ks_results.append(str(ks.statistic))
+        pvalue_results.append(str(ks.pvalue))
+    ks_results = np.array(ks_results)
+    if output:
+        try:
+            with open(output, 'w', encoding="utf-8") as output_file:
+                output_file.write(','.join(ks_results) + '\n')
+                output_file.write(','.join(pvalue_results))
+            print('[LOG] Observation KS test result file created')
+        except: 
+            print('[ERROR] Failed to export observation KS test results to file')
+
+def export_ks_test_of_feature(feature, data_R, data_S, features_R, features_S):
     data_R_f = get_feature_data(feature, data_R, features_R)
     data_S_f = get_feature_data(feature, data_S, features_S)
     if not any(data_R_f) or not any(data_S_f):
@@ -73,7 +93,7 @@ def export_feature_ks_test(feature, data_R, data_S, features_R, features_S):
     
     print(f'[RESULT] Feature {feature} KS statistic =', res.statistic)
     print(f'[RESULT] Feature {feature} P value =', res.pvalue)
-    with open(f'./output/temp_results/ks_test_{feature}.txt', 'w', encoding="utf-8") as file:
+    with open(f'./output/temp_results/feat_ks_test_{feature}.txt', 'w', encoding="utf-8") as file:
         file.write('\t\t<tr colspan="2">\n')
         file.write(f'\t\t\t<td>Feature {feature} KS statistic</td>\n')
         file.write(f'\t\t\t<td>{res.statistic}</td>\n')
@@ -84,7 +104,42 @@ def export_feature_ks_test(feature, data_R, data_S, features_R, features_S):
         file.write(f'\t\t\t<td>{res.pvalue}</td>\n')
         file.write('\t\t</tr>\n')
 
-    f.savefig(f'./output/temp_figures/ks_test_{feature}_{int(time.time())}.svg')
+    f.savefig(f'./output/temp_figures/feat_ks_test_{feature}_{int(time.time())}.svg')
+    del f
+    plt.close()
+    
+def export_ks_test_of_observation(observation, data_R, data_S):
+    data_R_o = get_observation_data(observation, data_R)
+    data_S_o = get_observation_data(observation, data_S)
+    if not any(data_R_o) or not any(data_S_o):
+        return
+
+    cdf_1_x, cdf_1_y = cdf(data_R_o)
+    cdf_2_x, cdf_2_y = cdf(data_S_o)
+    res = scipy.stats.ks_2samp(data_R_o, data_S_o)
+    
+    f, ax = plt.subplots(1, 1)
+    f.set_size_inches(5, 5)
+    f.suptitle(f'CDF comparison of observation {observation}\nin real and simulated datasets')
+    ax.plot(cdf_1_x, cdf_1_y, c='#1b24a8', label='Real dataset')
+    ax.plot(cdf_2_x, cdf_2_y, c='r', label='Simulated dataset')
+    ax.grid(visible=True)
+    ax.legend()
+    
+    print(f'[RESULT] Observation {observation} KS statistic =', res.statistic)
+    print(f'[RESULT] Observation {observation} P value =', res.pvalue)
+    with open(f'./output/temp_results/obs_ks_test_{observation}.txt', 'w', encoding="utf-8") as file:
+        file.write('\t\t<tr colspan="2">\n')
+        file.write(f'\t\t\t<td>Observation {observation} KS statistic</td>\n')
+        file.write(f'\t\t\t<td>{res.statistic}</td>\n')
+        file.write('\t\t</tr>\n')
+
+        file.write('\t\t<tr colspan="2">\n')
+        file.write(f'\t\t\t<td>Observation {observation} P value</td>\n')
+        file.write(f'\t\t\t<td>{res.pvalue}</td>\n')
+        file.write('\t\t</tr>\n')
+
+    f.savefig(f'./output/temp_figures/obs_ks_test_{observation}_{int(time.time())}.svg')
     del f
     plt.close()
 

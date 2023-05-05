@@ -22,6 +22,7 @@ reports:
       observations:
         - 0
       report_types:
+        - ks
         - observation_distr_histogram
         - observation_distr_boxplot
         - observation_distr_violinplot
@@ -60,8 +61,10 @@ reports:
       ml_random_state: 0
     corr_csv:
       output: ./output/corr.csv
-    ks:
-      output: ./output/ks.csv
+    ks_feat:
+      output: ./output/ks_feat.csv
+    ks_obs:
+      output: ./output/ks_obs.csv
     statistics:
       output_dir: ./output/
     observation_statistics:
