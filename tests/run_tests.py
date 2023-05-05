@@ -14,12 +14,14 @@ max_reps = 200
 max_seqs = 100000
 n_runs = 10
 thresholds = {
-    'ks': 0.4,
-    'ks_pval': 0.05,
+    'ks_feat': 0.4,
+    'ks_feat_pval': 0.05,
+    'ks_obs': 0.4,
+    'ks_obs_pval': 0.05,
     'dist': 22,
     'dist_obs': 140,
-    'avg': 2e-16,
-    'avg_obs': 0.15,
+    'mean': 2e-16,
+    'mean_obs': 0.15,
     'median': 0.1,
     'median_obs': 0.1,
     'var': 4e-15,
@@ -120,7 +122,8 @@ for n in range(0, n_runs):
 ################
 ### COLLECT DATA
 
-final_ks = dict()
+final_ks_feat = dict()
+final_ks_obs = dict()
 final_dist = dict()
 final_dist_obs = dict()
 final_stat_R = dict()
@@ -131,8 +134,10 @@ final_jenshan = dict()
 final_jenshan_obs = dict()
 
 for t in timestamps:
-    with open(f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_{t}/ks.csv', 'r') as file:
-        final_ks[t] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
+    with open(f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_{t}/ks_feat.csv', 'r') as file:
+        final_ks_feat[t] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
+    with open(f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_{t}/ks_obs.csv', 'r') as file:
+        final_ks_obs[t] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
     with open(f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_{t}/dist.csv', 'r') as file:
         final_dist[t] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
     with open(f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_{t}/dist_obs.csv', 'r') as file:
@@ -154,12 +159,14 @@ for t in timestamps:
 final_stat = dict()
 final_stat_obs = dict()
 t_results = {
-    'ks': [],
-    'ks_pval': [],
+    'ks_feat': [],
+    'ks_feat_pval': [],
+    'ks_obs': [],
+    'ks_obs_pval': [],
     'dist': [],
     'dist_obs': [],
-    'avg': [],
-    'avg_obs': [],
+    'mean': [],
+    'mean_obs': [],
     'median': [],
     'median_obs': [],
     'var': [],
@@ -173,12 +180,14 @@ for t in timestamps:
     final_stat[t] = np.absolute(final_stat_R[t] - final_stat_S[t])
     final_stat_obs[t] = np.absolute(final_stat_obs_R[t] - final_stat_obs_S[t])
     
-    t_results['ks'].append(float(np.count_nonzero(np.where(final_ks[t][0] <= thresholds['ks'], final_ks[t][0], 0))) / len(final_ks[t][0]))
-    t_results['ks_pval'].append(float(np.count_nonzero(np.where(final_ks[t][1] >= thresholds['ks_pval'], final_ks[t][1], 0))) / len(final_ks[t][1]))
+    t_results['ks_feat'].append(float(np.count_nonzero(np.where(final_ks_feat[t][0] <= thresholds['ks_feat'], final_ks_feat[t][0], 0))) / len(final_ks_feat[t][0]))
+    t_results['ks_feat_pval'].append(float(np.count_nonzero(np.where(final_ks_feat[t][1] >= thresholds['ks_feat_pval'], final_ks_feat[t][1], 0))) / len(final_ks_feat[t][1]))
+    t_results['ks_obs'].append(float(np.count_nonzero(np.where(final_ks_obs[t][0] <= thresholds['ks_obs'], final_ks_obs[t][0], 0))) / len(final_ks_obs[t][0]))
+    t_results['ks_obs_pval'].append(float(np.count_nonzero(np.where(final_ks_obs[t][1] >= thresholds['ks_obs_pval'], final_ks_obs[t][1], 0))) / len(final_ks_obs[t][1]))
     t_results['dist'].append(float(np.count_nonzero(np.where(final_dist[t][0] <= thresholds['dist'], final_dist[t][0], 0))) / len(final_dist[t][0]))
     t_results['dist_obs'].append(float(np.count_nonzero(np.where(final_dist_obs[t][0] <= thresholds['dist_obs'], final_dist_obs[t][0], 0))) / len(final_dist_obs[t][0]))
-    t_results['avg'].append(float(np.count_nonzero(np.where(final_stat[t][0] <= thresholds['avg'], final_stat[t][0], 0))) / len(final_stat[t][0]))
-    t_results['avg_obs'].append(float(np.count_nonzero(np.where(final_stat_obs[t][0] <= thresholds['avg_obs'], final_stat_obs[t][0], 0))) / len(final_stat_obs[t][0]))
+    t_results['mean'].append(float(np.count_nonzero(np.where(final_stat[t][0] <= thresholds['mean'], final_stat[t][0], 0))) / len(final_stat[t][0]))
+    t_results['mean_obs'].append(float(np.count_nonzero(np.where(final_stat_obs[t][0] <= thresholds['mean_obs'], final_stat_obs[t][0], 0))) / len(final_stat_obs[t][0]))
     t_results['median'].append(float(np.count_nonzero(np.where(final_stat[t][1] <= thresholds['median'], final_stat[t][1], 0))) / len(final_stat[t][1]))
     t_results['median_obs'].append(float(np.count_nonzero(np.where(final_stat_obs[t][1] <= thresholds['median_obs'], final_stat_obs[t][1], 0))) / len(final_stat_obs[t][1]))
     t_results['std'].append(float(np.count_nonzero(np.where(final_stat[t][2] <= thresholds['std'], final_stat[t][2], 0))) / len(final_stat[t][2]))
@@ -189,9 +198,10 @@ for t in timestamps:
     t_results['jenshan_obs'].append(float(np.count_nonzero(np.where(final_jenshan_obs[t][0] <= thresholds['jenshan_obs'], final_jenshan_obs[t][0], 0))) / len(final_jenshan_obs[t][0]))
 
 ### FINAL RESULT FIGURE EXPORT
-for key in ['ks_pval', 'dist', 'dist_obs', 'avg', 'avg_obs', 'median', 'median_obs', 'var', 'var_obs', 'std', 'std_obs', 'jenshan', 'jenshan_obs']:
-    ab_be = 'above' if key in 'ks_pval' else 'below'
-    print(f'[RESULT] Indicator:{key} - % {ab_be} threshold: {np.average(t_results[key]) * 100}')
+for key in ['ks_feat', 'ks_feat_pval', 'ks_obs', 'ks_obs_pval', 'dist', 'dist_obs', 'mean', 'mean_obs', 
+            'median', 'median_obs', 'var', 'var_obs', 'std', 'std_obs', 'jenshan', 'jenshan_obs']:
+    ab_be = 'above' if key in ['ks_feat_pval', 'ks_obs_pval'] else 'below'
+    print(f'[RESULT] Indicator:{key} - % {ab_be} threshold: {np.mean(t_results[key]) * 100}')
 
 colours = sns.color_palette(cc.glasbey, n_runs).as_hex()
 def draw_kdeplot(data, title, xlabel, output, threshold, stat=None):
@@ -208,17 +218,29 @@ def draw_kdeplot(data, title, xlabel, output, threshold, stat=None):
     del f
     plt.close()
 
-# KS Statistic
-title = 'Distribution of KS statistic for each iteration'
-xlabel = 'Kolmogorov-Smirnov statistic'
-output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_ks.png'
-draw_kdeplot(final_ks, title, xlabel, output, thresholds['ks'], 0)
+# Feature KS Statistic
+title = 'Distribution of feature KS statistic for each iteration'
+xlabel = 'Feature Kolmogorov-Smirnov statistic'
+output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_ks_feat.png'
+draw_kdeplot(final_ks_feat, title, xlabel, output, thresholds['ks_feat'], 0)
 
-# KS P-values
-title = 'Distribution of KS P-values for each iteration'
-xlabel = 'Kolmogorov-Smirnov P-values'
-output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_ks_pval.png'
-draw_kdeplot(final_ks, title, xlabel, output, thresholds['ks_pval'], 1)
+# Feature KS P-values
+title = 'Distribution of feature KS P-values for each iteration'
+xlabel = 'Feature Kolmogorov-Smirnov P-values'
+output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_ks_feat_pval.png'
+draw_kdeplot(final_ks_feat, title, xlabel, output, thresholds['ks_feat_pval'], 1)
+
+# Observation KS Statistic
+title = 'Distribution of observation KS statistic for each iteration'
+xlabel = 'Observation Kolmogorov-Smirnov statistic'
+output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_ks_obs.png'
+draw_kdeplot(final_ks_obs, title, xlabel, output, thresholds['ks_obs'], 0)
+
+# Observation KS P-values
+title = 'Distribution of observation KS P-values for each iteration'
+xlabel = 'Observation Kolmogorov-Smirnov P-values'
+output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_ks_obs_pval.png'
+draw_kdeplot(final_ks_obs, title, xlabel, output, thresholds['ks_obs_pval'], 1)
 
 # Euclidean distance
 title = 'Distribution of Euclidean distance between real and simulated\nfeatures for each iteration'
@@ -245,10 +267,10 @@ output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_jens
 draw_kdeplot(final_jenshan_obs, title, xlabel, output, thresholds['jenshan_obs'])
 
 # Statistics
-title = 'Distribution of the difference between the real and simulated\naverage feature values for each iteration'
-xlabel = 'Difference between the real and simulated average feature values'
-output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_stat_average.png'
-draw_kdeplot(final_stat, title, xlabel, output, thresholds['avg'], 0)
+title = 'Distribution of the difference between the real and simulated\nmean feature values for each iteration'
+xlabel = 'Difference between the real and simulated mean feature values'
+output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_stat_mean.png'
+draw_kdeplot(final_stat, title, xlabel, output, thresholds['mean'], 0)
 
 title = 'Distribution of the difference between the real and simulated\nmedian feature values for each iteration'
 xlabel = 'Difference between the real and simulated median feature values'
@@ -266,10 +288,10 @@ output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_stat
 draw_kdeplot(final_stat, title, xlabel, output, thresholds['var'], 3)
 
 # Observation statistics
-title = 'Distribution of the difference between the real and simulated\naverage observation values for each iteration'
-xlabel = 'Difference between the real and simulated average observation values'
-output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_stat_obs_average.png'
-draw_kdeplot(final_stat_obs, title, xlabel, output, thresholds['avg_obs'], 0)
+title = 'Distribution of the difference between the real and simulated\nmean observation values for each iteration'
+xlabel = 'Difference between the real and simulated mean observation values'
+output = f'/home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_stat_obs_mean.png'
+draw_kdeplot(final_stat_obs, title, xlabel, output, thresholds['mean_obs'], 0)
 
 title = 'Distribution of the difference between the real and simulated\nmedian observation values for each iteration'
 xlabel = 'Difference between the real and simulated median observation values'

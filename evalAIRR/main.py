@@ -12,7 +12,7 @@ from evalAIRR.util.univar import export_distr_histogram, export_obs_distr_histog
 from evalAIRR.util.univar import export_distr_boxplot, export_obs_distr_boxplot
 from evalAIRR.util.univar import export_distr_violinplot, export_obs_distr_violinplot
 from evalAIRR.util.univar import export_distr_densityplot, export_obs_distr_densityplot
-from evalAIRR.util.univar import export_avg_var_scatter_plot
+from evalAIRR.util.univar import export_mean_var_scatter_plot
 from evalAIRR.util.univar import export_jensenshannon
 from evalAIRR.util.univar import export_distance, export_obs_distance
 from evalAIRR.util.univar import export_statistics, export_obs_statistics
@@ -273,29 +273,29 @@ def run():
                 ml_random_state = None
             export_pca_2d_comparison(data_R, data_S, with_ml_sim, ml_random_state)
 
-        # FEATURE AVERAGE VALUE VS VARIANCE REPORT
-        if ('feature_average_vs_variance' in reports_g):
+        # FEATURE MEAN VALUE VS VARIANCE REPORT
+        if ('feature_mean_vs_variance' in reports_g):
             try:
-                with_ml_sim = reports_g['feature_average_vs_variance']['with_ml_sim']
+                with_ml_sim = reports_g['feature_mean_vs_variance']['with_ml_sim']
             except: 
                 with_ml_sim = False
             try:
-                ml_random_state = reports_g['feature_average_vs_variance']['ml_random_state']
+                ml_random_state = reports_g['feature_mean_vs_variance']['ml_random_state']
             except: 
                 ml_random_state = None
-            export_avg_var_scatter_plot(data_R, data_S, axis=0, with_ml_sim=with_ml_sim, ml_random_state=ml_random_state)
+            export_mean_var_scatter_plot(data_R, data_S, axis=0, with_ml_sim=with_ml_sim, ml_random_state=ml_random_state)
 
-        # OBSERVATION AVERAGE VALUE VS VARIANCE REPORT
-        if ('observation_average_vs_variance' in reports_g):
+        # OBSERVATION MEAN VALUE VS VARIANCE REPORT
+        if ('observation_mean_vs_variance' in reports_g):
             try:
-                with_ml_sim = reports_g['observation_average_vs_variance']['with_ml_sim']
+                with_ml_sim = reports_g['observation_mean_vs_variance']['with_ml_sim']
             except: 
                 with_ml_sim = False
             try:
-                ml_random_state = reports_g['observation_average_vs_variance']['ml_random_state']
+                ml_random_state = reports_g['observation_mean_vs_variance']['ml_random_state']
             except: 
                 ml_random_state = None
-            export_avg_var_scatter_plot(data_R, data_S, axis=1, with_ml_sim=with_ml_sim, ml_random_state=ml_random_state)
+            export_mean_var_scatter_plot(data_R, data_S, axis=1, with_ml_sim=with_ml_sim, ml_random_state=ml_random_state)
 
         # COPULA 2D REPORT
         if ('copula_2d' in reports_g):

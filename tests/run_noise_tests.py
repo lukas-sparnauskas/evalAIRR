@@ -4,11 +4,12 @@ import numpy as np
 import random as rnd
 
 input_file_name = '/home/mint/masters/data/noise_data/original.csv'
-output_file_name = '/home/mint/masters/data/noise_data/with_noise.csv'
-rate_of_features = 0.1
-rate_of_feature_noise = 0.1
-rate_of_observations = 0
-rate_of_observation_noise = 0
+output_file_name = '/home/mint/masters/data/noise_data/original_unmodified.csv'
+output_noise_file_name = '/home/mint/masters/data/noise_data/with_noise.csv'
+rate_of_features = 0
+rate_of_feature_noise = 0
+rate_of_observations = 0.2
+rate_of_observation_noise = 0.3
 
 #region FUNCTIONS
 def read_encoded_csv(csv_path):
@@ -65,8 +66,8 @@ def add_observation_noise(data, rate_of_observations, rate_of_noise):
             with_noise[i,j] = rnd.uniform(min_limit, max_limit)
     return with_noise
 
-def export_csv(features, data):
-    with open(output_file_name, "w") as output_file:
+def export_csv(file_name, features, data):
+    with open(file_name, "w") as output_file:
         output_file.write(','.join(features) + '\n')
         for row in data:
             output_file.write(','.join([str(i) for i in row]) + '\n')
@@ -76,7 +77,8 @@ def export_csv(features, data):
 orig_features, orig_data = read_encoded_csv(input_file_name)
 noise_data = add_feature_noise(orig_data, rate_of_features, rate_of_feature_noise)
 noise_data = add_observation_noise(noise_data, rate_of_observations, rate_of_observation_noise)
-export_csv(orig_features, noise_data)
+export_csv(output_file_name, orig_features, orig_data)
+export_csv(output_noise_file_name, orig_features, noise_data)
 print(f'[LOG] RUNNING EVALAIRR')
 subprocess.run(f'sudo evalairr -i /home/mint/masters/data/noise_data/main_config.yaml', shell=True)
 #endregion

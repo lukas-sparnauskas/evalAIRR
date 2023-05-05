@@ -337,29 +337,29 @@ def export_obs_distr_densityplot(observation_index, data_R, data_S, with_ml_sim,
     del f
     plt.close()
 
-def export_avg_var_scatter_plot(data_R, data_S, axis=0, with_ml_sim = False, ml_random_state = None):
-    data_R_x = np.average(data_R, axis=axis)
+def export_mean_var_scatter_plot(data_R, data_S, axis=0, with_ml_sim = False, ml_random_state = None):
+    data_R_x = np.mean(data_R, axis=axis)
     data_R_y = np.var(data_R, axis=axis)
-    data_S_x = np.average(data_S, axis=axis)
+    data_S_x = np.mean(data_S, axis=axis)
     data_S_y = np.var(data_S, axis=axis)
     if with_ml_sim:
-        print('[LOG] AVG VS VAR: Generating ML dataset')
+        print('[LOG] MEAN VS VAR: Generating ML dataset')
         data_ML = ml_simulated_dataset(data_R, ml_random_state)
-        data_ML_x = np.average(data_ML, axis=axis)
+        data_ML_x = np.mean(data_ML, axis=axis)
         data_ML_y = np.var(data_ML, axis=axis)
 
     f, ax = plt.subplots(1, 1)
     f.set_size_inches(9, 7)
-    f.suptitle('Feature average value vs variance' if axis == 0 else 'Observation average value vs variance')
+    f.suptitle('Feature mean value vs variance' if axis == 0 else 'Observation mean value vs variance')
     ax.scatter(data_S_x, data_S_y, s=10 if axis == 0 else 40, c='#d65161', linewidths=None, alpha=0.5, label='Simulated')
     ax.scatter(data_R_x, data_R_y, s=10 if axis == 0 else 40, c='#5480d1', linewidths=None, alpha=0.5, label='Real')
     if with_ml_sim:
         ax.scatter(data_ML_x, data_ML_y, s=10 if axis == 0 else 40, c='#53d453', linewidths=None, alpha=0.5, label='ML generated')
-    ax.set_xlabel('Average value')
+    ax.set_xlabel('Mean value')
     ax.set_ylabel('Variance value')
     ax.legend()
     
-    f.savefig(f'./output/temp_figures/avg_var_{"feat" if axis == 0 else "obs"}_scatter_plot_{int(time.time())}.svg')
+    f.savefig(f'./output/temp_figures/mean_var_{"feat" if axis == 0 else "obs"}_scatter_plot_{int(time.time())}.svg')
     del f
     plt.close()
 
@@ -471,21 +471,21 @@ def export_statistics(feature, data_R, data_S, features_R, features_S):
     if not any(data_R_f) or not any(data_S_f):
         return
 
-    avg = { 'real': np.average(data_R_f), 'sim': np.average(data_S_f)}
+    mean = { 'real': np.mean(data_R_f), 'sim': np.mean(data_S_f)}
     median = { 'real': np.median(data_R_f), 'sim': np.median(data_S_f)}
     std = { 'real': np.std(data_R_f), 'sim': np.std(data_S_f)}
     var = { 'real': np.var(data_R_f), 'sim': np.var(data_S_f)}
 
-    print('[RESULT] Average of feature {0:>16} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, avg['real'], avg['sim']))
+    print('[RESULT] Mean of feature {0:>16} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, mean['real'], mean['sim']))
     print('[RESULT] Median of feature {0:>17} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, median['real'], median['sim']))
     print('[RESULT] Standard deviation of feature {0:>5} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, std['real'], std['sim']))
     print('[RESULT] Variance of feature {0:>15} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(feature, var['real'], var['sim']))
 
     with open(f'./output/temp_statistics/{feature}.txt', 'w', encoding="utf-8") as file:
         file.write('\t\t<tr>\n')
-        file.write(f'\t\t\t<td>Average of feature {feature}</td>\n')
-        file.write(f'\t\t\t<td>{avg["real"]}</td>\n')
-        file.write(f'\t\t\t<td>{avg["sim"]}</td>\n')
+        file.write(f'\t\t\t<td>Mean of feature {feature}</td>\n')
+        file.write(f'\t\t\t<td>{mean["real"]}</td>\n')
+        file.write(f'\t\t\t<td>{mean["sim"]}</td>\n')
         file.write('\t\t</tr>\n')
         file.write('\t\t<tr>\n')
         file.write(f'\t\t\t<td>Median of feature {feature}</td>\n')
@@ -504,7 +504,7 @@ def export_statistics(feature, data_R, data_S, features_R, features_S):
         file.write('\t\t</tr>\n')
 
 def export_statistics_all(data_R, data_S, features_R, features_S, output_dir):
-    R_avg, S_avg = [], []
+    R_mean, S_mean = [], []
     R_median, S_median = [], []
     R_std, S_std = [], []
     R_var, S_var = [], []
@@ -512,12 +512,12 @@ def export_statistics_all(data_R, data_S, features_R, features_S, output_dir):
         data_R_f = np.array(get_feature_data(features_R[f_idx], data_R, features_R), dtype=float)
         data_S_f = np.array(get_feature_data(features_S[f_idx], data_S, features_S), dtype=float)
 
-        R_avg.append(str(np.average(data_R_f)))
+        R_mean.append(str(np.mean(data_R_f)))
         R_median.append(str(np.median(data_R_f)))
         R_std.append(str(np.std(data_R_f)))
         R_var.append(str(np.var(data_R_f)))
 
-        S_avg.append(str(np.average(data_S_f)))
+        S_mean.append(str(np.mean(data_S_f)))
         S_median.append(str(np.median(data_S_f)))
         S_std.append(str(np.std(data_S_f)))
         S_var.append(str(np.var(data_S_f)))
@@ -527,12 +527,12 @@ def export_statistics_all(data_R, data_S, features_R, features_S, output_dir):
             if not str(output_dir).strip().endswith('/') and not str(output_dir).endswith('\\'):
                 output_dir = output_dir.strip() + '/'
             with open(output_dir + '/real_stat.csv', 'w', encoding="utf-8") as output_file:
-                output_file.write(','.join(R_avg) + '\n')
+                output_file.write(','.join(R_mean) + '\n')
                 output_file.write(','.join(R_median) + '\n')
                 output_file.write(','.join(R_std) + '\n')
                 output_file.write(','.join(R_var))
             with open(output_dir + '/sim_stat.csv', 'w', encoding="utf-8") as output_file:
-                output_file.write(','.join(S_avg) + '\n')
+                output_file.write(','.join(S_mean) + '\n')
                 output_file.write(','.join(S_median) + '\n')
                 output_file.write(','.join(S_std) + '\n')
                 output_file.write(','.join(S_var))
@@ -541,7 +541,7 @@ def export_statistics_all(data_R, data_S, features_R, features_S, output_dir):
             print('[ERROR] Failed to export statistic results to file')
 
 def export_obs_statistics_all(data_R, data_S, output_dir):
-    R_avg, S_avg = [], []
+    R_mean, S_mean = [], []
     R_median, S_median = [], []
     R_std, S_std = [], []
     R_var, S_var = [], []
@@ -549,12 +549,12 @@ def export_obs_statistics_all(data_R, data_S, output_dir):
         data_R_o = np.array(get_observation_data(o_idx, data_R), dtype=float)
         data_S_o = np.array(get_observation_data(o_idx, data_S), dtype=float)
 
-        R_avg.append(str(np.average(data_R_o)))
+        R_mean.append(str(np.mean(data_R_o)))
         R_median.append(str(np.median(data_R_o)))
         R_std.append(str(np.std(data_R_o)))
         R_var.append(str(np.var(data_R_o)))
 
-        S_avg.append(str(np.average(data_S_o)))
+        S_mean.append(str(np.mean(data_S_o)))
         S_median.append(str(np.median(data_S_o)))
         S_std.append(str(np.std(data_S_o)))
         S_var.append(str(np.var(data_S_o)))
@@ -564,12 +564,12 @@ def export_obs_statistics_all(data_R, data_S, output_dir):
             if not str(output_dir).strip().endswith('/') and not str(output_dir).endswith('\\'):
                 output_dir = output_dir.strip() + '/'
             with open(output_dir + '/real_obs_stat.csv', 'w', encoding="utf-8") as output_file:
-                output_file.write(','.join(R_avg) + '\n')
+                output_file.write(','.join(R_mean) + '\n')
                 output_file.write(','.join(R_median) + '\n')
                 output_file.write(','.join(R_std) + '\n')
                 output_file.write(','.join(R_var))
             with open(output_dir + '/sim_obs_stat.csv', 'w', encoding="utf-8") as output_file:
-                output_file.write(','.join(S_avg) + '\n')
+                output_file.write(','.join(S_mean) + '\n')
                 output_file.write(','.join(S_median) + '\n')
                 output_file.write(','.join(S_std) + '\n')
                 output_file.write(','.join(S_var))
@@ -586,21 +586,21 @@ def export_obs_statistics(observation_index, data_R, data_S):
     if not any(data_R_o) or not any(data_S_o):
         return
 
-    avg = { 'real': np.average(data_R_o), 'sim': np.average(data_S_o)}
+    mean = { 'real': np.mean(data_R_o), 'sim': np.mean(data_S_o)}
     median = { 'real': np.median(data_R_o), 'sim': np.median(data_S_o)}
     std = { 'real': np.std(data_R_o), 'sim': np.std(data_S_o)}
     var = { 'real': np.var(data_R_o), 'sim': np.var(data_S_o)}
 
-    print('[RESULT] Average of observation with index {0:>16} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(observation_index, avg['real'], avg['sim']))
+    print('[RESULT] Mean of observation with index {0:>16} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(observation_index, mean['real'], mean['sim']))
     print('[RESULT] Median of observation with index {0:>17} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(observation_index, median['real'], median['sim']))
     print('[RESULT] Standard deviation of observation with index {0:>5} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(observation_index, std['real'], std['sim']))
     print('[RESULT] Variance of observation with index {0:>15} : REAL = {1:>25}, SIMULATED = {2:>25}'.format(observation_index, var['real'], var['sim']))
 
     with open(f'./output/temp_statistics/obs_{observation_index}.txt', 'w', encoding="utf-8") as file:
         file.write('\t\t<tr>\n')
-        file.write(f'\t\t\t<td>Average of observation with index {observation_index}</td>\n')
-        file.write(f'\t\t\t<td>{avg["real"]}</td>\n')
-        file.write(f'\t\t\t<td>{avg["sim"]}</td>\n')
+        file.write(f'\t\t\t<td>Mean of observation with index {observation_index}</td>\n')
+        file.write(f'\t\t\t<td>{mean["real"]}</td>\n')
+        file.write(f'\t\t\t<td>{mean["sim"]}</td>\n')
         file.write('\t\t</tr>\n')
         file.write('\t\t<tr>\n')
         file.write(f'\t\t\t<td>Median of observation with index {observation_index}</td>\n')

@@ -46,10 +46,10 @@ reports:
         - TGT
         - ANV
         - CAS
-    feature_average_vs_variance:
+    feature_mean_vs_variance:
       with_ml_sim: True
       ml_random_state: 0
-    observation_average_vs_variance:
+    observation_mean_vs_variance:
       with_ml_sim: True
       ml_random_state: 0
     corr:
