@@ -1,7 +1,5 @@
 import time
-import math
 import numpy as np
-import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -23,13 +21,13 @@ def export_corr_heatmap(data_real, data_sim, n_real_feat = 0, n_sim_feat = 0, re
         print('[WARNING] CORR: reduce_to_n_features not provided and dimensionality reduction will not be applied. This may result in very long calculation times.')
 
     print('[LOG] CORR: Calculating correlation matrices')
-    corr_real = pd.DataFrame(data_real).corr()
-    corr_sim = pd.DataFrame(data_sim).corr()
+    corr_real = np.corrcoef(data_real)
+    corr_sim = np.corrcoef(data_sim)
 
     diff_corrs = corr_real.sub(corr_sim).abs()
 
     if with_ml_sim:
-        corr_ML = pd.DataFrame(data_ML).corr()
+        corr_ML = np.corrcoef(data_ML)
         diff_corrs_ML = corr_ML.sub(corr_sim).abs()
 
     print('[LOG] CORR: Displaying correlation heatmaps')
@@ -68,8 +66,8 @@ def export_corr_heatmap(data_real, data_sim, n_real_feat = 0, n_sim_feat = 0, re
     plt.close()
 
 def export_csv_corr_matrix(data_real, data_sim, output):
-    corr_real = pd.DataFrame(data_real).corr()
-    corr_sim = pd.DataFrame(data_sim).corr()
+    corr_real = np.corrcoef(data_real)
+    corr_sim = np.corrcoef(data_sim)
     diff_corrs = corr_real.sub(corr_sim).abs()
     diff_corrs = np.array(diff_corrs)
     if output:
