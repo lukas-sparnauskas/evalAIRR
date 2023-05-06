@@ -95,6 +95,8 @@ def export_corr_distr_histogram(data_real, data_sim, n_bins=30, n_real_feat = 0,
     bins = np.linspace(min(np.min(corr_real), np.min(corr_sim)), 
                        max(np.max(corr_real), np.max(corr_sim)), n_bins)
     
+    print('corr_real.shape: ', corr_real.shape)
+    print('corr_sim.shape: ', corr_sim.shape)
     print('np.squeeze(corr_real).shape: ', np.squeeze(corr_real).shape)
     print('np.squeeze(corr_sim).shape: ', np.squeeze(corr_sim).shape)
     if with_ml_sim:
