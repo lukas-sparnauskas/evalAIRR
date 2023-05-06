@@ -12,5 +12,18 @@ reports:
       report_types:
         - ks
         - distr_densityplot
+        - distance
+        - statistics
+  observation_based:
+    report1:
+      observations:
+        - all
+      report_types:
+        - observation_distr_densityplot
+  general:
+    feature_mean_vs_variance:
+    observation_mean_vs_variance:
+    pca_2d_feat:
+    pca_2d_obs:
 output:
   path: "./output/report.html"

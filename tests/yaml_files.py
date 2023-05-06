@@ -217,12 +217,8 @@ reports:
       output: /home/mint/masters/data/noise_data/results/jenshan_feat.csv
     observation_jensen_shannon:
       output: /home/mint/masters/data/noise_data/results/jenshan_obs.csv
-    distance:
-      output: /home/mint/masters/data/noise_data/results/dist_feat.csv
-    observation_distance:
-      output: /home/mint/masters/data/noise_data/results/dist_obs.csv
-    pca_2d:
-      transpose: True
+    pca_2d_feat:
+    pca_2d_obs:
 output:
   path: /home/mint/masters/data/noise_data/results/report_{run}.html
 '''

@@ -281,21 +281,29 @@ def run():
                 output = './output/corr.csv'
             export_csv_corr_matrix(data_R, data_S, output)
 
-        # PCA 2D REPORT
-        if ('pca_2d' in reports_g):
+        # FEATURE-LEVEL PCA 2D REPORT
+        if ('pca_2d_feat' in reports_g):
             try:
-                transpose = reports_g['pca_2d']['transpose']
-            except: 
-                transpose = False
-            try:
-                with_ml_sim = reports_g['pca_2d']['with_ml_sim']
+                with_ml_sim = reports_g['pca_2d_feat']['with_ml_sim']
             except: 
                 with_ml_sim = False
             try:
-                ml_random_state = reports_g['pca_2d']['ml_random_state']
+                ml_random_state = reports_g['pca_2d_feat']['ml_random_state']
             except: 
                 ml_random_state = None
-            export_pca_2d_comparison(data_R, data_S, transpose, with_ml_sim, ml_random_state)
+            export_pca_2d_comparison(data_R, data_S, False, with_ml_sim, ml_random_state)
+            
+        # OBSERVATION-LEVEL PCA 2D REPORT
+        if ('pca_2d_obs' in reports_g):
+            try:
+                with_ml_sim = reports_g['pca_2d_obs']['with_ml_sim']
+            except: 
+                with_ml_sim = False
+            try:
+                ml_random_state = reports_g['pca_2d_obs']['ml_random_state']
+            except: 
+                ml_random_state = None
+            export_pca_2d_comparison(data_R, data_S, True, with_ml_sim, ml_random_state)
 
         # FEATURE MEAN VALUE VS VARIANCE REPORT
         if ('feature_mean_vs_variance' in reports_g):

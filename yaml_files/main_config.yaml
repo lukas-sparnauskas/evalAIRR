@@ -61,8 +61,10 @@ reports:
       with_ml_sim: True
       ml_random_state: 0
       reduce_to_n_features: 150
-    pca_2d:
-      transpose: False
+    pca_2d_feat:
+      with_ml_sim: True
+      ml_random_state: 0
+    pca_2d_obs:
       with_ml_sim: True
       ml_random_state: 0
     corr_csv:

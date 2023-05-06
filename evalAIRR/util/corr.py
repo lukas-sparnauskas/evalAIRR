@@ -91,7 +91,7 @@ def export_corr_distr_histogram(data_real, data_sim, n_bins=30, n_real_feat = 0,
 
     f, ax = plt.subplots(1, 1)
     f.set_size_inches(9, 7)
-    f.suptitle('Correlation coefficient distribution histogram')
+    f.suptitle('Feature correlation coefficient distribution histogram')
     bins = np.linspace(min(np.min(corr_real), np.min(corr_sim)), 
                        max(np.max(corr_real), np.max(corr_sim)), n_bins)
     
