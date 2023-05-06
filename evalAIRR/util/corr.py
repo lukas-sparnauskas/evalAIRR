@@ -22,13 +22,13 @@ def export_corr_heatmap(data_real, data_sim, n_real_feat = 0, n_sim_feat = 0, re
         print('[WARNING] CORR: reduce_to_n_features not provided and dimensionality reduction will not be applied. This may result in very long calculation times.')
 
     print('[LOG] CORR: Calculating correlation matrices')
-    corr_real = np.corrcoef(data_real)
-    corr_sim = np.corrcoef(data_sim)
+    corr_real = np.corrcoef(data_real, rowvar=False)
+    corr_sim = np.corrcoef(data_sim, rowvar=False)
 
     diff_corrs = pd.DataFrame(corr_real).sub(corr_sim).abs()
 
     if with_ml_sim:
-        corr_ML = np.corrcoef(data_ML)
+        corr_ML = np.corrcoef(data_ML, rowvar=False)
         diff_corrs_ML = pd.DataFrame(corr_ML).sub(corr_sim).abs()
 
     print('[LOG] CORR: Displaying correlation heatmaps')
@@ -67,8 +67,8 @@ def export_corr_heatmap(data_real, data_sim, n_real_feat = 0, n_sim_feat = 0, re
     plt.close()
 
 def export_csv_corr_matrix(data_real, data_sim, output):
-    corr_real = np.corrcoef(data_real)
-    corr_sim = np.corrcoef(data_sim)
+    corr_real = np.corrcoef(data_real, rowvar=False)
+    corr_sim = np.corrcoef(data_sim, rowvar=False)
     diff_corrs = pd.DataFrame(corr_real).sub(corr_sim).abs()
     diff_corrs = np.array(diff_corrs)
     if output:

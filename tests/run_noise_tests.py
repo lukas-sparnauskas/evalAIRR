@@ -1,3 +1,4 @@
+import time
 import math
 import subprocess
 import numpy as np
@@ -10,6 +11,8 @@ rate_of_features = 0
 rate_of_feature_noise = 0
 rate_of_observations = 0.2
 rate_of_observation_noise = 0.3
+
+start_time = time.time()
 
 #region FUNCTIONS
 def read_encoded_csv(csv_path):
@@ -81,4 +84,5 @@ export_csv(output_file_name, orig_features, orig_data)
 export_csv(output_noise_file_name, orig_features, noise_data)
 print(f'[LOG] RUNNING EVALAIRR')
 subprocess.run(f'sudo evalairr -i /home/mint/masters/data/noise_data/main_config.yaml', shell=True)
+print(f'[LOG] EXECUTION TIME {(time.time() - start_time) / 60} m')
 #endregion
