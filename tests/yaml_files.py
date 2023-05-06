@@ -218,6 +218,7 @@ reports:
     observation_jensen_shannon:
       output: /home/mint/masters/data/noise_data/results/jenshan_obs.csv
     pca_2d:
+      transpose: True
 output:
   path: /home/mint/masters/data/noise_data/results/report_{run}.html
 '''
