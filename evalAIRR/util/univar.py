@@ -155,6 +155,8 @@ def export_distr_histogram(feature, data_R, data_S, features_R, features_S, n_bi
     f.set_size_inches(9, 7)
     f.suptitle(f'Distribution histograms of feature {feature}')
     ax.hist([data_R_f, data_S_f], bins, label=['Real dataset', 'Simulated dataset'])
+    ax.set_xlabel('Correlation coefficient')
+    ax.set_ylabel('Density')
     ax.legend(loc='upper right')
     
     f.savefig(f'./output/temp_figures/histogram_{feature}_{int(time.time())}.svg')
