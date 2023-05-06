@@ -284,6 +284,10 @@ def run():
         # PCA 2D REPORT
         if ('pca_2d' in reports_g):
             try:
+                transpose = reports_g['pca_2d']['transpose']
+            except: 
+                transpose = False
+            try:
                 with_ml_sim = reports_g['pca_2d']['with_ml_sim']
             except: 
                 with_ml_sim = False
@@ -291,7 +295,7 @@ def run():
                 ml_random_state = reports_g['pca_2d']['ml_random_state']
             except: 
                 ml_random_state = None
-            export_pca_2d_comparison(data_R, data_S, with_ml_sim, ml_random_state)
+            export_pca_2d_comparison(data_R, data_S, transpose, with_ml_sim, ml_random_state)
 
         # FEATURE MEAN VALUE VS VARIANCE REPORT
         if ('feature_mean_vs_variance' in reports_g):

@@ -109,6 +109,8 @@ def export_corr_distr_histogram(data_real, data_sim, n_bins=30, n_real_feat = 0,
                 bins, 
                 label=['Real dataset', 'Simulated dataset'])
         
+    ax.set_xlabel('Feature correlation coefficient')
+    ax.set_ylabel('Density')
     ax.legend(loc='upper right')
     f.savefig(f'./output/temp_figures/corr_hist_{int(time.time())}.svg')
     del f

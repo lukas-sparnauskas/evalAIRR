@@ -199,3 +199,25 @@ reports:
 output:
   path: NONE
   '''
+  
+def noisetest_evalairr_spec(run):
+  return f'''datasets:
+  real:
+    path: /home/mint/masters/data/noise_data/original_unmodified.csv
+  sim:
+    path: /home/mint/masters/data/noise_data/with_noise.csv
+reports:
+  general:
+    corr_hist:
+    ks_feat:
+      output: /home/mint/masters/data/noise_data/results/ks_feat.csv
+    ks_obs:
+      output: /home/mint/masters/data/noise_data/results/ks_obs.csv
+    jensen_shannon:
+      output: /home/mint/masters/data/noise_data/results/jenshan_feat.csv
+    observation_jensen_shannon:
+      output: /home/mint/masters/data/noise_data/results/jenshan_obs.csv
+    pca_2d:
+output:
+  path: /home/mint/masters/data/noise_data/results/report_{run}.html
+'''

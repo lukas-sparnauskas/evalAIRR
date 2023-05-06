@@ -14,9 +14,9 @@ def pca(A,m):
     pca.fit(A)
     return pca.components_, pca.transform(A)
 
-def export_pca_2d_comparison(data_real, data_sim, with_ml_sim = False, ml_random_state = None):
-    components_R, pca_R = pca(data_real, 2)
-    components_S, pca_S = pca(data_sim, 2)
+def export_pca_2d_comparison(data_real, data_sim, transpose = False, with_ml_sim = False, ml_random_state = None):
+    components_R, pca_R = pca(data_real.T if transpose else data_real, 2)
+    components_S, pca_S = pca(data_sim.T if transpose else data_sim, 2)
 
     pc_R_x = np.linspace(min(pca_R[:, 0]), max(pca_R[:, 0]), 1000)
     pc_R_y = components_R[1][0] / components_R[0][0] * pc_R_x

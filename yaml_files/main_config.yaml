@@ -62,6 +62,7 @@ reports:
       ml_random_state: 0
       reduce_to_n_features: 150
     pca_2d:
+      transpose: False
       with_ml_sim: True
       ml_random_state: 0
     corr_csv:
