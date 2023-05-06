@@ -26,6 +26,8 @@ run_names = [
 
 final_ks_feat = dict()
 final_ks_obs = dict()
+final_dist_feat = dict()
+final_dist_obs = dict()
 final_jenshan_feat = dict()
 final_jenshan_obs = dict()
 
@@ -111,6 +113,10 @@ for run in range(runs):
         final_ks_feat[run] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
     with open(f'/home/mint/masters/data/noise_data/results/ks_obs.csv', 'r') as file:
         final_ks_obs[run] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
+    with open(f'/home/mint/masters/data/noise_data/results/dist_feat.csv', 'r') as file:
+        final_dist_feat[run] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
+    with open(f'/home/mint/masters/data/noise_data/results/dist_obs.csv', 'r') as file:
+        final_dist_obs[run] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
     with open(f'/home/mint/masters/data/noise_data/results/jenshan_feat.csv', 'r') as file:
         final_jenshan_feat[run] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
     with open(f'/home/mint/masters/data/noise_data/results/jenshan_obs.csv', 'r') as file:
@@ -139,6 +145,14 @@ draw_kdeplot(final_ks_obs,
              'Distribution of observation KS statistic for original and noisy datasets', 
              'Observation Kolmogorov-Smirnov statistic', 
              'ks_obs.png', 0)
+draw_kdeplot(final_dist_feat, 
+             'Distribution of Euclidean distance between features\nin the original and noisy datasets', 
+             'Euclidean distance between features', 
+             'dist_feat.png')
+draw_kdeplot(final_dist_obs, 
+             'Distribution of Euclidean distance between observations\nin the original and noisy datasets', 
+             'Euclidean distance between observations', 
+             'dist_obs.png')
 draw_kdeplot(final_jenshan_feat, 
              'Distribution of feature Jensen-Shannon divergence for original and noisy datasets', 
              'Feature Jensen-Shannon divergence', 
