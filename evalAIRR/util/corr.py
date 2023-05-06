@@ -94,15 +94,20 @@ def export_corr_distr_histogram(data_real, data_sim, n_bins=30, n_real_feat = 0,
     f.suptitle('Correlation coefficient distribution histogram')
     bins = np.linspace(min(np.min(corr_real), np.min(corr_sim)), 
                        max(np.max(corr_real), np.max(corr_sim)), n_bins)
+    
+    print('np.squeeze(corr_real).shape: ', np.squeeze(corr_real).shape)
+    print('np.squeeze(corr_sim).shape: ', np.squeeze(corr_sim).shape)
     if with_ml_sim:
-        ax.hist([corr_real.squeeze(), 
-                 corr_sim.squeeze(), 
-                 corr_ML.squeeze()], bins, label=['Real dataset', 
-                                                  'Simulated dataset', 
-                                                  'ML generated dataset'])
+        ax.hist([np.squeeze(corr_real), 
+                 np.squeeze(corr_sim), 
+                 np.squeeze(corr_ML)], 
+                bins, 
+                label=['Real dataset',
+                       'Simulated dataset', 
+                       'ML generated dataset'])
     else:
-        ax.hist([corr_real.squeeze(), 
-                 corr_sim.squeeze()], 
+        ax.hist([np.squeeze(corr_real), 
+                 np.squeeze(corr_sim)], 
                 bins, 
                 label=['Real dataset', 'Simulated dataset'])
         
