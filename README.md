@@ -102,6 +102,7 @@ Additional parameters: `with_ml_sim` - optional parameter, which if True, instru
 - <b>`feature_mean_vs_variance`</b> - a scatter plot that displays the mean value of every feature on one axis and the variance of every feature on the other axis. Parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
 - <b>`observation_mean_vs_variance`</b> - a scatter plot that displays the mean value of every observation on one axis and the variance of every observation on the other axis. Parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
 - <b>`corr`</b> - correlation matrix heatmaps of the real and simulated datasets. Parameters: `reduce_to_n_features` - an optional parameter for dimensionality reduction using PCA. The number of features to reduce the dataset to (must be reduce_to_n_features < min(n_observations, n_features)). `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
+- <b>`corr_hist`</b> - correlation matrix distribution histogram for the real and simulated datasets. Parameters: `n_bins` - an optional parameter that sets the number of bins in the histogram (default value is 30). `reduce_to_n_features` - an optional parameter for dimensionality reduction using PCA. The number of features to reduce the dataset to (must be reduce_to_n_features < min(n_observations, n_features)). `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
 - <b>`corr_csv`</b> - CSV file exporting of the difference between correlation matrices of the real and simulated datasets. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/corr.csv`).
 - <b>`pca_2d`</b> - two scatter plots with both datasets reduced to two dimensions using PCA. Parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
 - <b>`distance`</b> - Euclidean distance between the real and simulated features. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/dist.csv`).
@@ -163,6 +164,11 @@ reports:
     observation_mean_vs_variance:
       with_ml_sim: True
       ml_random_state: 0
+    corr_hist:
+      n_bins: 30
+      with_ml_sim: True
+      ml_random_state: 0
+      reduce_to_n_features: 150
     corr:
       reduce_to_n_features: 150
       with_ml_sim: True
