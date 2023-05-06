@@ -1,5 +1,6 @@
 import time
 import numpy as np
+import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -24,11 +25,11 @@ def export_corr_heatmap(data_real, data_sim, n_real_feat = 0, n_sim_feat = 0, re
     corr_real = np.corrcoef(data_real)
     corr_sim = np.corrcoef(data_sim)
 
-    diff_corrs = corr_real.sub(corr_sim).abs()
+    diff_corrs = pd.DataFrame(corr_real).sub(corr_sim).abs()
 
     if with_ml_sim:
         corr_ML = np.corrcoef(data_ML)
-        diff_corrs_ML = corr_ML.sub(corr_sim).abs()
+        diff_corrs_ML = pd.DataFrame(corr_ML).sub(corr_sim).abs()
 
     print('[LOG] CORR: Displaying correlation heatmaps')
     if with_ml_sim:
@@ -68,7 +69,7 @@ def export_corr_heatmap(data_real, data_sim, n_real_feat = 0, n_sim_feat = 0, re
 def export_csv_corr_matrix(data_real, data_sim, output):
     corr_real = np.corrcoef(data_real)
     corr_sim = np.corrcoef(data_sim)
-    diff_corrs = corr_real.sub(corr_sim).abs()
+    diff_corrs = pd.DataFrame(corr_real).sub(corr_sim).abs()
     diff_corrs = np.array(diff_corrs)
     if output:
         try:
