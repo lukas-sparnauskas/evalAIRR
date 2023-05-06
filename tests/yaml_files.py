@@ -70,6 +70,34 @@ reports:
 output:
   path: NONE
   '''
+  
+def evalairr_preencoded_spec(data_folder, run, timestamp):
+  return f'''datasets:
+  real:
+    path: \"/home/mint/masters/data/immunemldata/{data_folder}/expl_analysis_instruction/analysis_real/report/design_matrix.csv\"
+  sim:
+    path: \"/home/mint/masters/data/immunemldata/{data_folder}/expl_analysis_instruction/analysis_sim/report/design_matrix.csv\"
+reports:
+  general:
+    ks_feat:
+      output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/ks_feat.csv\"
+    ks_obs:
+      output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/ks_obs.csv\"
+    statistics:
+      output_dir: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/\"
+    observation_statistics:
+      output_dir: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/\"
+    distance:
+      output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/dist.csv\"
+    observation_distance:
+      output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/dist_obs.csv\"
+    jensen_shannon:
+      output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/jenshan.csv\"
+    observation_jensen_shannon:
+      output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/jenshan_obs.csv\"
+output:
+  path: NONE
+  '''
 
 def threshold_test_immuneml_spec(run, timestamp):
   return f'''definitions:

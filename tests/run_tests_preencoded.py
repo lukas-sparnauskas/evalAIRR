@@ -8,11 +8,11 @@ import seaborn as sns
 import colorcet as cc
 import matplotlib.pyplot as plt
 
-from yaml_files import immuneml_spec, evalairr_spec
+from yaml_files import evalairr_preencoded_spec
 
-max_reps = 200
-max_seqs = 100000
 n_runs = 10
+folder_index = 10
+
 thresholds = {
     # PERCENTILES: 80th, 90th, 95th, 99th
     'ks_feat_pval': [0.006, 0.328, 0.713, 0.965],
@@ -34,85 +34,21 @@ run_timestamp = int(time.time()) - 1
 timestamps = []
 start_time = time.time()
 
+data_list = sorted(os.listdir('/home/mint/masters/data/immunemldata/'))
+print('[LOG] RUNNING WITH PREENCODED FILES:', data_list[folder_index:folder_index+10])
 for n in range(0, n_runs):
     print(f'[LOG] RUNNING ITERATION {n+1}/{n_runs}')
+    data_folder = data_list[folder_index]
+    folder_index += 1
     output_timestamp = int(time.time())
-    random_n = rnd.randint(1, 9)
-    min_n_seq = sys.maxsize
-
     timestamps.append(str(output_timestamp))
-    
-    ### CREATE METADATA FILES
-    
-    print(f'[LOG] CREATING METADATA FILES')
-    real_data_list = os.listdir('/home/mint/masters/data/real_data/repertoires/')
-    sim_data_list = os.listdir(f'/home/mint/masters/data/sim_data/{random_n}/simulated_repertoires/')
-    rnd.shuffle(real_data_list)
-    rnd.shuffle(sim_data_list)
-    n_reps = min(max_reps, len(real_data_list), len(sim_data_list))
-    
-    real_data_list = np.array(real_data_list, dtype=str)[:n_reps]
-    with open(f'/home/mint/masters/data/real_data/metadata_{output_timestamp}.csv', 'w') as file:
-        file.write('filename,subject_id\n')
-        for r in real_data_list:
-            subject_id = r.replace('.tsv', '')
-            file.write(f'{r},{subject_id}\n')
-            
-            data = open(f'/home/mint/masters/data/real_data/repertoires/{r}', 'r')
-            data_rows = data.readlines()
-            if len(data_rows) - 1 < min_n_seq:
-                min_n_seq = len(data_rows) - 1
-            del data_rows
-            data.close()
-            
-    sim_data_list = np.array(sim_data_list, dtype=str)[:n_reps]
-    with open(f'/home/mint/masters/data/sim_data/metadata_{run_timestamp}_{output_timestamp}.csv', 'w') as file:
-        file.write('filename,subject_id\n')
-        for r in sim_data_list:
-            subject_id = r.replace('.tsv', '')
-            file.write(f'{r},{subject_id}\n')
-            
-            data = open(f'/home/mint/masters/data/sim_data/{random_n}/simulated_repertoires/{r}', 'r')
-            data_rows = data.readlines()
-            if len(data_rows) < min_n_seq:
-                min_n_seq = len(data_rows)
-            del data_rows
-            data.close()
-            
-    ### CREATE TEMP DATA FILES
-    
-    print(f'[LOG] CREATING TEMP DATA FILES')
-    subprocess.run(f'sudo rm -r /home/mint/masters/data/real_data/temp', shell=True)
-    subprocess.run(f'sudo rm -r /home/mint/masters/data/sim_data/temp', shell=True)
-    subprocess.run(f'sudo mkdir /home/mint/masters/data/real_data/temp', shell=True)
-    subprocess.run(f'sudo mkdir /home/mint/masters/data/sim_data/temp', shell=True)
-    n_seq = min(max_seqs, min_n_seq)
-    for r in real_data_list:
-        source = open(f'/home/mint/masters/data/real_data/repertoires/{r}', 'r')
-        rows = [next(source) for _ in range(n_seq + 1)]
-        with open(f'/home/mint/masters/data/real_data/temp/{r}', 'w') as target:
-            target.writelines(rows)
-        source.close()
-        
-    for r in sim_data_list:
-        source = open(f'/home/mint/masters/data/sim_data/{random_n}/simulated_repertoires/{r}', 'r')
-        rows = [next(source) for _ in range(n_seq)]
-        with open(f'/home/mint/masters/data/sim_data/temp/{r}', 'w') as target:
-            target.writelines(rows)
-        source.close()
-    
-    ### RUN IMMUNEML ENCODING
-    
-    print(f'[LOG] RUNNING IMMUNEML ENCODING')
-    subprocess.run(f'sudo echo \"{immuneml_spec(run_timestamp, output_timestamp)}\" > /home/mint/masters/data/immunemldata/yaml_files/immuneml_spec_{output_timestamp}.yaml', shell=True)
-    subprocess.run(f'sudo docker run -it -v /home/mint/masters/data:/data milenapavlovic/immuneml:sha-5de9c51 immune-ml /data/immunemldata/yaml_files/immuneml_spec_{output_timestamp}.yaml /data/immunemldata/output_{output_timestamp}/', shell=True)
     
     ### RUN EVALAIRR
     
     print(f'[LOG] RUNNING EVALAIRR')
     subprocess.run(f'sudo mkdir /home/mint/masters/data/evalairrdata/run_{run_timestamp}', shell=True)
     subprocess.run(f'sudo mkdir /home/mint/masters/data/evalairrdata/run_{run_timestamp}/results_{output_timestamp}/', shell=True)
-    subprocess.run(f'echo \"{evalairr_spec(run_timestamp, output_timestamp)}\" > /home/mint/masters/data/evalairrdata/yaml_files/main_yaml_{output_timestamp}.yaml', shell=True)
+    subprocess.run(f'echo \"{evalairr_preencoded_spec(data_folder, run_timestamp, output_timestamp)}\" > /home/mint/masters/data/evalairrdata/yaml_files/main_yaml_{output_timestamp}.yaml', shell=True)
     subprocess.run(f'sudo evalairr -i /home/mint/masters/data/evalairrdata/yaml_files/main_yaml_{output_timestamp}.yaml', shell=True)
 
 ################
@@ -155,20 +91,20 @@ for t in timestamps:
 final_stat = dict()
 final_stat_obs = dict()
 t_results = {
-    'ks_feat': [],
-    'ks_feat_pval': [],
-    'ks_obs': [],
-    'ks_obs_pval': [],
-    'dist': [],
-    'dist_obs': [],
-    'mean': [],
-    'mean_obs': [],
-    'median': [],
-    'median_obs': [],
-    'var': [],
-    'var_obs': [],
-    'jenshan': [],
-    'jenshan_obs': []
+    'ks_feat': [[], [], [], []],
+    'ks_feat_pval': [[], [], [], []],
+    'ks_obs': [[], [], [], []],
+    'ks_obs_pval': [[], [], [], []],
+    'dist': [[], [], [], []],
+    'dist_obs': [[], [], [], []],
+    'mean': [[], [], [], []],
+    'mean_obs': [[], [], [], []],
+    'median': [[], [], [], []],
+    'median_obs': [[], [], [], []],
+    'var': [[], [], [], []],
+    'var_obs': [[], [], [], []],
+    'jenshan': [[], [], [], []],
+    'jenshan_obs': [[], [], [], []]
 }
 
 def check_thresholds(p_idx):
