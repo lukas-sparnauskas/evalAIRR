@@ -3,6 +3,9 @@ import math
 import subprocess
 import numpy as np
 import random as rnd
+import seaborn as sns
+import colorcet as cc
+import matplotlib.pyplot as plt
 
 input_file_name = '/home/mint/masters/data/noise_data/original.csv'
 output_file_name = '/home/mint/masters/data/noise_data/original_unmodified.csv'
@@ -74,6 +77,20 @@ def export_csv(file_name, features, data):
         output_file.write(','.join(features) + '\n')
         for row in data:
             output_file.write(','.join([str(i) for i in row]) + '\n')
+            
+def draw_kskdeplot(ks_data, feat=True):
+    colours = sns.color_palette(cc.glasbey, 1).as_hex()
+    f, ax = plt.subplots(1, 1)
+    f.set_size_inches(9, 7)
+    title_subject = 'Feature' if feat else 'Observation'
+    f.suptitle(f'Distribution of {title_subject.lower()} KS statistic for the original and noisy datasets')
+    ax.set_xlabel(f'{title_subject} Kolmogorov-Smirnov statistic')
+    ax.set_ylabel('Density')
+    sns.kdeplot(ks_data[0].squeeze(), ax=ax, color=colours[0])
+    ax.legend()
+    f.savefig(f'/home/mint/masters/data/noise_data/results/ks_{title_subject}.png')
+    del f
+    plt.close()
 #endregion
 
 #region TEST EXECUTION
@@ -84,5 +101,18 @@ export_csv(output_file_name, orig_features, orig_data)
 export_csv(output_noise_file_name, orig_features, noise_data)
 print(f'[LOG] RUNNING EVALAIRR')
 subprocess.run(f'sudo evalairr -i /home/mint/masters/data/noise_data/main_config.yaml', shell=True)
+
+# READ KS FILES
+final_ks_feat = []
+final_ks_obs = []
+with open(f'/home/mint/masters/data/evalairrdata/noise_data/results/ks_feat.csv', 'r') as file:
+    final_ks_feat = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
+with open(f'/home/mint/masters/data/evalairrdata/noise_data/results/ks_obs.csv', 'r') as file:
+    final_ks_obs = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
+
+# DRAW KS PLOTS
+draw_kskdeplot(final_ks_feat)
+draw_kskdeplot(final_ks_obs, False)
+
 print(f'[LOG] EXECUTION TIME {(time.time() - start_time) / 60} m')
 #endregion
