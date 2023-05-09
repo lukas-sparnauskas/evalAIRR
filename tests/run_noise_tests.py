@@ -14,9 +14,9 @@ output_file_name = '/home/mint/masters/data/noise_data/original_unmodified.csv'
 output_noise_file_name = '/home/mint/masters/data/noise_data/with_noise.csv'
 runs = 4
 rate_of_features = [0.02, 0.3, 0, 0]
-rate_of_feature_noise = [0.03, 0.3, 0, 0]
+rate_of_feature_noise = [0.05, 0.3, 0, 0]
 rate_of_observations = [0, 0, 0.02, 0.3]
-rate_of_observation_noise = [0, 0, 0.03, 0.3]
+rate_of_observation_noise = [0, 0, 0.05, 0.3]
 run_names = [
     'Low-level noise to 2% of features',
     'High-level noise to 30% of features',
@@ -116,7 +116,7 @@ for run in range(runs):
     with open(f'/home/mint/masters/data/noise_data/results/jenshan_obs.csv', 'r') as file:
         final_jenshan_obs[run] = np.array([[float(val) for val in row.replace('\n', '').split(',')] for row in file.readlines()])
 
-def draw_kdeplot(data, title, xlabel, file_name, stat=None):
+def draw_kdeplot(data, title, xlabel, file_name, stat=None, xbound=None):
     colours = sns.color_palette(cc.glasbey, runs).as_hex()
     f, ax = plt.subplots(1, 1)
     f.set_size_inches(9, 7)
@@ -124,7 +124,9 @@ def draw_kdeplot(data, title, xlabel, file_name, stat=None):
     ax.set_xlabel(xlabel)
     ax.set_ylabel('Density')
     for run in range(runs):
-        sns.displot(data[run].squeeze() if stat is None else data[run][stat].squeeze(), ax=ax, color=colours[run], label=run_names[run], bw_adjust=.25)
+        sns.kdeplot(data[run].squeeze() if stat is None else data[run][stat].squeeze(), ax=ax, color=colours[run], label=run_names[run], bw_adjust=2)
+    if xbound != None:
+        ax.set_xbound(xbound[0], xbound[1])
     ax.legend()
     f.savefig(f'/home/mint/masters/data/noise_data/results/{file_name}')
     del f
@@ -134,19 +136,19 @@ def draw_kdeplot(data, title, xlabel, file_name, stat=None):
 draw_kdeplot(final_ks_feat,
              'Distribution of feature KS statistic for original and noisy datasets', 
              'Feature Kolmogorov-Smirnov statistic', 
-             'ks_feat.png', 0)
+             'ks_feat.png', 0, xbound=[-0.1, 0.5])
 draw_kdeplot(final_ks_obs, 
              'Distribution of observation KS statistic for original and noisy datasets', 
              'Observation Kolmogorov-Smirnov statistic', 
-             'ks_obs.png', 0)
+             'ks_obs.png', 0, xbound=[-0.05, 0.4])
 draw_kdeplot(final_jenshan_feat, 
              'Distribution of feature Jensen-Shannon divergence for original and noisy datasets', 
              'Feature Jensen-Shannon divergence', 
-             'jenshan_feat.png')
+             'jenshan_feat.png', xbound=[-0.1, 1])
 draw_kdeplot(final_jenshan_obs, 
              'Distribution of observation Jensen-Shannon divergence for original and noisy datasets', 
              'Observation Jensen-Shannon divergence', 
-             'jenshan_obs.png')
+             'jenshan_obs.png', xbound=[-0.01, 0.55])
 
 print(f'[LOG] EXECUTION TIME {(time.time() - start_time) / 60} m')
 #endregion

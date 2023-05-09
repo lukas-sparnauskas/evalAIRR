@@ -67,8 +67,9 @@ reports:
       output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/jenshan.csv\"
     observation_jensen_shannon:
       output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/jenshan_obs.csv\"
+    corr_feat_hist:
 output:
-  path: NONE
+  path: /home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/report.html
   '''
   
 def evalairr_preencoded_spec(data_folder, run, timestamp):
@@ -95,8 +96,9 @@ reports:
       output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/jenshan.csv\"
     observation_jensen_shannon:
       output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/jenshan_obs.csv\"
+    corr_feat_hist:
 output:
-  path: NONE
+  path: /home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/report.html
   '''
 
 def threshold_test_immuneml_spec(run, timestamp):
@@ -168,8 +170,9 @@ reports:
       output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/jenshan.csv\"
     observation_jensen_shannon:
       output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/jenshan_obs.csv\"
+    corr_feat_hist:
 output:
-  path: NONE
+  path: /home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/report.html
   '''
   
 def threshold_test_preencoded_evalairr_spec(data_folder, run, timestamp):
@@ -196,8 +199,9 @@ reports:
       output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/jenshan.csv\"
     observation_jensen_shannon:
       output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/jenshan_obs.csv\"
+    corr_feat_hist:
 output:
-  path: NONE
+  path: /home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/report.html
   '''
   
 def noisetest_evalairr_spec(run):
@@ -208,7 +212,7 @@ def noisetest_evalairr_spec(run):
     path: /home/mint/masters/data/noise_data/with_noise.csv
 reports:
   general:
-    corr_hist:
+    corr_obs_hist:
     ks_feat:
       output: /home/mint/masters/data/noise_data/results/ks_feat.csv
     ks_obs:

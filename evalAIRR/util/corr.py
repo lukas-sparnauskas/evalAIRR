@@ -66,8 +66,8 @@ def export_corr_heatmap(data_real, data_sim, n_real_feat = 0, n_sim_feat = 0, re
     del f
     plt.close()
     
-def export_corr_distr_histogram(data_real, data_sim, n_bins=30, n_real_feat = 0, n_sim_feat = 0, reduce_to_n_features = 0, with_ml_sim = False, ml_random_state = None):
-    print('[LOG] CORR: Exporting correlation distribution histogram')
+def export_corr_feat_distr_histogram(data_real, data_sim, n_bins=30, n_real_feat = 0, n_sim_feat = 0, reduce_to_n_features = 0, with_ml_sim = False, ml_random_state = None):
+    print('[LOG] CORR: Exporting feature correlation coefficient distribution histogram')
     if with_ml_sim:
         print('[LOG] CORR: Generating ML dataset')
         data_ML = ml_simulated_dataset(data_real, ml_random_state)
@@ -87,7 +87,7 @@ def export_corr_distr_histogram(data_real, data_sim, n_bins=30, n_real_feat = 0,
     if with_ml_sim:
         corr_ML = np.corrcoef(data_ML, rowvar=False)
 
-    print('[LOG] CORR: Displaying correlation distribution histogram')
+    print('[LOG] CORR: Displaying feature correlation coefficient distribution histogram')
 
     f, ax = plt.subplots(1, 1)
     f.set_size_inches(9, 7)
@@ -112,7 +112,59 @@ def export_corr_distr_histogram(data_real, data_sim, n_bins=30, n_real_feat = 0,
     ax.set_xlabel('Feature correlation coefficient')
     ax.set_ylabel('Density')
     ax.legend(loc='upper right')
-    f.savefig(f'./output/temp_figures/corr_hist_{int(time.time())}.svg')
+    f.savefig(f'./output/temp_figures/corr_feat_hist_{int(time.time())}.svg')
+    del f
+    plt.close()
+    
+def export_corr_obs_distr_histogram(data_real, data_sim, n_bins=30, n_real_obs = 0, n_sim_obs = 0, reduce_to_n_obs = 0, with_ml_sim = False, ml_random_state = None):
+    print('[LOG] CORR: Exporting observation correlation coefficient distribution histogram')
+    data_real = data_real.T
+    data_sim = data_sim.T
+    if with_ml_sim:
+        print('[LOG] CORR: Generating ML dataset')
+        data_ML = ml_simulated_dataset(data_real, ml_random_state)
+    if n_real_obs != 0 and n_sim_obs != 0 and reduce_to_n_obs != 0:
+        print('[LOG] CORR: Reducing dimentions using PCA')
+        _, data_real = pca(data_real, reduce_to_n_obs)
+        _, data_sim = pca(data_sim, reduce_to_n_obs)
+        if with_ml_sim:
+            _, data_ML = pca(data_ML, reduce_to_n_obs)
+    if reduce_to_n_obs == 0:
+        print('[WARNING] CORR: reduce_to_n_obs not provided and dimensionality reduction will not be applied. This may result in very long calculation times.')
+
+    print('[LOG] CORR: Calculating correlation matrices')
+    corr_real = np.corrcoef(data_real, rowvar=False)
+    corr_sim = np.corrcoef(data_sim, rowvar=False)
+
+    if with_ml_sim:
+        corr_ML = np.corrcoef(data_ML, rowvar=False)
+
+    print('[LOG] CORR: Displaying observation correlation coefficient distribution histogram')
+
+    f, ax = plt.subplots(1, 1)
+    f.set_size_inches(9, 7)
+    f.suptitle('Observation correlation coefficient distribution histogram')
+    bins = np.linspace(min(np.min(corr_real), np.min(corr_sim)), 
+                       max(np.max(corr_real), np.max(corr_sim)), n_bins)
+    
+    if with_ml_sim:
+        ax.hist([corr_real.ravel(), 
+                 corr_sim.ravel(), 
+                 corr_ML.ravel()], 
+                bins, 
+                label=['Real dataset',
+                       'Simulated dataset', 
+                       'ML generated dataset'])
+    else:
+        ax.hist([corr_real.ravel(), 
+                 corr_sim.ravel()], 
+                bins, 
+                label=['Real dataset', 'Simulated dataset'])
+        
+    ax.set_xlabel('Observation correlation coefficient')
+    ax.set_ylabel('Density')
+    ax.legend(loc='upper right')
+    f.savefig(f'./output/temp_figures/corr_obs_hist_{int(time.time())}.svg')
     del f
     plt.close()
 

@@ -56,11 +56,16 @@ reports:
       with_ml_sim: True
       ml_random_state: 0
       reduce_to_n_features: 150
-    corr_hist:
+    corr_feat_hist:
       n_bins: 30
       with_ml_sim: True
       ml_random_state: 0
       reduce_to_n_features: 150
+    corr_obs_hist:
+      n_bins: 30
+      with_ml_sim: True
+      ml_random_state: 0
+      reduce_to_n_obs: 150
     pca_2d_feat:
       with_ml_sim: True
       ml_random_state: 0

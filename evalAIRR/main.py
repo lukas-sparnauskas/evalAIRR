@@ -4,7 +4,8 @@ import argparse
 
 from evalAIRR.version import __version__
 from evalAIRR.util.input import read_encoded_csv, remove_non_mutual_features
-from evalAIRR.util.corr import export_corr_heatmap, export_corr_distr_histogram, export_csv_corr_matrix
+from evalAIRR.util.corr import export_corr_heatmap, export_csv_corr_matrix
+from evalAIRR.util.corr import export_corr_feat_distr_histogram, export_corr_obs_distr_histogram
 from evalAIRR.util.pca import export_pca_2d_comparison
 from evalAIRR.util.univar import export_ks_test_of_feature, export_ks_test_of_observation
 from evalAIRR.util.univar import export_ks_test_all_features, export_ks_test_all_observations
@@ -253,25 +254,45 @@ def run():
                 ml_random_state = None
             export_corr_heatmap(data_R, data_S, len(features_R), len(features_S), reduce_to_n_features, with_ml_sim, ml_random_state)
 
-        # CORRELATION COEFFICIENT DISTRIBUTION HISTOGRAM REPORT
-        if ('corr_hist' in reports_g):
+        # FEATURE CORRELATION COEFFICIENT DISTRIBUTION HISTOGRAM REPORT
+        if ('corr_feat_hist' in reports_g):
             try:
-                n_bins = reports_g['corr_hist']['n_bins']
+                n_bins = reports_g['corr_feat_hist']['n_bins']
             except: 
                 n_bins = 30
             try:
-                reduce_to_n_features = reports_g['corr_hist']['reduce_to_n_features']
+                reduce_to_n_features = reports_g['corr_feat_hist']['reduce_to_n_features']
             except: 
                 reduce_to_n_features = 0
             try:
-                with_ml_sim = reports_g['corr_hist']['with_ml_sim']
+                with_ml_sim = reports_g['corr_feat_hist']['with_ml_sim']
             except: 
                 with_ml_sim = False
             try:
-                ml_random_state = reports_g['corr_hist']['ml_random_state']
+                ml_random_state = reports_g['corr_feat_hist']['ml_random_state']
             except: 
                 ml_random_state = None
-            export_corr_distr_histogram(data_R, data_S, n_bins, len(features_R), len(features_S), reduce_to_n_features, with_ml_sim, ml_random_state)
+            export_corr_feat_distr_histogram(data_R, data_S, n_bins, len(features_R), len(features_S), reduce_to_n_features, with_ml_sim, ml_random_state)
+
+        # OBSERVATION CORRELATION COEFFICIENT DISTRIBUTION HISTOGRAM REPORT
+        if ('corr_obs_hist' in reports_g):
+            try:
+                n_bins = reports_g['corr_obs_hist']['n_bins']
+            except: 
+                n_bins = 30
+            try:
+                reduce_to_n_obs = reports_g['corr_obs_hist']['reduce_to_n_obs']
+            except: 
+                reduce_to_n_obs = 0
+            try:
+                with_ml_sim = reports_g['corr_obs_hist']['with_ml_sim']
+            except: 
+                with_ml_sim = False
+            try:
+                ml_random_state = reports_g['corr_obs_hist']['ml_random_state']
+            except: 
+                ml_random_state = None
+            export_corr_obs_distr_histogram(data_R, data_S, n_bins, len(data_R), len(data_S), reduce_to_n_obs, with_ml_sim, ml_random_state)
 
         # CORRELATION MATRIX CSV EXPORT
         if ('corr_csv' in reports_g):

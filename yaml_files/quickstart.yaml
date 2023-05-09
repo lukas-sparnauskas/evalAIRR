@@ -25,5 +25,7 @@ reports:
     observation_mean_vs_variance:
     pca_2d_feat:
     pca_2d_obs:
+    corr_feat_hist:
+    corr_obs_hist:
 output:
   path: "./output/report.html"
