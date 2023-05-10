@@ -1,8 +1,8 @@
 datasets:
   real:
-    path: /home/mint/masters/evalAIRR/data/real_data.csv
+    path: ./data/real_data.csv
   sim:
-    path: /home/mint/masters/evalAIRR/data/sim_data.csv
+    path: ./data/sim_data.csv
 reports:
   feature_based:
     report1:
@@ -57,4 +57,4 @@ reports:
     pca_2d_feat:
     pca_2d_obs:
 output:
-  path: /home/mint/masters/output/report.html
+  path: ./output/report.html

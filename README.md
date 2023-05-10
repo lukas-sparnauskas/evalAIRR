@@ -161,8 +161,6 @@ reports:
         - all
       report_types:
         - distr_densityplot
-      with_ml_sim: True
-      ml_random_state: 0
   general:
     copula_2d:
       report1:
@@ -174,26 +172,17 @@ reports:
         - ASC
         - ASA
     feat_mean_vs_variance:
-      with_ml_sim: True
-      ml_random_state: 0
     obs_mean_vs_variance:
-      with_ml_sim: True
-      ml_random_state: 0
-    corr_hist:
-      n_bins: 30
-      with_ml_sim: True
-      ml_random_state: 0
-      reduce_to_n_features: 200
     corr:
-      reduce_to_n_features: 200
+      reduce_to_n_features: 150
+    corr_feat_hist:
+      n_bins: 30
+    corr_obs_hist:
+      n_bins: 20
       with_ml_sim: True
       ml_random_state: 0
     pca_2d_feat:
-      with_ml_sim: True
-      ml_random_state: 0
     pca_2d_obs:
-      with_ml_sim: True
-      ml_random_state: 0
     corr_csv:
       output: ./output/corr.csv
     ks_feat:
