@@ -32,8 +32,8 @@ reports:
   feature_based:
     report1:
       features:
-        - CAS
-        - SAS
+        - AST
+        - ASC
       report_types:
         - ks
         - distr_densityplot
@@ -56,7 +56,7 @@ output:
   path: ./output/report.html
 ```
 
-This report will process the two provided datasets (real and simulated) with encoded kmer data, and create an HTML report with multiple report types. These include feature-based report types - Kolmogorov–Smirnov test (indicated by report type `ks`), a feature distribution density plot (indicated by report type `distr_densityplot`), Euclidean distance measures (indicated by report type `distance`) and descriptive statistics (mean, median, variance and standard deviation)(indicated by report type `statistics`) for the features `CAS` and `SAS`. It will then export the report to the path `./output/report.html`. It will also create an observation-based report with the feature distribution density plot (indicated by report type `distr_densityplot`) for all observations (indicated by keyword `all` in the observation list). Finally, these general reports will be generated: feature mean compared with feature variance (indicated by report type `feat_mean_vs_variance`), observation mean compared with observation variance (indicated by report type `obs_mean_vs_variance`), two dimensional representation of all features using PCA (indicated by report type `pca_2d_feat`), two dimensional representation of all observations using PCA (indicated by report type `pca_2d_obs`), feature correlation coefficient distribution histogram (indicated by report type `corr_feat_hist`) and an observation correlation coefficient distribution histogram (indicated by report type `corr_obs_hist`). More details on what reports can be created can be found in the _YAML Configuration Guidelines_ section.
+This report will process the two provided datasets (real and simulated) with encoded kmer data, and create an HTML report with multiple report types. These include feature-based report types - Kolmogorov–Smirnov test (indicated by report type `ks`), a feature distribution density plot (indicated by report type `distr_densityplot`), Euclidean distance measures (indicated by report type `distance`) and descriptive statistics (mean, median, variance and standard deviation)(indicated by report type `statistics`) for the features `AST` and `ASC`. It will then export the report to the path `./output/report.html`. It will also create an observation-based report with the feature distribution density plot (indicated by report type `distr_densityplot`) for all observations (indicated by keyword `all` in the observation list). Finally, these general reports will be generated: feature mean compared with feature variance (indicated by report type `feat_mean_vs_variance`), observation mean compared with observation variance (indicated by report type `obs_mean_vs_variance`), two dimensional representation of all features using PCA (indicated by report type `pca_2d_feat`), two dimensional representation of all observations using PCA (indicated by report type `pca_2d_obs`), feature correlation coefficient distribution histogram (indicated by report type `corr_feat_hist`) and an observation correlation coefficient distribution histogram (indicated by report type `corr_obs_hist`). More details on what reports can be created can be found in the _YAML Configuration Guidelines_ section.
 
 The repository contains sample datafiles and a quickstart YAML configuration files. You can clone the repository and run evalAIRR within it to use sample data.
 
@@ -134,8 +134,8 @@ reports:
   feature_based:
     report1:
       features:
-        - CAS
-        - SAS
+        - AST
+        - ASC
       report_types:
         - ks
         - distr_histogram
@@ -166,13 +166,13 @@ reports:
   general:
     copula_2d:
       report1:
-        - CAS
-        - SAS
+        - AST
+        - ASC
     copula_3d:
       report1:
-        - CAS
-        - SAS
-        - TGT
+        - AST
+        - ASC
+        - ASA
     feat_mean_vs_variance:
       with_ml_sim: True
       ml_random_state: 0

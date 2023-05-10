@@ -7,8 +7,8 @@ reports:
   feature_based:
     report1:
       features:
-        - CAS
-        - SAS
+        - AST
+        - ASC
       report_types:
         - ks
         - distr_densityplot

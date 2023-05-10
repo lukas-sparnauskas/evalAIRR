@@ -7,8 +7,8 @@ reports:
   feature_based:
     report1:
       features:
-        - CAS
-        - SAS
+        - AST
+        - ASC
       report_types:
         - ks
         - distr_histogram
@@ -37,13 +37,13 @@ reports:
   general:
     copula_2d:
       report1:
-        - CAS
-        - SAS
+        - AST
+        - ASC
     copula_3d:
       report1:
-        - CAS
-        - SAS
-        - TGT
+        - AST
+        - ASC
+        - ASA
     feat_mean_vs_variance:
     obs_mean_vs_variance:
     corr:
