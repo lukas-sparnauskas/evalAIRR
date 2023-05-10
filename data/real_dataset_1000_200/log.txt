@@ -1,4 +1,0 @@
-2022-10-30 15:59:52,180: INFO: Validation of user-supplied parameter specification completed.
-2022-10-30 15:59:52,180: INFO: Starting the execution of desired workflow: baseline_repertoire_generation
-2022-10-30 15:59:52,180: INFO: Generating baseline repertoires with the following parameters --- {'model': 'humanTRB', 'output_file_path': '/home/mint/Desktop/masters/simAIRR_evaluation/data/real_dataset_1000_200/baseline_repertoires', 'n_seq': 1000, 'seed': 3906, 'n_reps': 200, 'n_threads': 1}
-2022-10-30 16:03:39,157: INFO: simAIRR workflow execution completed.

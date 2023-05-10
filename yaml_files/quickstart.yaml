@@ -1,14 +1,14 @@
 datasets:
   real:
-    path: ./data/encoded_real_1000_200.csv
+    path: ./data/real_data.csv
   sim:
-    path: ./data/encoded_sim_1000_200.csv
+    path: ./data/sim_data.csv
 reports:
   feature_based:
     report1:
       features:
-        - TGT
-        - ANV
+        - CAS
+        - SAS
       report_types:
         - ks
         - distr_densityplot
@@ -19,13 +19,13 @@ reports:
       observations:
         - all
       report_types:
-        - observation_distr_densityplot
+        - distr_densityplot
   general:
-    feature_mean_vs_variance:
-    observation_mean_vs_variance:
+    feat_mean_vs_variance:
+    obs_mean_vs_variance:
     pca_2d_feat:
     pca_2d_obs:
     corr_feat_hist:
     corr_obs_hist:
 output:
-  path: "./output/report.html"
+  path: ./output/report.html

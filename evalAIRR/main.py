@@ -136,19 +136,19 @@ def run():
                     export_ks_test_of_observation(observation_index, data_R, data_S)
 
                 # OBSERVATION DISTRIBUTION HISTOGRAM REPORT
-                if 'observation_distr_histogram' in report_types:
+                if 'distr_histogram' in report_types:
                     export_obs_distr_histogram(observation_index, data_R, data_S)
 
                 # OBSERVATION DISTRIBUTION BOX PLOT REPORT
-                if 'observation_distr_boxplot' in report_types:
+                if 'distr_boxplot' in report_types:
                     export_obs_distr_boxplot(observation_index, data_R, data_S)
 
                 # OBSERVATION DISTRIBUTION VIOLIN PLOT REPORT
-                if 'observation_distr_violinplot' in report_types:
+                if 'distr_violinplot' in report_types:
                     export_obs_distr_violinplot(observation_index, data_R, data_S)
 
                 # OBSERVATION DISTRIBUTION DENSITY PLOT REPORT
-                if 'observation_distr_densityplot' in report_types:
+                if 'distr_densityplot' in report_types:
                     try:
                         with_ml_sim = reports_o[report]['with_ml_sim']
                     except: 
@@ -160,11 +160,11 @@ def run():
                     export_obs_distr_densityplot(observation_index, data_R, data_S, with_ml_sim, ml_random_state)
 
                 # OBSERVATION EUCLIDEAN DISTANCE REPORT
-                if 'observation_distance' in report_types:
+                if 'distance' in report_types:
                     export_obs_distance(observation_index, data_R, data_S)
 
                 # OBSERVATION STATISTICS REPORT
-                if 'observation_statistics' in report_types:
+                if 'statistics' in report_types:
                     export_obs_statistics(observation_index, data_R, data_S)
 
     #######################
@@ -190,50 +190,50 @@ def run():
                 output = './output/ks_obs.csv'
             export_ks_test_all_observations(data_R, data_S, output)
 
-        # STATISTICS REPORT
-        if 'statistics' in reports_g:
+        # FEATURE STATISTICS REPORT
+        if 'statistics_feat' in reports_g:
             try:
-                output_dir = reports_g['statistics']['output_dir']
+                output_dir = reports_g['statistics_feat']['output_dir']
             except:
                 output_dir = './output/'
             export_statistics_all(data_R, data_S, features_R, features_S, output_dir)
 
         # OBSERVATION STATISTICS REPORT
-        if 'observation_statistics' in reports_g:
+        if 'statistics_obs' in reports_g:
             try:
-                output_dir = reports_g['observation_statistics']['output_dir']
+                output_dir = reports_g['statistics_obs']['output_dir']
             except: 
                 output_dir = './output/'
             export_obs_statistics_all(data_R, data_S, output_dir)
 
-        # EUCLIDEAN DISTANCE REPORT
-        if 'distance' in reports_g:
+        # FEATURE EUCLIDEAN DISTANCE REPORT
+        if 'distance_feat' in reports_g:
             try:
-                output = reports_g['distance']['output']
+                output = reports_g['distance_feat']['output']
             except:
                 output = './output/dist.csv'
             export_distance_all(data_R, data_S, features_R, features_S, output)
 
         # OBSERVATION EUCLIDEAN DISTANCE REPORT
-        if 'observation_distance' in reports_g:
+        if 'distance_obs' in reports_g:
             try:
-                output = reports_g['observation_distance']['output']
+                output = reports_g['distance_obs']['output']
             except: 
                 output = './output/obs_dist.csv'
             export_obs_distance_all(data_R, data_S, output)
 
-        # JENSEN-SHANNON DIVERGENCE REPORT
-        if 'jensen_shannon' in reports_g:
+        # FEATURE JENSEN-SHANNON DIVERGENCE REPORT
+        if 'jensen_shannon_feat' in reports_g:
             try:
-                output = reports_g['jensen_shannon']['output']
+                output = reports_g['jensen_shannon_feat']['output']
             except:
                 output = './output/jenshan.csv'
             export_jensenshannon(data_R, data_S, output, axis=0)
 
         # OBSERVATION JENSEN-SHANNON DIVERGENCE REPORT
-        if 'observation_jensen_shannon' in reports_g:
+        if 'jensen_shannon_obs' in reports_g:
             try:
-                output = reports_g['observation_jensen_shannon']['output']
+                output = reports_g['jensen_shannon_obs']['output']
             except: 
                 output = './output/obs_jenshan.csv'
             export_jensenshannon(data_R, data_S, output, axis=1)
@@ -327,25 +327,25 @@ def run():
             export_pca_2d_comparison(data_R, data_S, True, with_ml_sim, ml_random_state)
 
         # FEATURE MEAN VALUE VS VARIANCE REPORT
-        if ('feature_mean_vs_variance' in reports_g):
+        if ('feat_mean_vs_variance' in reports_g):
             try:
-                with_ml_sim = reports_g['feature_mean_vs_variance']['with_ml_sim']
+                with_ml_sim = reports_g['feat_mean_vs_variance']['with_ml_sim']
             except: 
                 with_ml_sim = False
             try:
-                ml_random_state = reports_g['feature_mean_vs_variance']['ml_random_state']
+                ml_random_state = reports_g['feat_mean_vs_variance']['ml_random_state']
             except: 
                 ml_random_state = None
             export_mean_var_scatter_plot(data_R, data_S, axis=0, with_ml_sim=with_ml_sim, ml_random_state=ml_random_state)
 
         # OBSERVATION MEAN VALUE VS VARIANCE REPORT
-        if ('observation_mean_vs_variance' in reports_g):
+        if ('obs_mean_vs_variance' in reports_g):
             try:
-                with_ml_sim = reports_g['observation_mean_vs_variance']['with_ml_sim']
+                with_ml_sim = reports_g['obs_mean_vs_variance']['with_ml_sim']
             except: 
                 with_ml_sim = False
             try:
-                ml_random_state = reports_g['observation_mean_vs_variance']['ml_random_state']
+                ml_random_state = reports_g['obs_mean_vs_variance']['ml_random_state']
             except: 
                 ml_random_state = None
             export_mean_var_scatter_plot(data_R, data_S, axis=1, with_ml_sim=with_ml_sim, ml_random_state=ml_random_state)

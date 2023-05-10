@@ -1,0 +1,60 @@
+datasets:
+  real:
+    path: /home/mint/masters/evalAIRR/data/real_data.csv
+  sim:
+    path: /home/mint/masters/evalAIRR/data/sim_data.csv
+reports:
+  feature_based:
+    report1:
+      features:
+        - CAS
+        - SAS
+      report_types:
+        - ks
+        - distr_histogram
+        - distr_boxplot
+        - distr_violinplot
+        - distr_densityplot
+        - distance
+        - statistics
+  observation_based:
+    report1:
+      observations:
+        - 20
+      report_types:
+        - ks
+        - distr_histogram
+        - distr_boxplot
+        - distr_violinplot
+        - distr_densityplot
+        - distance
+        - statistics
+    report2:
+      observations:
+        - all
+      report_types:
+        - distr_densityplot
+  general:
+    copula_2d:
+      report1:
+        - CAS
+        - SAS
+    copula_3d:
+      report1:
+        - CAS
+        - SAS
+        - TGT
+    feat_mean_vs_variance:
+    obs_mean_vs_variance:
+    corr:
+      reduce_to_n_features: 200
+    corr_feat_hist:
+      n_bins: 30
+    corr_obs_hist:
+      n_bins: 20
+      with_ml_sim: True
+      ml_random_state: 0
+    pca_2d_feat:
+    pca_2d_obs:
+output:
+  path: /home/mint/masters/output/report.html

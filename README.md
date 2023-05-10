@@ -25,23 +25,38 @@ This is the stucture of a sample report configuration file you can use to start 
 ```
 datasets:
   real:
-    path: ./data/encoded_real_1000_200.csv
+    path: ./data/real_data.csv
   sim:
-    path: ./data/encoded_sim_1000_200.csv
+    path: ./data/sim_data.csv
 reports:
   feature_based:
     report1:
       features:
-        - TGT
-        - ANV
+        - CAS
+        - SAS
       report_types:
         - ks
         - distr_densityplot
+        - distance
+        - statistics
+  observation_based:
+    report1:
+      observations:
+        - all
+      report_types:
+        - distr_densityplot
+  general:
+    feat_mean_vs_variance:
+    obs_mean_vs_variance:
+    pca_2d_feat:
+    pca_2d_obs:
+    corr_feat_hist:
+    corr_obs_hist:
 output:
   path: ./output/report.html
 ```
 
-This report will process the two provided datasets (real and simulated) with encoded kmer data, and create an HTML report with feature-based report types - Kolmogorov–Smirnov test (indicated by `ks`) and a feature distribution density plot (indicated by `distr_densityplot`) for the features `TGT` and `ANV`. It will then export the report to the path `./output/report.html`. More details on what reports can be created can be found in the _YAML Configuration Guidelines_ section.
+This report will process the two provided datasets (real and simulated) with encoded kmer data, and create an HTML report with multiple report types. These include feature-based report types - Kolmogorov–Smirnov test (indicated by report type `ks`), a feature distribution density plot (indicated by report type `distr_densityplot`), Euclidean distance measures (indicated by report type `distance`) and descriptive statistics (mean, median, variance and standard deviation)(indicated by report type `statistics`) for the features `CAS` and `SAS`. It will then export the report to the path `./output/report.html`. It will also create an observation-based report with the feature distribution density plot (indicated by report type `distr_densityplot`) for all observations (indicated by keyword `all` in the observation list). Finally, these general reports will be generated: feature mean compared with feature variance (indicated by report type `feat_mean_vs_variance`), observation mean compared with observation variance (indicated by report type `obs_mean_vs_variance`), two dimensional representation of all features using PCA (indicated by report type `pca_2d_feat`), two dimensional representation of all observations using PCA (indicated by report type `pca_2d_obs`), feature correlation coefficient distribution histogram (indicated by report type `corr_feat_hist`) and an observation correlation coefficient distribution histogram (indicated by report type `corr_obs_hist`). More details on what reports can be created can be found in the _YAML Configuration Guidelines_ section.
 
 The repository contains sample datafiles and a quickstart YAML configuration files. You can clone the repository and run evalAIRR within it to use sample data.
 
@@ -62,9 +77,9 @@ In the `datasets` section, you have to provide paths to a real and a simulated d
 ```
 datasets:
   real:
-    path: ./data/encoded_real_1000_200.csv
+    path: ./data/real_data.csv
   sim:
-    path: ./data/encoded_sim_1000_200.csv
+    path: ./data/sim_data.csv
 ```
 
 ### Reports
@@ -84,14 +99,12 @@ In the `reports` section, you can provide the list of report types you want to c
 #### Observation-based reports
 
 - <b>`ks`</b> - Kolmogorov–Smirnov statistic. Parameters: list of observations you are creating the report for.
-- <b>`observation_distr_histogram`</b> - observation distribution histogram. Parameters: list of observations you are creating the report for.
-- <b>`observation_distr_boxplot`</b> - observation distribution boxplot. Parameters: list of observations you are creating the report for.
-- <b>`observation_distr_violinplot`</b> - observation distribution violin plot. Parameters: list of observations you are creating the report for.
-- <b>`observation_distr_densityplot`</b> - observation distribution density plot. Parameters: list of observations you are creating the report for. The observation index `all` can be used to report on all observations in one plot.
-- <b>`observation_distance`</b> - Euclidean distance between the real and simulated observation. Parameters: list of observations you are creating the report for.
-- <b>`observation_statistics`</b> - statistical indicators (mean, median, standard deviation and variance) of an observation in both real and simulated datasets. Parameters: list of observations you are creating the report for.
-
-Additional parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset (currently, only applies to the report type `observation_distr_densityplot` in reports with `all` observations). `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
+- <b>`distr_histogram`</b> - observation distribution histogram. Parameters: list of observations you are creating the report for.
+- <b>`distr_boxplot`</b> - observation distribution boxplot. Parameters: list of observations you are creating the report for.
+- <b>`distr_violinplot`</b> - observation distribution violin plot. Parameters: list of observations you are creating the report for.
+- <b>`distr_densityplot`</b> - observation distribution density plot. Parameters: list of observations you are creating the report for. The observation index `all` can be used to report on all observations in one plot. `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset (only applies in reports with `all` observations). `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
+- <b>`distance`</b> - Euclidean distance between the real and simulated observation. Parameters: list of observations you are creating the report for.
+- <b>`statistics`</b> - statistical indicators (mean, median, standard deviation and variance) of an observation in both real and simulated datasets. Parameters: list of observations you are creating the report for.
 
 #### General reports
 
@@ -99,20 +112,20 @@ Additional parameters: `with_ml_sim` - optional parameter, which if True, instru
 - <b>`ks_obs`</b> - Kolmogorov–Smirnov statistic for all observations. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/ks_obs.csv`). The csv file contains two rows, with the first row containing the ks-statistic and the second one - the p-values.
 - <b>`copula_2d`</b> - a 2D scatter plot that displays two features in a Gausian Multivariate copula space. Parameters: a report section of any name, under which the compared features are specified.
 - <b>`copula_3d`</b> - a 3D scatter plot that displays three features in a Gausian Multivariate copula space. Parameters: a report section of any name, under which the compared features are specified.
-- <b>`feature_mean_vs_variance`</b> - a scatter plot that displays the mean value of every feature on one axis and the variance of every feature on the other axis. Parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
-- <b>`observation_mean_vs_variance`</b> - a scatter plot that displays the mean value of every observation on one axis and the variance of every observation on the other axis. Parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
+- <b>`feat_mean_vs_variance`</b> - a scatter plot that displays the mean value of every feature on one axis and the variance of every feature on the other axis. Parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
+- <b>`obs_mean_vs_variance`</b> - a scatter plot that displays the mean value of every observation on one axis and the variance of every observation on the other axis. Parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
 - <b>`corr`</b> - correlation matrix heatmaps of the real and simulated datasets. Parameters: `reduce_to_n_features` - an optional parameter for dimensionality reduction using PCA. The number of features to reduce the dataset to (must be reduce_to_n_features < min(n_observations, n_features)). `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
 - <b>`corr_feat_hist`</b> - feature correlation matrix distribution histogram for the real and simulated datasets. Parameters: `n_bins` - an optional parameter that sets the number of bins in the histogram (default value is 30). `reduce_to_n_features` - an optional parameter for dimensionality reduction using PCA. The number of features to reduce the dataset to (must be reduce_to_n_features < min(n_observations, n_features)). `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
 - <b>`corr_obs_hist`</b> - observation correlation matrix distribution histogram for the real and simulated datasets. Parameters: `n_bins` - an optional parameter that sets the number of bins in the histogram (default value is 30). `reduce_to_n_obs` - an optional parameter for dimensionality reduction using PCA. The number of observations to reduce the dataset to (must be reduce_to_n_obs < min(n_observations, n_features)). `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
 - <b>`corr_csv`</b> - CSV file exporting of the difference between correlation matrices of the real and simulated datasets. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/corr.csv`).
 - <b>`pca_2d_feat`</b> - two feature-level scatter plots with both datasets reduced to two dimensions using PCA. Parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
 - <b>`pca_2d_obs`</b> - two observation-level scatter plots with both datasets reduced to two dimensions using PCA. Parameters: `with_ml_sim` - optional parameter, which if True, instructs the report to include a comparison with a generated dataset using a GaussianProcessRegressor machine learning model trained on the real dataset. `ml_random_state` - optional integer parameter, relevant only if `with_ml_sim` is set to True, which sets a seed in the machine learning model random number generation.
-- <b>`distance`</b> - Euclidean distance between the real and simulated features. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/dist.csv`).
-- <b>`statistics`</b> - statistical indicators (mean, median, standard deviation and variance) of all features in both real and simulated datasets. Parameters: `output_dir` - optional parameter, that specifies the directory for the csv files in which the csv result files `real_stat.csv` and `sim_stat.csv` will be exported to (default value is set to `./output/`). Each csv file contain four rows, each with a different statistic: 1 - mean, 2 - median, 3 - standard deviation, 4 - variance.
-- <b>`observation_distance`</b> - Euclidean distance between the real and simulated observations. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/obs_dist.csv`).
-- <b>`observation_statistics`</b> - statistical indicators (mean, median, standard deviation and variance) of all observation in both real and simulated datasets. Parameters: `output_dir` - optional parameter, that specifies the directory for the csv files in which the csv result files `real_obs_stat.csv` and `sim_obs_stat.csv` will be exported to (default value is set to `./output/`). Each csv file contain four rows, each with a different statistic: 1 - mean, 2 - median, 3 - standard deviation, 4 - variance.
-- <b>`jensen_shannon`</b> - Jensen-Shannon divergence metric between the real and simulated features. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/jenshan.csv`).
-- <b>`observation_jensen_shannon`</b> - Jensen-Shannon divergence metric between the real and simulated observations. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/obs_jenshan.csv`).
+- <b>`distance_feat`</b> - Euclidean distance between the real and simulated features. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/dist.csv`).
+- <b>`statistics_feat`</b> - statistical indicators (mean, median, standard deviation and variance) of all features in both real and simulated datasets. Parameters: `output_dir` - optional parameter, that specifies the directory for the csv files in which the csv result files `real_stat.csv` and `sim_stat.csv` will be exported to (default value is set to `./output/`). Each csv file contain four rows, each with a different statistic: 1 - mean, 2 - median, 3 - standard deviation, 4 - variance.
+- <b>`distance_obs`</b> - Euclidean distance between the real and simulated observations. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/obs_dist.csv`).
+- <b>`statistics_obs`</b> - statistical indicators (mean, median, standard deviation and variance) of all observation in both real and simulated datasets. Parameters: `output_dir` - optional parameter, that specifies the directory for the csv files in which the csv result files `real_obs_stat.csv` and `sim_obs_stat.csv` will be exported to (default value is set to `./output/`). Each csv file contain four rows, each with a different statistic: 1 - mean, 2 - median, 3 - standard deviation, 4 - variance.
+- <b>`jensen_shannon_feat`</b> - Jensen-Shannon divergence metric between the real and simulated features. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/jenshan.csv`).
+- <b>`jensen_shannon_obs`</b> - Jensen-Shannon divergence metric between the real and simulated observations. Parameters: `output` - optional parameter, that specifies the path of text/csv file the results will be exported to (default value is set to `./output/obs_jenshan.csv`).
 
 Here is a sample `reports` section of a configuration file containing all of the reports:
 
@@ -121,8 +134,8 @@ reports:
   feature_based:
     report1:
       features:
-        - TGT
-        - ANV
+        - CAS
+        - SAS
       report_types:
         - ks
         - distr_histogram
@@ -134,45 +147,45 @@ reports:
   observation_based:
     report1:
       observations:
-        - 0
+        - 20
       report_types:
         - ks
-        - observation_distr_histogram
-        - observation_distr_boxplot
-        - observation_distr_violinplot
-        - observation_distr_densityplot
-        - observation_distance
-        - observation_statistics
+        - distr_histogram
+        - distr_boxplot
+        - distr_violinplot
+        - distr_densityplot
+        - distance
+        - statistics
     report2:
       observations:
         - all
       report_types:
-        - observation_distr_densityplot
+        - distr_densityplot
       with_ml_sim: True
       ml_random_state: 0
   general:
     copula_2d:
       report1:
-        - TGT
-        - ANV
+        - CAS
+        - SAS
     copula_3d:
       report1:
-        - TGT
-        - ANV
         - CAS
-    feature_mean_vs_variance:
+        - SAS
+        - TGT
+    feat_mean_vs_variance:
       with_ml_sim: True
       ml_random_state: 0
-    observation_mean_vs_variance:
+    obs_mean_vs_variance:
       with_ml_sim: True
       ml_random_state: 0
     corr_hist:
       n_bins: 30
       with_ml_sim: True
       ml_random_state: 0
-      reduce_to_n_features: 150
+      reduce_to_n_features: 200
     corr:
-      reduce_to_n_features: 150
+      reduce_to_n_features: 200
       with_ml_sim: True
       ml_random_state: 0
     pca_2d_feat:
@@ -187,17 +200,17 @@ reports:
       output: ./output/ks_feat.csv
     ks_obs:
       output: ./output/ks_obs.csv
-    statistics:
+    statistics_feat:
       output_dir: ./output/
-    observation_statistics:
+    statistics_obs:
       output_dir: ./output/
-    distance:
+    distance_feat:
       output: ./output/dist.csv
-    observation_distance:
+    distance_obs:
       output: ./output/obs_dist.csv
-    jensen_shannon:
+    jensen_shannon_feat:
       output: ./output/jenshan.csv
-    observation_jensen_shannon:
+    jensen_shannon_obs:
       output: ./output/obs_jenshan.csv
 ```
 

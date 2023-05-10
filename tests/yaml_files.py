@@ -55,17 +55,17 @@ reports:
       output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/ks_feat.csv\"
     ks_obs:
       output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/ks_obs.csv\"
-    statistics:
+    statistics_feat:
       output_dir: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/\"
-    observation_statistics:
+    statistics_obs:
       output_dir: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/\"
-    distance:
+    distance_feat:
       output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/dist.csv\"
-    observation_distance:
+    distance_obs:
       output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/dist_obs.csv\"
-    jensen_shannon:
+    jensen_shannon_feat:
       output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/jenshan.csv\"
-    observation_jensen_shannon:
+    jensen_shannon_obs:
       output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/jenshan_obs.csv\"
     corr_feat_hist:
 output:
@@ -84,17 +84,17 @@ reports:
       output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/ks_feat.csv\"
     ks_obs:
       output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/ks_obs.csv\"
-    statistics:
+    statistics_feat:
       output_dir: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/\"
-    observation_statistics:
+    statistics_obs:
       output_dir: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/\"
-    distance:
+    distance_feat:
       output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/dist.csv\"
-    observation_distance:
+    distance_obs:
       output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/dist_obs.csv\"
-    jensen_shannon:
+    jensen_shannon_feat:
       output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/jenshan.csv\"
-    observation_jensen_shannon:
+    jensen_shannon_obs:
       output: \"/home/mint/masters/data/evalairrdata/run_{run}/results_{timestamp}/jenshan_obs.csv\"
     corr_feat_hist:
 output:
@@ -158,17 +158,17 @@ reports:
       output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/ks_feat.csv\"
     ks_obs:
       output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/ks_obs.csv\"
-    statistics:
+    statistics_feat:
       output_dir: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/\"
-    observation_statistics:
+    statistics_obs:
       output_dir: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/\"
-    distance:
+    distance_feat:
       output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/dist.csv\"
-    observation_distance:
+    distance_obs:
       output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/dist_obs.csv\"
-    jensen_shannon:
+    jensen_shannon_feat:
       output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/jenshan.csv\"
-    observation_jensen_shannon:
+    jensen_shannon_obs:
       output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/jenshan_obs.csv\"
     corr_feat_hist:
 output:
@@ -187,17 +187,17 @@ reports:
       output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/ks_feat.csv\"
     ks_obs:
       output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/ks_obs.csv\"
-    statistics:
+    statistics_feat:
       output_dir: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/\"
-    observation_statistics:
+    statistics_obs:
       output_dir: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/\"
-    distance:
+    distance_feat:
       output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/dist.csv\"
-    observation_distance:
+    distance_obs:
       output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/dist_obs.csv\"
-    jensen_shannon:
+    jensen_shannon_feat:
       output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/jenshan.csv\"
-    observation_jensen_shannon:
+    jensen_shannon_obs:
       output: \"/home/mint/masters/data/evalairrdata/th_run_{run}/results_{timestamp}/jenshan_obs.csv\"
     corr_feat_hist:
 output:
@@ -212,14 +212,16 @@ def noisetest_evalairr_spec(run):
     path: /home/mint/masters/data/noise_data/with_noise.csv
 reports:
   general:
+    corr_feat_hist:
     corr_obs_hist:
+      n_bins: 20
     ks_feat:
       output: /home/mint/masters/data/noise_data/results/ks_feat.csv
     ks_obs:
       output: /home/mint/masters/data/noise_data/results/ks_obs.csv
-    jensen_shannon:
+    jensen_shannon_feat:
       output: /home/mint/masters/data/noise_data/results/jenshan_feat.csv
-    observation_jensen_shannon:
+    jensen_shannon_obs:
       output: /home/mint/masters/data/noise_data/results/jenshan_obs.csv
     pca_2d_feat:
     pca_2d_obs:
