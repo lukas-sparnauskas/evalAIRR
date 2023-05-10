@@ -231,3 +231,7 @@ For example, this output section would result in a report file not being created
 output:
   path: NONE
 ```
+
+## Example of full HTML report
+
+![full_report](https://github.com/lukas-sparnauskas/evalAIRR/assets/58486048/3c8771f9-5540-4b08-902f-44e9ef867c72)
